@@ -1,0 +1,14 @@
+{
+    "name": "jusypaz"
+  , "version": "0.0.1"
+  , "private": true
+  , "dependencies": {
+      "express": "*"
+    , "jade": "*"
+    , "passport-local":"*"
+    , "passport":"*"
+    , "coffee-trace":"*"
+    , "connect-flash":"*"
+    , "mongoose":"*"
+  }
+}

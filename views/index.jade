@@ -1,0 +1,13 @@
+!!! 5
+html
+  head
+    title jusypaz - Autentificación
+  body
+    login
+      form(action="/login", method="post")
+        label Usuario: 
+          input(type="text", id="username")
+        label Contraseña: 
+          input(type="password", id="password")
+
+        input(type="Submit", value="Login")
