@@ -80,15 +80,15 @@ app.configure('production', () ->
 )
 
 app.get('/', routes.index)
-app.get('/tablero', ensureAuthenticated, routes.tablero)
-
-
 passport_options =
   successRedirect: '/tablero'
   failureRedirect: '/'
   failureFlash: true 
 
 app.post('/login', passport.authenticate('local', passport_options))
+
+app.all('*',ensureAuthenticated)
+app.get('/tablero', routes.tablero)
 
 port = 3333
 
