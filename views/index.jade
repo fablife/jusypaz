@@ -1,13 +1,16 @@
 !!! 5
 html
   head
+    link(rel='stylesheet', href='/css/main.css') 
     title jusypaz - Autentificación
   body
-    login
-      form(action="/login", method="post")
-        label Usuario: 
-          input(type="text", id="username")
-        label Contraseña: 
-          input(type="password", id="password")
-
-        input(type="Submit", value="Login")
+    div#container
+      div.login
+        div.center.mbottom15
+          img(class="logo", src="/img/logo.png")
+        form(action="/login",class="login_form", method="post")
+          label.form_label Usuario: 
+          input(type="text", id="username", name="username") 
+          label.form_label Contraseña: 
+          input(type="password", id="password", name="password")
+          input(type="Submit", class="submit", value="Login")

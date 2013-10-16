@@ -4,9 +4,32 @@ flash    = require('connect-flash')
 express  = require('express')
 passport = require('passport')
 mongoose = require('mongoose')
+
 mongoose.connect('mongodb://localhost/jusypaz')
 
-User = mongoose.model('User', 
+# Passport session setup.
+# To support persistent login sessions, Passport needs to be able to
+# serialize users into and deserialize users out of the session. Typically,
+# this will be as simple as storing the user ID when serializing, and finding
+# the user by ID when deserializing.
+passport.serializeUser((user, done) ->
+      done(null, user)
+)
+
+passport.deserializeUser((id, done) ->
+      done(null,id)
+      #findById(id, (err, user) ->
+      #   done(err, user)
+      #)
+)
+
+#exports.ensureAuthenticated = ensureAuthenticated(req, res, next) ->
+ensureAuthenticated = (req, res, next) ->
+      if (req.isAuthenticated())
+          return next()
+      res.redirect('/')
+
+User = mongoose.model('User',
  {
      username: String
     ,password: String
@@ -17,24 +40,18 @@ app = module.exports = express()
 routes   = require('./routes')
 
 LocalStrategy = require('passport-local').Strategy
-
 passport.use(new LocalStrategy( (username, password, done) ->
-    console.log "aaaa"
     User.findOne({ username: username }, (err, user) ->
-      console.log("findone")
+      #console.log("findone")
       if err
-         console.log "error"
+         #console.log "error"
          return done(err)
       if not user
-        console.log("incorrect username")
+        #console.log("incorrect username")
         return done(null, false, { message: 'Incorrect username.' })
-      
-      if not user.validPassword(password)
-        console.log("incorrect password")
-        return done(null, false, { message: 'Incorrect password.' })
-      
-      console.log("bla")
-      return done(null, user)
+      else
+        #console.log(user.password) 
+        done(null,user)
     )
 ))
 
@@ -50,6 +67,7 @@ app.configure( () ->
   app.use(passport.initialize())
   app.use(passport.session())
   app.use(app.router)
+  app.use(express.static(__dirname + '/../../public'))
 )
 
 
@@ -62,17 +80,15 @@ app.configure('production', () ->
 )
 
 app.get('/', routes.index)
-app.get('/tablero', routes.tablero)
+app.get('/tablero', ensureAuthenticated, routes.tablero)
 
 
 passport_options =
   successRedirect: '/tablero'
   failureRedirect: '/'
-  failureFlash: true
+  failureFlash: true 
 
-app.post('/login',
-  passport.authenticate('local', passport_options)
-)
+app.post('/login', passport.authenticate('local', passport_options))
 
 port = 3333
 
