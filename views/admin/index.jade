@@ -1,0 +1,11 @@
+!!! 5
+html(ng-app="jusypazAdminApp")
+  head
+    script(src='/js/angular.min.js')
+    script(src='/js/angular-route.min.js')
+    script(src='/js/admin.js')
+    link(rel='stylesheet', href='/css/admin.css') 
+    title jusypaz - Administración
+  body
+    div#admin_container
+      div(ng-view)

@@ -1,8 +1,26 @@
 !!! 5
-html
+html(ng-app="jusypazApp")
   head
+    script(src='/js/angular.min.js')
+    script(src='/js/tablero.js')
     title jusypaz - Tablero de inicio
 
   body
     h1 Aplicación de Justicia y Paz
-    h5 Bienvenido!
+    h5 Bienvenido! 
+    
+
+    div.acciones(ng-controller="TableroCtrl")
+      h2 Operaciones 
+      if role == "admin"
+        button(id="informes") Informes
+        button(id="admin", ng-click = "admin_index()") Administración
+
+      h2 Busqueda por cédula: 
+      div.query
+ 
+        form(id="cedula-form" name="cedula-form" ng-submit="consulta_cedula()" )
+          input(ng-model="cedula" required)
+          input(type="submit", value="Consulta")
+  
+          div.result {{result}}

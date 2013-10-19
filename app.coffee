@@ -1,11 +1,16 @@
 require('coffee-script')
 require('coffee-trace')
-flash    = require('connect-flash')
-express  = require('express')
-passport = require('passport')
-mongoose = require('mongoose')
+flash     = require('connect-flash')
+express   = require('express')
+passport  = require('passport')
+mongoose  = require('mongoose')
+config    = require('./config')
+urls      = require('./urls')
+routes    = require('./routes')
+User      = require('./models/models').User
 
-mongoose.connect('mongodb://localhost/jusypaz')
+#Connect to DB
+db = mongoose.connect(config.creds.mongoose_auth_local)
 
 # Passport session setup.
 # To support persistent login sessions, Passport needs to be able to
@@ -23,22 +28,23 @@ passport.deserializeUser((id, done) ->
       #)
 )
 
-#exports.ensureAuthenticated = ensureAuthenticated(req, res, next) ->
+#Middleware to check that a user is authenticated
 ensureAuthenticated = (req, res, next) ->
       if (req.isAuthenticated())
           return next()
+      console.log "Not authenticated!"
       res.redirect('/')
 
-User = mongoose.model('User',
- {
-     username: String
-    ,password: String
- })
+#Middleware to check that a user has admin role 
+ensureAdmin = (req, res, next) ->
+      if (req.user.role == "admin")
+          return next()
+      console.log "Not admin!"
+      res.redirect('/')
 
 app = module.exports = express()
 
-routes   = require('./routes')
-
+#set up passport
 LocalStrategy = require('passport-local').Strategy
 passport.use(new LocalStrategy( (username, password, done) ->
     User.findOne({ username: username }, (err, user) ->
@@ -55,6 +61,9 @@ passport.use(new LocalStrategy( (username, password, done) ->
     )
 ))
 
+########################
+#configure the app
+########################
 app.configure( () ->
   app.set('views', __dirname + '/views')
   app.set('view engine', 'jade')
@@ -69,16 +78,16 @@ app.configure( () ->
   app.use(app.router)
   app.use(express.static(__dirname + '/../../public'))
 )
-
-
 app.configure('development', () ->
       app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
 )
-
 app.configure('production', () ->
       app.use(express.errorHandler())
 )
 
+########################
+#  Routes
+########################
 app.get('/', routes.index)
 passport_options =
   successRedirect: '/tablero'
@@ -86,10 +95,20 @@ passport_options =
   failureFlash: true 
 
 app.post('/login', passport.authenticate('local', passport_options))
-
 app.all('*',ensureAuthenticated)
-app.get('/tablero', routes.tablero)
 
+app.get('/tablero', routes.tablero)
+app.post('/consulta/cedula', routes.consulta_cedula)
+app.get('/admin', ensureAdmin, routes.admin)
+app.get('/admin/partials/:name',(req, res) ->
+   name = req.params.name
+   console.log name
+   res.render('admin/partials/' + name)
+)
+
+########################
+#Start the app
+########################
 port = 3333
 
 app.listen(port, () ->

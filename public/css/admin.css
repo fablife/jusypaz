@@ -1,0 +1,11 @@
+.postulado_img {
+    background-image: url('/img/profile_placeholder.png');
+    background-size: 200px 200px;
+    display: inline-block;
+    width: 200px;
+    height: 200px;
+}
+
+.postulado_info {
+    width: 100%;
+}
