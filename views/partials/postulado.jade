@@ -1,0 +1,25 @@
+div(ng-controller="AdminCtrl") 
+  div.postulado_main
+    div.inline.heading(click-to-edit="nombres", placeholder="Nombres") 
+    div.inline.heading(click-to-edit="apellidos", placeholder="Apellidos") 
+    div.inline.heading(click-to-edit="cedula", placeholder="Cédula")
+  div.postulado_info
+    div.postulado_img 
+    div.info_col
+      div(click-to-edit="fecha_nacimiento", placeholder="Fecha de nacimiento")
+      label Masculino
+      input(type="radio" name="sexo" value="Masculino") 
+      label Femenino
+      input(type="radio" name="sexo" value="Femenino") 
+      div(click-to-edit="estado_civil")
+    div.info_col
+      textarea(id="direccion" name="direccion")
+      div(click-to-edit="ciudad")
+    div.info_col
+      div(click-to-edit="telefono_fijo")
+      div(click-to-edit="telefono_movil")
+      div(click-to-edit="correo")
+    div.info_footer
+      textarea(id="estudios" name="estudios")
+      textarea(id="experiencia" name="experiencia")
+    

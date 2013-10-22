@@ -5,3 +5,7 @@ exports.creds = {
   mongoose_auth_local: 'mongodb://localhost/jusypaz',
   #mongoose_auth_jitsu: 'copy and paste your unique connection string uri from the nodejitsu admin'
 }
+
+exports.app = {
+    port: 3333,
+}

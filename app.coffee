@@ -102,15 +102,16 @@ app.post('/consulta/cedula', routes.consulta_cedula)
 app.get('/admin', ensureAdmin, routes.admin)
 app.get('/admin/partials/:name',(req, res) ->
    name = req.params.name
-   console.log name
    res.render('admin/partials/' + name)
+)
+app.get('/partials/:name',(req, res) ->
+   name = req.params.name
+   res.render('partials/' + name)
 )
 
 ########################
 #Start the app
 ########################
-port = 3333
-
-app.listen(port, () ->
-      console.log("Express server listening on port %d in %s mode", port, app.settings.env)
+app.listen(config.app.port, () ->
+      console.log("Express server listening on port %d in %s mode", config.app.port, app.settings.env)
 )

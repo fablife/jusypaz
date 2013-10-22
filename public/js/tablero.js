@@ -1,4 +1,3 @@
-
 var app = angular.module('jusypazApp', []);
 
 app.controller('TableroCtrl', function TableroCtrl($scope, $http) {
@@ -21,3 +20,4 @@ app.controller('TableroCtrl', function TableroCtrl($scope, $http) {
     });
   };
 });
+

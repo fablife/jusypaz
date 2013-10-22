@@ -29,8 +29,9 @@ input {
     border: 1px solid #003b6f;
     width: 100%;
     border-radius: 5px;
-    height: 24px;
+    height: 28px;
     margin-bottom: 20px;
+    padding: 0 6px;
 }
 
 .submit {
@@ -58,4 +59,58 @@ input {
     margin-bottom: 15px;
 }
 
+.inline {
+    display: inline-block;
+}
 
+.heading {
+  font-weight: bold;
+  font-size: 20px;
+  margin-right: 15px;
+}
+
+.postulado_info {
+    width: 100%;
+}
+
+.postulado_img {
+  background-image: url('/img/profile_placeholder.png');
+  background-size: 200px 200px;
+  float: left;
+  width: 200px;
+  height: 200px;
+}
+
+.info_col {
+  float: left;
+  margin: 0 15px;
+  width: 200px;
+}
+
+.info_footer {
+  width: 100%;
+}
+
+div.click-to-edit {
+  font-size: 14px;
+  height: 28px;
+}
+
+.inline_edit_action {
+  font-size: 0.8em;
+  color: #003b6f;
+}
+
+input.inline_edit_input {
+    font-size: 12px;
+    border: 1px solid #003b6f;
+    border-radius: 2px;
+    height: 28px;
+    padding: 0 6px;
+    width: 100px;
+}
+
+div.postulado_main {
+  width: 100%;
+  margin: 50px 0 50px 0;
+}  
