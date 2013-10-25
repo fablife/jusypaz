@@ -1,9 +1,6 @@
 div(class="inline_edit_div")
-  input(class="inline_edit_input" type="text" on-enter="save()" on-esc="cancel()" ng-model="model" ng-show="editMode")
-  //- button(ng-click="cancel()" ng-show="editMode") Cancelar
-  //- button(ng-click="save()" ng-show="editMode") Guardar
+  input(class="inline_edit_input" type="text" on-enter="save()" on-blur="cancel()" on-esc="cancel()" ng-model="model" ng-show="editMode")
   span(ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false")
     span(ng-hide="editMode" ng-click="edit()") 
       div(class="inline_edit_text")
         {{model}}
-    //- a(ng-show="showEdit" ng-click="edit()") Editar

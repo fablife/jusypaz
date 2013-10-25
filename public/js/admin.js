@@ -22,34 +22,57 @@ adminControllers = angular.module('adminControllers',[]);
 
 adminControllers.controller('AdminCtrl', ['$scope', '$http',
   function AdminCtrl($scope, $http) {
-    $scope.nombres          = "Nombres";
-    $scope.apellidos        = "Appellidos";
-    $scope.cedula           = "Cédula";
-    $scope.fecha_nacimiento = "Fecha nacimiento";
-    $scope.estado_civil     = "Estado civil";
-    $scope.direccion        = "Dirección";
-    $scope.ciudad           = "Ciudad";
-    $scope.telefono_fijo    = "Telefono fijo";
-    $scope.telefono_movil   = "Telefono movil";
-    $scope.correo           = "Correo electrónico";
+    $scope.post = {
+        nombres:          'Nombres',
+        apellidos:        'Apellidos',
+        cedula:           'Cédula',
+        fecha_nacimiento: "Fecha nacimiento",
+        estado_civil:      "Estado civil",
+        direccion:         "Dirección",
+        ciudad:            "Ciudad",
+        telefono_fijo:     "Telefono fijo",
+        telefono_movil:    "Telefono movil",
+        correo:            "Correo electrónico"
+    };
 
     $scope.create_user = function() {
       location.href = '/admin#crea_postulado';
     };
   
+    /*
+    $scope.save_single = function(data) {
+        alert("svae_single" + data);
+    };*/
+    $scope.save_postulado = function() {
+        $http.put('/admin/save_postulado',$scope.post).success(function() {
+            //alert("Callback!");
+        }).error(function() {
+            alert("Failed");
+        });
+    };
 }]);
 
-
-// On esc event
-adminApp.directive('onEsc', function() {
-  return function(scope, elm, attr) {
+var escape_function = function(scope, elm, attr) {
     elm.bind('keydown', function(e) {
       if (e.keyCode === 27) {
         scope.$apply(attr.onEsc);
       }
     });
+    /*
+    elm.bind('blur', function(e) {
+        scope.$apply(attr.onEsc);
+    });
+    */
   };
+// On esc event
+adminApp.directive('onEsc', function() {
+    return escape_function;
 });
+
+/*adminApp.directive('onBlur', function() {
+    return escape_function;
+});
+*/
 
 // On enter event
 adminApp.directive('onEnter', function() {
@@ -94,4 +117,3 @@ adminApp.directive('inlineEdit', function($timeout) {
     templateUrl: 'partials/inline-edit'
   };
 });
-

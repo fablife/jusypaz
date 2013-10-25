@@ -1,52 +1,52 @@
 div(ng-controller="AdminCtrl") 
-  div.postulado_main
-    div.inline.editable_heading(inline-edit="nombres", placeholder="Nombres") 
-    div.inline.editable_heading(inline-edit="apellidos", placeholder="Apellidos") 
-    div.inline.editable_heading(inline-edit="cedula", placeholder="Cédula")
-    div.inline.action_buttons
-      button(class="buttons action_button" ng-click="save()") Salvar
-      button(class="buttons cancel_button" ng-click="cancel"()) Cancelar
-  div.postulado_info
-    div.postulado_img 
-    div.info_col
-      div.info_element
-         label(class="form") Fecha de nacimiento 
-         div.form(inline-edit="fecha_nacimiento", placeholder="Fecha de nacimiento")
-      div.info_element
-        div.checkbox_label
-         label(class="form") Sexo 
-        div.checkbox_elements
-         label(class="form w65") Masculino
-         input(class="square_28" type="radio" name="sexo" value="Masculino") 
-         label(class="form w65") Femenino
-         input(class="square_28" type="radio" name="sexo" value="Femenino") 
-      div.info_element_bottom
-        label(class="form") Estado civil 
-        div.form(inline-edit="estado_civil")
-    div.info_col
-      div.info_element_double
-        label(class="form") Dirección 
-        textarea(id="direccion" name="direccion")
-      div.info_element_bottom
-        label(class="form") Ciudad 
-        div.form(inline-edit="ciudad")
-    div.info_col
-      div.info_element
-        label(class="form") Telefono fijo 
-        div.form(inline-edit="telefono_fijo")
-      div.info_element
-        label(class="form") Telefono movil 
-        div.form(inline-edit="telefono_movil")
-      div.info_element_bottom
-        label(class="form") Correo electrónico 
-        div.form(inline-edit="correo")
-  div.info_footer
-    div.big_text_div
-      label(class="form") Estudios
-      br
-      textarea(class="big_text" id="estudios" name="estudios")
-    div.big_text_div
-      label(class="form") Experiencia laboral 
-      br
-      textarea(class="big_text" id="experiencia" name="experiencia")
-    
+    //- form(id="postulado_form")
+    div.postulado_main
+      div.inline.editable_heading(inline-edit="post.nombres", placeholder="Nombres") 
+      div.inline.editable_heading(inline-edit="post.apellidos", placeholder="Apellidos") 
+      div.inline.editable_heading(inline-edit="post.cedula", placeholder="Cédula")
+      div.inline.action_buttons
+        button(class="buttons action_button" ng-click="save_postulado()") Salvar
+        button(class="buttons cancel_button" ng-click="cancel()") Cancelar
+    div.postulado_info
+      div.postulado_img 
+      div.info_col
+        div.info_element
+           label(class="form") Fecha de nacimiento 
+           div.form(inline-edit="post.fecha_nacimiento", placeholder="Fecha de nacimiento")
+        div.info_element
+          div.checkbox_label
+           label(class="form") Sexo 
+          div.checkbox_elements
+           label(class="form w65") Masculino
+           input(class="square_28", type="radio", name="post.sexo", value="Masculino") 
+           label(class="form w65") Femenino
+           input(class="square_28", type="radio", name="post.sexo", value="Femenino") 
+        div.info_element_bottom
+          label(class="form") Estado civil 
+          div.form(inline-edit="post.estado_civil")
+      div.info_col
+        div.info_element_double
+          label(class="form") Dirección 
+          textarea(id="direccion" name="post.direccion")
+        div.info_element_bottom
+          label(class="form") Ciudad 
+          div.form(inline-edit="post.ciudad")
+      div.info_col
+        div.info_element
+          label(class="form") Telefono fijo 
+          div.form(inline-edit="post.telefono_fijo")
+        div.info_element
+          label(class="form") Telefono movil 
+          div.form(inline-edit="post.telefono_movil")
+        div.info_element_bottom
+          label(class="form") Correo electrónico 
+          div.form(inline-edit="post.correo")
+    div.info_footer
+      div.big_text_div
+        label(class="form") Estudios
+        br
+        textarea(class="big_text" id="estudios" name="post.estudios")
+      div.big_text_div
+        label(class="form") Experiencia laboral 
+        br
+        textarea(class="big_text" id="experiencia" name="post.experiencia")

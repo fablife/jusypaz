@@ -145,7 +145,7 @@ div.inline_edit_text {
 
 div.postulado_main {
   width: 100%;
-  margin: 50px 0 50px 0;
+  margin: 20px 0 80px 0;
 }  
 
 div.checkbox_label {
@@ -164,6 +164,7 @@ label {
 }
 
 textarea {
+  border: 1px solid #003b6f;
   background-color: #EBF7F7;
   border-radius: 5px;
   width: 194px;
@@ -179,24 +180,26 @@ div.big_text_div {
 }
 .action_buttons {
   height: 50px;
-  margin-left: 20px;
+  margin-left: 30px;
 }
 
 .buttons {
+  cursor: pointer;
   height: 45px;
-  width: 80px;
+  width: 90px;
   border: none;
   margin-right: 20px;
 }
 
 .action_button {
-  background-color: #5EBAD9;
+  background-color: #003b6f;
   color: white;
   font-weight: bold;
 }
 
 .cancel_button {
-  background-color: #CACCCC;
+  border: 1px solid #003b6f;
   color: white;
+  background-color: #003b6f;
   font-weight: bold;
 }

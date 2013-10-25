@@ -108,6 +108,7 @@ app.get('/partials/:name',(req, res) ->
    name = req.params.name
    res.render('partials/' + name)
 )
+app.put('/admin/save_postulado', routes.save_postulado)
 
 ########################
 #Start the app

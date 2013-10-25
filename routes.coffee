@@ -13,3 +13,8 @@ exports.consulta_cedula = (req,res) ->
         res.end("OK!!!!")
     else
         res.end(":-(")
+
+exports.save_postulado = (req,res) ->
+    console.log ("saving postulado!")
+    console.log (req.body)
+    res.end("OK!!!!")
