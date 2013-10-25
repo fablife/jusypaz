@@ -32,51 +32,66 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http',
     $scope.telefono_fijo    = "Telefono fijo";
     $scope.telefono_movil   = "Telefono movil";
     $scope.correo           = "Correo electrónico";
+
     $scope.create_user = function() {
       location.href = '/admin#crea_postulado';
     };
+  
 }]);
 
-adminApp.directive("clickToEdit", function() {
-    var editorTemplate = '<div class="click-to-edit">' +
-        '<div ng-hide="view.editorEnabled">' +
-            '{{value}} ' +
-            '<a class="inline_edit_action" ng-click="enableEditor()">Modificar</a>' +
-        '</div>' +
-        '<div ng-show="view.editorEnabled">' +
-            '<input class="inline_edit_input" ng-model="view.editableValue">' +
-            '<a ng-click="save()">Salvar</a>' +
-            ' or ' +
-            '<a class="inline_edit_action" ng-click="disableEditor()">Cancelar</a>.' +
-        '</div>' +
-    '</div>';
 
-    return {
-        restrict: "A",
-        replace: true,
-        template: editorTemplate,
-        scope: {
-            value: "=clickToEdit",
-        },
-        controller: function($scope) {
-            $scope.view = {
-                editableValue: $scope.value,
-                editorEnabled: false
-            };
-
-            $scope.enableEditor = function() {
-                $scope.view.editorEnabled = true;
-                $scope.view.editableValue = $scope.value;
-            };
-
-            $scope.disableEditor = function() {
-                $scope.view.editorEnabled = false;
-            };
-
-            $scope.save = function() {
-                $scope.value = $scope.view.editableValue;
-                $scope.disableEditor();
-            };
-        }
-    };
+// On esc event
+adminApp.directive('onEsc', function() {
+  return function(scope, elm, attr) {
+    elm.bind('keydown', function(e) {
+      if (e.keyCode === 27) {
+        scope.$apply(attr.onEsc);
+      }
+    });
+  };
 });
+
+// On enter event
+adminApp.directive('onEnter', function() {
+  return function(scope, elm, attr) {
+    elm.bind('keypress', function(e) {
+      if (e.keyCode === 13) {
+        scope.$apply(attr.onEnter);
+      }
+    });
+  };
+});
+
+// Inline edit directive
+adminApp.directive('inlineEdit', function($timeout) {
+  return {
+    scope: {
+      model: '=inlineEdit',
+      handleSave: '&onSave',
+      handleCancel: '&onCancel'
+    },
+    link: function(scope, elm, attr) {
+      var previousValue;
+
+      scope.edit = function() {
+        scope.editMode = true;
+        previousValue = scope.model;
+
+        $timeout(function() {
+          elm.find('input')[0].focus();
+        }, 0, false);
+      };
+      scope.save = function() {
+        scope.editMode = false;
+        scope.handleSave({value: scope.model});
+      };
+      scope.cancel = function() {
+        scope.editMode = false;
+        scope.model = previousValue;
+        scope.handleCancel({value: scope.model});
+      };
+    },
+    templateUrl: 'partials/inline-edit'
+  };
+});
+

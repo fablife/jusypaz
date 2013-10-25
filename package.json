@@ -7,6 +7,7 @@
     , "jade": "*"
     , "passport-local":"*"
     , "passport":"*"
+    , "coffee-script":"*"
     , "coffee-trace":"*"
     , "connect-flash":"*"
     , "mongoose":"*"
