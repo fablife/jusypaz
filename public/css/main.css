@@ -34,6 +34,35 @@ body {
     padding: 0 6px;
 }
 
+.menu_bar {
+  border-bottom: 1px solid #003b6f;
+}
+
+ul.menu_options {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li.menu_option {
+  display: inline-block;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+ul.submenu {
+  list-style-type: none;
+  padding-left: 0;
+  padding-top: 10px;
+  position: absolute;
+  z-index: 10;
+}
+
+li.submenu_option {
+  padding: 4px;
+  background-color: #EBF7F7;
+  border-bottom: 1px solid #003b6f;
+}
+
 input.inline_edit_input {
     border-radius: 5px;
     height: 28px;
@@ -105,7 +134,7 @@ div.inline_edit_text {
   font-weight: bold;
   font-size: 20px;
   margin-right: 15px;
-  width: 200px;
+  width: 282px;
 }
 
 .postulado_info {
@@ -149,6 +178,10 @@ div.postulado_main {
 }  
 
 div.checkbox_label {
+  /*display: inline-block;*/
+}
+.chk_label {
+  width: 80px;
   display: inline-block;
 }
 div.checkbox_elements {
@@ -180,7 +213,6 @@ div.big_text_div {
 }
 .action_buttons {
   height: 50px;
-  margin-left: 30px;
 }
 
 .buttons {
@@ -189,6 +221,13 @@ div.big_text_div {
   width: 90px;
   border: none;
   margin-right: 20px;
+}
+
+.list_buttons {
+  cursor: pointer;
+  height: 30px;
+  width: 120px;
+  border: none;
 }
 
 .action_button {
@@ -202,4 +241,112 @@ div.big_text_div {
   color: white;
   background-color: #003b6f;
   font-weight: bold;
+}
+
+.object_table {
+  border: 1px solid #003b6f;
+  padding: 10px;
+  border-collapse: collapse;
+  margin-bottom: 5px;
+}
+
+.object_table_large {
+  border: 1px solid #003b6f;
+  padding: 10px;
+  border-collapse: collapse;
+  margin-bottom: 5px;
+  width: 100%;
+}
+tr.row {
+  cursor: pointer;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 8px;
+}
+
+td.p_data,
+td.u_data {
+  width: 150px;
+}
+  
+td.actions {
+  /*width: 200px;*/
+}
+
+.object_row_even {
+  background-color: white;
+}
+.object_row_even:hover {
+  background-color: #003b6f;
+  color: white;
+}
+.object_row_odd,
+.no_results {
+  background-color: #EBF7F7;
+}
+.object_row_odd:hover {
+  background-color: #003b6f;
+  color: white;
+}
+
+.error {
+  background-color: #DB8E8C;
+  color: #FA0400;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.notification {
+  background-color: #67E08E;
+  color: #136134;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.navigation_header {
+  margin: 0 0 15px 0;
+  height: 20px;
+  background-color: #003b6f;
+}
+
+.submenu.ng-hide-add {
+  -webkit-transition:0.3s linear all;
+  -moz-transition:0.3s linear all;
+  -o-transition:0.3s linear all;
+  transition:0.3s linear all;
+
+  opacity:1;
+}
+.submenu.ng-hide-add.ng-hide-add-active {
+  opacity:0;
+}
+
+/* When showing an element */
+.submenu.ng-hide-remove {
+  -webkit-transition:0.3s linear all;
+  -moz-transition:0.3s linear all;
+  -o-transition:0.3s linear all;
+  transition:0.3s linear all;
+
+  /* this needs to be here to make it visible during the animation
+     since the .ng-hide class is already on the element rendering
+     it as hidden. */
+  display:block!important;
+  opacity:0;
+}
+.submenu,
+.submenu.ng-hide-remove.ng-hide-remove-active {
+  opacity:1;
+}
+
+.object_container {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.object_list_large {
+  width: 100%;
 }

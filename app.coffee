@@ -57,6 +57,8 @@ passport.use(new LocalStrategy( (username, password, done) ->
         return done(null, false, { message: 'Incorrect username.' })
       else
         #console.log(user.password) 
+        if (password != user.password)
+          return done(null, false, {message: "Incorrect password" })
         done(null,user)
     )
 ))
@@ -92,23 +94,29 @@ app.get('/', routes.index)
 passport_options =
   successRedirect: '/tablero'
   failureRedirect: '/'
-  failureFlash: true 
+  failureFlash: true
 
 app.post('/login', passport.authenticate('local', passport_options))
 app.all('*',ensureAuthenticated)
 
+app.get('/hechos/:cedula', routes.hechos) 
 app.get('/tablero', routes.tablero)
-app.post('/consulta/cedula', routes.consulta_cedula)
+app.post('/consulta_cedula', routes.consulta_cedula)
+#admin routes
 app.get('/admin', ensureAdmin, routes.admin)
+app.put('/admin/save_postulado', routes.save_postulado)
+app.get('/admin/usuarios/usuarios.json', ensureAdmin, routes.usuarios)
+app.get('/admin/postulados/postulados.json', ensureAdmin, routes.postulados)
+
 app.get('/admin/partials/:name',(req, res) ->
    name = req.params.name
    res.render('admin/partials/' + name)
 )
+
 app.get('/partials/:name',(req, res) ->
    name = req.params.name
    res.render('partials/' + name)
 )
-app.put('/admin/save_postulado', routes.save_postulado)
 
 ########################
 #Start the app

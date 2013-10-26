@@ -1,0 +1,49 @@
+!!! 5
+html(ng-app="jusypazApp")
+  head
+    link(rel='stylesheet', href='/css/main.css') 
+    script(src='/js/angular.min.js')
+    script(src='/js/angular-animate.min.js')
+    script(src='/js/app.js')
+    title jusypaz - Listado de hechos de postulado 
+  body
+    div#container
+      div.navigation_header
+
+      div.menu_bar(ng-controller="MenuCtrl")
+        ul.menu_options
+          li.menu_option(ng-click="show_todos()" ng-mouseleave="hide_menu()" ng-mouseover="animate_menu()") Justicia Y Paz
+            ul.submenu(ng-show="animateJyp")
+              li.submenu_option(ng-click="show_delitos()") Delitos confesados
+              li.submenu_option(ng-click="show_fosas()") Fosas
+              li.submenu_option(ng-click="show_operaciones()") Operaciones conjuntas 
+              li.submenu_option(ng-click="show_autoridades()") Relaciones autoridades 
+              li.submenu_option(ng-click="show_parapolitica()") Parapolitica 
+          li.menu_option(ng-click="show_menores()") Reclutamiento Ilicito de Menores
+          li.menu_option(ng-click="show_bienes()") Bienes
+          li.menu_option(ng-click="show_procesos()") Procesos 
+          li.menu_option(ng-click="show_hv()") Hoja de Vida 
+  
+      div.object_container
+        div.object_list_large
+          table#hechos.object_table_large
+            thead.object_list_header
+              th Titulo 
+              th Código penal 
+              th Fecha
+              th Municipio 
+           
+            tbody
+              tr.row.no_results(ng-show="!hechos.length") 
+                td(colspan="4") No se han encontrado hechos de este tipo
+              tr.row(ng-click="ver_hecho({{hecho.id}})" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'" ng-repeat="hecho in hechos")
+                td.p_data
+                  {{hecho.titulo}}
+                td.p_data
+                  {{hecho.penal}}
+                td.p_data
+                  {{hecho.fecha}}
+                td.p_data
+                {{hecho.municipio}}
+
+

@@ -1,5 +1,6 @@
 var adminApp = angular.module('jusypazAdminApp', [
     'ngRoute',
+    'adminServices',
     'adminControllers']);
 
 adminApp.config(['$routeProvider',
@@ -13,41 +14,78 @@ adminApp.config(['$routeProvider',
         templateUrl: 'admin/partials/index',
         controller: 'AdminCtrl'
       }).
+      when('/crea_hecho', {
+        templateUrl: 'partials/hecho',
+        controller: 'AdminCtrl'
+      }).
       otherwise({
         redirectTo: 'admin/index'
       });
 }]);
 
+var adminServices = angular.module('adminServices', ['ngResource']);
+     
+adminServices.factory('Usuario', ['$resource',
+  function($resource){
+    return $resource('admin/usuarios/:usuarioId.json', {}, {
+    query: {method:'GET', params:{usuarioId:'usuarios'}, isArray:true}
+    });
+  }]);
+
+adminServices.factory('Postulado', ['$resource',
+  function($resource){
+    return $resource('admin/postulados/:postuladoId.json', {}, {
+    query: {method:'GET', params:{postuladoId:'postulados'}, isArray:true}
+    });
+  }]);
+
+
 adminControllers = angular.module('adminControllers',[]);
 
-adminControllers.controller('AdminCtrl', ['$scope', '$http',
-  function AdminCtrl($scope, $http) {
+adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postulado',
+  function AdminCtrl($scope, $http, Usuario, Postulado) {
+    $scope.notification = "";
+    $scope.error = "";
+
+    $scope.usuarios = Usuario.query()
+    $scope.postulados = Postulado.query()
+
     $scope.post = {
         nombres:          'Nombres',
         apellidos:        'Apellidos',
         cedula:           'Cédula',
         fecha_nacimiento: "Fecha nacimiento",
-        estado_civil:      "Estado civil",
-        direccion:         "Dirección",
-        ciudad:            "Ciudad",
-        telefono_fijo:     "Telefono fijo",
-        telefono_movil:    "Telefono movil",
-        correo:            "Correo electrónico"
+        estado_civil:     "Estado civil",
+        direccion:        "Dirección",
+        ciudad:           "Ciudad",
+        telefono_fijo:    "Telefono fijo",
+        telefono_movil:   "Telefono movil",
+        correo:           "Correo electrónico"
     };
 
-    $scope.create_user = function() {
+    $scope.ver_hechos = function(cedula) {
+      location.href = "/hechos/" + cedula;
+    } 
+
+    $scope.cancel = function() {
+      $scope.notification = "";
+      $scope.error = "";
+    };
+
+    $scope.create_postulado = function() {
       location.href = '/admin#crea_postulado';
     };
   
-    /*
-    $scope.save_single = function(data) {
-        alert("svae_single" + data);
-    };*/
+    $scope.crea_hecho = function() {
+      location.href = '/admin#crea_hecho';
+    };
+
     $scope.save_postulado = function() {
-        $http.put('/admin/save_postulado',$scope.post).success(function() {
-            //alert("Callback!");
+        $http.put('/admin/save_postulado',$scope.post).
+           success(function() {
+            $scope.notification = "Postulado salvado con éxito."; 
         }).error(function() {
-            alert("Failed");
+            $scope.error = "Error al salvar el postulado."; 
         });
     };
 }]);
@@ -101,7 +139,8 @@ adminApp.directive('inlineEdit', function($timeout) {
         previousValue = scope.model;
 
         $timeout(function() {
-          elm.find('input')[0].focus();
+          //elm.find('input')[0].focus();
+          elm.find('input')[0].select();
         }, 0, false);
       };
       scope.save = function() {

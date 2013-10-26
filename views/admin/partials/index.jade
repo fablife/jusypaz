@@ -1,2 +1,47 @@
 h1 Administración
-button(id=create_user, ng-click="create_user()") Crea postulado
+div.data_list
+
+  h2 Postulados
+  div.object_list
+    table#postulados.object_table
+      thead.object_list_header
+        th Nombres
+        th Apellidos
+        th Cédula
+        th Operaciones
+   
+      tr.row(ng-click="ver_hechos({{postulado.cedula}})" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'" ng-repeat="postulado in postulados")
+        td.p_data
+          {{postulado.nombres}}
+        td.p_data
+          {{postulado.apellidos}}
+        td.p_data
+          {{postulado.cedula}}
+        td.actions
+          button.icon_buttons(ng-click="edit()") Editar
+          button.icon_buttons(ng-click="delete()") Remover 
+          button.icon_buttons(ng-click="crea_hecho()") Crea hecho
+    button.list_buttons.action_button(id=create_postulado, ng-click="create_postulado()") Nuevo postulado
+
+
+  h2 Usuarios
+  div.object_list
+    table#usuarios.object_table
+      thead.object_list_header
+        th Username 
+        th Nombres 
+        th Rol
+        th Operaciones
+ 
+      tr.row(ng-repeat="usuario in usuarios")
+        td.u_data
+          {{usuario.username}}
+        td.u_data
+          {{usuario.name}}
+        td.u_data
+          {{usuario.role}}
+        td.actions
+          button.icon_buttons(id='edit') Editar
+          button.icon_buttons(id='delete') Remover 
+        
+    button.list_buttons.action_button(id=create_user, ng-click="create_user()") Nuevo usuario 

@@ -10,7 +10,8 @@ db = mongoose.connect(config.creds.mongoose_auth_local)
 admin = new User({
     username : "fabio",
     password : "1234",
-    role : "admin"
+    role : "admin",
+    cedula: 411371
 })
 
 console.log "Going to save admin user with username: " + admin.username
