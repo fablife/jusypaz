@@ -1,24 +1,95 @@
 /* color: #003b6f */
-
+/* GENERALES */
+/* ================================================== */
+img, li, ul {
+    margin:0;
+    padding: 0;
+}
 body {
-    font-size: 12px;
-    font: Arial;
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
 }
 
+.centered {
+    text-align: center;
+}
+
+.w100 {
+  width: 100px;
+}
+
+.inline {
+    display: inline-block;
+}
+
+.right {
+    float: right;
+}
+
+.center {
+    text-align: center;
+}
+
+.mbottom15 {
+    margin-bottom: 15px;
+}
+
+.w65 {
+  width: 65px;
+}
+
+
+/* Home */
+/* ================================================== */
+.home_container {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: #003b6f;
+  left: 0;
+  top: 0;
+}
+
+.home_banner {
+   position: fixed;
+   left: 0px;
+   top: 350px;
+   z-index: 2;
+}
+
+.submit {
+    background-color: #003b6f;
+    color: white;
+    font-weight:bold;
+    height: 40px;
+    width: 60px;
+    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 0px;
+}
+
+.logo {
+    background-color: #003b6f;
+    margin-top: 20px;
+    padding: 15px 0 0 20px;
+    border-radius: 4px;
+}
 .login {
     position: fixed;
     top: 50%;
     left: 50%;
     margin-left: -200px;
-    margin-top: -250px;
+    margin-top: -320px;
     width: 400px;
+    z-index: 100;
 }
 
 .login_form {
-    margin-top: 60px;
+    margin-top: 40px;
     padding: 20px;
     border-radius: 8px;
     background-color: #5EBAD9;
+    box-shadow: 5px 5px 2px #010101;
 }
 
 .form_label {
@@ -34,6 +105,67 @@ body {
     padding: 0 6px;
 }
 
+
+/*  App */
+/* ================================================== */
+.navigation_header {
+  height: 44px;
+  margin: 0 0 15px 0;
+  background-color: #003b6f;
+}
+
+.header_logo {
+  float: left;
+  margin: 2px 0 0 5px;
+}
+
+.header_actions {
+  margin-top: 12px;
+  margin-right: 10px;
+  color: white 10px;
+  float: right;
+}
+
+.header_menu {
+    list-style-type: none;
+    margin: 0 10px 0 0;
+}
+
+li.header_menu_item {
+    cursor: pointer;
+}
+
+
+ul.header_submenu {
+  list-style-type: none;
+  padding-left: 0;
+  right: 20px;
+  padding-top: 10px;
+  position: absolute;
+  z-index: 10;
+  text-align: left;
+}
+
+li.header_submenu_item {
+  padding: 8px;
+  background-color: #EBF7F7;
+  border-bottom: 1px solid #003b6f;
+}
+
+li.header_submenu_item:hover  {
+    background-color: #003b6f;
+    color: white;
+}
+
+a.action_link {
+  color: white;
+  font-weight: bold;
+}
+
+.cedula_input {
+  margin-top: 12px;
+}
+    .
 .menu_bar {
   border-bottom: 1px solid #003b6f;
 }
@@ -85,39 +217,6 @@ div.inline_edit_text {
     padding: 6px;
 }
   
-
-.submit {
-    background-color: #003b6f;
-    color: white;
-    font-weight:bold;
-    height: 40px;
-    width: 60px;
-    padding: 10px;
-    margin-top: 15px;
-    margin-bottom: 0px;
-}
-
-.logo {
-    background-color: #003b6f;
-    padding: 15px 0 0 20px;
-    border-radius: 4px;
-}
-
-.center {
-    text-align: center;
-}
-
-.mbottom15 {
-    margin-bottom: 15px;
-}
-
-.w65 {
-  width: 65px;
-}
-
-.inline {
-    display: inline-block;
-}
 
 .form {
   font-size: 14px;
@@ -306,30 +405,25 @@ td.actions {
   border-radius: 5px;
 }
 
-.navigation_header {
-  margin: 0 0 15px 0;
-  height: 20px;
-  background-color: #003b6f;
-}
 
-.submenu.ng-hide-add {
-  -webkit-transition:0.3s linear all;
-  -moz-transition:0.3s linear all;
-  -o-transition:0.3s linear all;
-  transition:0.3s linear all;
+.header_submenu.ng-hide-add {
+  -webkit-transition:0.2s linear all;
+  -moz-transition:0.2s linear all;
+  -o-transition:0.2s linear all;
+  transition:0.2s linear all;
 
   opacity:1;
 }
-.submenu.ng-hide-add.ng-hide-add-active {
+.header_submenu.ng-hide-add.ng-hide-add-active {
   opacity:0;
 }
 
 /* When showing an element */
-.submenu.ng-hide-remove {
-  -webkit-transition:0.3s linear all;
-  -moz-transition:0.3s linear all;
-  -o-transition:0.3s linear all;
-  transition:0.3s linear all;
+.header_submenu.ng-hide-remove {
+  -webkit-transition:0.2s linear all;
+  -moz-transition:0.2s linear all;
+  -o-transition:0.2s linear all;
+  transition:0.2s linear all;
 
   /* this needs to be here to make it visible during the animation
      since the .ng-hide class is already on the element rendering
@@ -337,8 +431,8 @@ td.actions {
   display:block!important;
   opacity:0;
 }
-.submenu,
-.submenu.ng-hide-remove.ng-hide-remove-active {
+.header_submenu,
+.header_submenu.ng-hide-remove.ng-hide-remove-active {
   opacity:1;
 }
 

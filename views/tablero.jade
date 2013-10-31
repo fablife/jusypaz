@@ -2,16 +2,31 @@
 html(ng-app="jusypazApp")
   head
     link(rel='stylesheet', href='/css/main.css') 
+    link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css')
     script(src='/js/angular.min.js')
     script(src='/js/tablero.js')
     title jusypaz - Tablero de inicio
 
   body
-    div.navigation_header
+    div.navigation_header.centered
+      img.header_logo(width="40px", height="40px", src="/img/logo_small.png")
 
-    h1 Aplicación de Justicia y Paz
-    h5 Bienvenido! 
-    
+      div.inline.cedula_input
+        form(id="cedula-form" name="cedula-form" ng-submit="consulta_cedula()" )
+          input(ng-model="cedula" required)
+      
+      div.header_actions.inline(ng-controller="MenuCtrl")
+        div.menu_wrapper.inline
+          ul.header_menu.inline
+              li.header_menu_item(ng-mouseleave="hide_menu()" ng-mouseover="animate_menu()")
+                img.inline(width="24" src="/img/conf.png")
+                ul.header_submenu(ng-show="show_submenu")
+                  li.header_submenu_item Administración Postulados
+                  li.header_submenu_item Administración Usuarios 
+                  li.header_submenu_item Configuraciones 
+                  li.header_submenu_item Logout 
+
+      
 
     div.acciones(ng-controller="TableroCtrl")
       h2 Operaciones 
@@ -22,8 +37,6 @@ html(ng-app="jusypazApp")
       h2 Busqueda por cédula: 
       div.query
  
-        form(id="cedula-form" name="cedula-form" ng-submit="consulta_cedula()" )
-          input(ng-model="cedula" required)
           input(type="submit", value="Consulta")
   
           div.result {{result}}

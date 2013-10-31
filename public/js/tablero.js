@@ -20,3 +20,14 @@ app.controller('TableroCtrl', function TableroCtrl($scope, $http) {
   };
 });
 
+app.controller("MenuCtrl", function MenuCtrl($scope, $http) {
+
+  $scope.show_submenu = false; 
+  $scope.animate_menu = function() {
+    $scope.show_submenu = true;
+  }
+
+  $scope.hide_menu = function() {
+    $scope.show_submenu = false;
+  }
+});
