@@ -4,16 +4,20 @@ html(ng-app="jusypazApp")
     link(rel='stylesheet', href='/css/main.css') 
     link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css')
     script(src='/js/angular.min.js')
-    script(src='/js/tablero.js')
+    script(src='/js/angular-route.min.js')
+    script(src='/js/angular-animate.min.js')
+    script(src='/js/angular-animate.min.js')
+    script(src="/js/angular-resource.min.js")
+    script(src='/js/app.js')
     title jusypaz - Tablero de inicio
 
   body
     div.navigation_header.centered
       img.header_logo(width="40px", height="40px", src="/img/logo_small.png")
 
-      div.inline.cedula_input
+      div.inline.cedula_input_div
         form(id="cedula-form" name="cedula-form" ng-submit="consulta_cedula()" )
-          input(ng-model="cedula" required)
+          input.cedula_input(ng-model="cedula" required)
       
       div.header_actions.inline(ng-controller="MenuCtrl")
         div.menu_wrapper.inline
@@ -21,22 +25,16 @@ html(ng-app="jusypazApp")
               li.header_menu_item(ng-mouseleave="hide_menu()" ng-mouseover="animate_menu()")
                 img.inline(width="24" src="/img/conf.png")
                 ul.header_submenu(ng-show="show_submenu")
-                  li.header_submenu_item Administración Postulados
-                  li.header_submenu_item Administración Usuarios 
-                  li.header_submenu_item Configuraciones 
-                  li.header_submenu_item Logout 
+                  li.header_submenu_item(ng-click="admin_postulados()")  Administración Postulados
+                  li.header_submenu_item(ng-click="admin_users()") Administración Usuarios 
+                  li.header_submenu_item(ng-click="config()") Configuraciones 
+                  li.header_submenu_item(ng-click="logout()") Logout 
 
       
 
-    div.acciones(ng-controller="TableroCtrl")
-      h2 Operaciones 
-      if role == "admin"
-        button(id="informes") Informes
-        button(id="admin", ng-click = "admin_index()") Administración
+    div(ng-view)
 
-      h2 Busqueda por cédula: 
-      div.query
- 
-          input(type="submit", value="Consulta")
-  
-          div.result {{result}}
+    //-div.acciones(ng-controller="TableroCtrl")
+    //-   if role == "admin"
+    //-     button(id="informes") Informes
+    //-     button(id="admin", ng-click = "admin_index()") Administración

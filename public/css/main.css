@@ -8,6 +8,7 @@ img, li, ul {
 body {
   font-size: 12px;
   font-family: 'Open Sans', sans-serif;
+  color: #010101;
 }
 
 .centered {
@@ -152,6 +153,7 @@ li.header_submenu_item {
   border-bottom: 1px solid #003b6f;
 }
 
+
 li.header_submenu_item:hover  {
     background-color: #003b6f;
     color: white;
@@ -162,10 +164,15 @@ a.action_link {
   font-weight: bold;
 }
 
-.cedula_input {
+.cedula_input_div {
   margin-top: 12px;
 }
-    .
+
+input.cedula_input {
+  height: 20px;
+  border: 1px solid #003b6f;
+}
+
 .menu_bar {
   border-bottom: 1px solid #003b6f;
 }
@@ -333,6 +340,14 @@ div.big_text_div {
   background-color: #003b6f;
   color: white;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.top_button {
+    float: right;
+    height: 45px;
+    border: 1px solid #003b6f;
+    padding: 0 10px;
 }
 
 .cancel_button {
@@ -343,6 +358,7 @@ div.big_text_div {
 }
 
 .object_table {
+  width: 100%;
   border: 1px solid #003b6f;
   padding: 10px;
   border-collapse: collapse;
@@ -360,7 +376,10 @@ tr.row {
   cursor: pointer;
 }
 
-th,
+th {
+  text-align: left;
+  padding: 8px 8px 16px 8px;
+}
 td {
   text-align: left;
   padding: 8px;
@@ -443,4 +462,8 @@ td.actions {
 
 .object_list_large {
   width: 100%;
+}
+
+.editing {
+    background-color: #EDB44A;
 }

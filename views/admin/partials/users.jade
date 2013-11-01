@@ -1,0 +1,22 @@
+div.data_container
+    div.users(ng-controller="AdminCtrl")
+        h1 Usuarios
+        div.data_table_container
+            button.action_button.top_button(ng-click="add_user()") Agregar Usuario 
+            table#users_table.object_table
+                thead
+                    tr
+                      th Usuario
+                      th Cedula
+                      th Contraseña 
+                      th Rol
+                      th Acciones
+                tbody
+                    tr.row(ng-class="{editing: is_dirty(user)} " ng-repeat="user in usuarios" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+                      td {{user.name}}
+                      td {{user.cedula}}
+                      td ************ 
+                      td {{user.role}}
+                      td 
+                          button.action Editar 
+                          button.action Eliminar

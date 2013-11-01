@@ -1,0 +1,24 @@
+div.data_container
+    div.users(ng-controller="AdminCtrl")
+        h1 Postulados 
+        div.data_table_container
+            button.action_button.top_button(ng-click="add_postulado()") Agregar Postulado 
+            table#users_table.object_table
+                thead
+                    tr
+                      th Nombres 
+                      th Apellidos 
+                      th Cedula 
+                      th Fecha de nacimiento 
+                      th Ciudad 
+                      th Acciones 
+                tbody
+                    tr.row(ng-class="{editing: is_dirty(p)}" ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+                      td {{p.nombres}}
+                      td {{p.apellidos}}
+                      td {{p.cedula}} 
+                      td {{p.fecha_nacimiento}}
+                      td {{p.ciudad}}
+                      td 
+                          button.action Editar 
+                          button.action Eliminar
