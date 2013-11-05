@@ -35,7 +35,7 @@ exports.usuarios = (req, res) ->
   catch e
     handle_error(e, "Error retornando lista de usuarios", res)
 
-
+    
 exports.postulados = (req, res) ->
   console.log("GET postulados ")
   try
@@ -62,7 +62,17 @@ exports.hechos = (req, res) ->
         #  res.render('hechos',{hechos: hechos})
         #  console.log("Lista de hechos mandada")
         #  })
-
+exports.hv = (req, res) ->
+  console.log "Hoja de vida"
+  cedula = req.params.postuladoId
+  console.log "params: " + req.params
+  console.log "Cedula: " + cedula
+  can_access(req, res, cedula, (err) ->
+    if err?
+      handle_error(err, err.message, res)
+    else
+      getPostulado(req, res)
+  )
 exports.consulta_cedula = (req,res) ->
   console.log "Consulta cedula"
   cedula = req.body.cedula
@@ -98,3 +108,18 @@ can_access = (req, res, cedula, callback) ->
         console.log "Can access"
         callback(null)
     )
+
+getPostulado = (req, res) ->
+  console.log("_get postulado")
+  try
+    p = req.params.postuladoId
+    if not p?
+      throw new Error("Postulado invalido")
+    Postulado.find({'cedula':p}, (err, postulado) ->
+      if err?
+        throw err
+      res.send(postulado)
+      console.log("Postulado retornado")
+      )
+  catch error
+      handle_error(error, "Error accedendo a postulado.")

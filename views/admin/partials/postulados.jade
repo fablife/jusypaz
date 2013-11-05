@@ -13,7 +13,7 @@ div.data_container
                       th Ciudad 
                       th Acciones 
                 tbody
-                    tr.row(ng-class="{editing: is_dirty(p)}" ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+                    tr.row(ng-click="view_postulado(p.cedula)" ng-class="{editing: is_dirty(p)}" ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
                       td {{p.nombres}}
                       td {{p.apellidos}}
                       td {{p.cedula}} 

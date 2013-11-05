@@ -101,10 +101,13 @@ app.all('*',ensureAuthenticated)
 
 app.get('/hechos/:cedula', routes.hechos) 
 app.get('/tablero', routes.tablero)
-app.post('/consulta_cedula', routes.consulta_cedula)
+app.get('/postulados/:postuladoId/hv', routes.hv)
+#app.get('postulados/:postuladoId', routes.postulado)
+
+#app.post('/consulta_cedula', routes.consulta_cedula)
 #admin routes
 app.get('/admin', ensureAdmin, routes.admin)
-app.put('/admin/save_postulado', routes.save_postulado)
+#app.put('/admin/save_postulado', routes.save_postulado)
 app.get('/admin/usuarios/usuarios.json', ensureAdmin, routes.usuarios)
 app.get('/admin/postulados/postulados.json', ensureAdmin, routes.postulados)
 

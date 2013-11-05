@@ -2,6 +2,7 @@ var app = angular.module('jusypazApp', [
         'ngAnimate',
         'adminControllers',
         'adminServices',
+        'ui.bootstrap',
         'ngRoute']);
 
 var adminServices = angular.module('adminServices', ['ngResource']);
@@ -31,18 +32,65 @@ app.config(['$routeProvider',
         templateUrl: 'admin/partials/postulados',
         controller: 'AdminCtrl'
       }).
-      when('/index', {
-        templateUrl: 'partials/tablero',
-        controller: 'AdminCtrl'
-      }).
-      when('/crea_hecho', {
-        templateUrl: 'partials/hecho',
-        controller: 'AdminCtrl'
+      when('/postulados/:postuladoId', {
+        templateUrl: 'partials/postulado',
+        controller: 'PostuladoCtrl'
       }).
       otherwise({
-        redirectTo: 'admin/index'
+        redirectTo: '/index'
       });
 }]);
+
+app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $http){
+  $scope.postulado_id = $routeParams.postuladoId;
+  $scope.hv = function() {
+    $http.get('/postulados/' + $scope.postulado_id + "/hv").success(function(data, status, headers, config) {
+      $scope.hoja = data;
+    }).error(function(data, status, headers, config) {
+
+    });
+  }
+
+  $scope.jyp = function() {
+    $http.get('/postulados/' + $scope.postulado_id + "/jyp")
+    .success(function(data, status, headers, config) {
+      $scope.hv_data = data;
+    })
+    .error(function(data, status, headers, config){
+        
+    }); 
+  }
+
+  $scope.proc = function() {
+    $http.get('/postulados/' + $scope.postulado_id + "/proc")
+    .success(function(data, status, headers, config) {
+      $scope.proc = data;
+    })
+    .error(function(data, status, headers, config){
+        
+    });
+  }
+
+  $scope.bienes = function() {
+    $http.get('/postulados/' + $scope.postulado_id + "/bienes")
+    .success(function(data, status, headers, config) {
+      $scope.bienes = data;
+    })
+    .error(function(data, status, headers, config){
+        
+    });
+  }
+
+  $scope.menores = function() {
+    $http.get('/postulados/' + $scope.postulado_id + "/menores")
+    .success(function(data, status, headers, config) {
+      $scope.menores = data;
+    })
+    .error(function(data, status, headers, config){
+        
+    });
+  }
+});
 
 app.controller("MenuCtrl", function MenuCtrl($scope, $http) {
 
@@ -83,6 +131,10 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
             password: null,
             rol: null
         });
+    }
+
+    $scope.view_postulado = function(postulado_id) {
+      location.href = '#/postulados/' + postulado_id;
     }
 
     $scope.add_postulado = function() {

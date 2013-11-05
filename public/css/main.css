@@ -243,17 +243,88 @@ div.inline_edit_text {
   width: 282px;
 }
 
+.info_area {
+  margin-top: 10px;
+}
+
+.info_tabs {
+  margin-top: 10px;
+}
+
+
+li.info_tab.active a {  
+  background-color: #003b6f !important;
+  color: white !important;
+  font-weight: bold;
+}
+
+li.info_tab.active:hover {
+  top: -3px;
+}
+
+li.info_tab {
+  display: inline-block;  
+  border-radius: 5px 5px 0 0;
+  font-size: 12px;
+  font-weight: normal;
+  cursor: pointer;
+  position: relative;
+  top: 0px;
+  margin-right: 10px;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+
+li.info_tab a {
+  color: #003b6f;
+  background-color: #5EBAD9;
+}
+
+li.info_tab:hover {
+  background: rgba(255,255,255,0.5);
+  top: -3px;
+}
+
+.info_content {
+  border: 1px solid #003b6f;
+  border-radius: 0 5px 5px 5px;
+}
+
+.tab_content {
+  z-index: 2;
+  text-align: left;
+  width: 100%;
+  font-size: 20px;
+  line-height: 140%;
+  padding-top: 10px;
+  padding: 15px;
+  box-sizing: border-box;
+  -webkit-animation-duration: 0.5s;
+  -o-animation-duration: 0.5s;
+  -moz-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+}
+
 .postulado_info {
     width: 100%;
-    height: 200px;
+    height: 100px;
+    margin-top: 20px;
+}
+
+.nombres {
+  margin-left: 20px;
+  width: 200px;
+  float: left;
 }
 
 .postulado_img {
   background-image: url('/img/profile_placeholder.png');
-  background-size: 200px 200px;
+  background-size: 100px 100px;
   float: left;
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 100px;
 }
 
 .info_col {
@@ -278,10 +349,6 @@ div.inline_edit_text {
   padding-top:38px;
 }
 
-div.postulado_main {
-  width: 100%;
-  margin: 20px 0 80px 0;
-}  
 
 div.checkbox_label {
   /*display: inline-block;*/
