@@ -99,16 +99,15 @@ passport_options =
 app.post('/login', passport.authenticate('local', passport_options))
 app.all('*',ensureAuthenticated)
 
-app.get('/hechos/:cedula', routes.hechos) 
 app.get('/tablero', routes.tablero)
 app.get('/postulados/:postuladoId/hv', routes.hv)
-#app.get('postulados/:postuladoId', routes.postulado)
 
-#app.post('/consulta_cedula', routes.consulta_cedula)
 #admin routes
 app.get('/admin', ensureAdmin, routes.admin)
-#app.put('/admin/save_postulado', routes.save_postulado)
+app.put('/admin/save_user', routes.save_user)
+app.put('/admin/save_postulado', routes.save_postulado)
 app.get('/admin/usuarios/usuarios.json', ensureAdmin, routes.usuarios)
+app.put('/admin/postulados/:postuladoId/hv', routes.save_hv)
 app.get('/admin/postulados/postulados.json', ensureAdmin, routes.postulados)
 
 app.get('/admin/partials/:name',(req, res) ->

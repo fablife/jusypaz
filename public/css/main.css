@@ -203,46 +203,24 @@ li.submenu_option {
 }
 
 input.inline_edit_input {
-    border-radius: 5px;
     height: 28px;
-    margin-bottom: 20px;
     padding: 0;
     border: 0;
-    width: 188px;
-    padding: 0 6px;
+    padding: 5px;
 }
 
-div.inline_edit_div {
-    background-color: #EBF7F7;
-    border: 1px solid #003b6f;
-    border-radius: 5px;
-    height: 28px;
-    margin-bottom: 20px;
+.inline_edit_text {  
+    border-left: 1px solid #D6D6D6;
+    border-bottom : 1px solid #D6D6D6;
+    padding: 0 0 5px 5px;
 }
 
-div.inline_edit_text {
-    padding: 6px;
+.info {
+  font-size: 12px;
 }
-  
-
-.form {
-  font-size: 14px;
-  height: 28px;
-  margin-bottom: 20px;
+h2.info_subtitle {
+  font-size: 24px !important;
 }
-
-.square_28 {
-  height: 28px;
-  width: 28px;
-}
-
-.editable_heading {
-  font-weight: bold;
-  font-size: 20px;
-  margin-right: 15px;
-  width: 282px;
-}
-
 .info_area {
   margin-top: 10px;
 }
@@ -365,6 +343,11 @@ label {
   font-weight: bold;
 }
 
+label.small_form {
+  font-size: 12px;
+  display: inline;
+}
+
 #direccion {
   height: 132px;
 }
@@ -430,6 +413,16 @@ div.big_text_div {
   padding: 10px;
   border-collapse: collapse;
   margin-bottom: 5px;
+  table-layout: fixed;
+}
+
+.tab_form_table {
+  width: 100%;
+  border-top: 1px solid #003b6f;
+  padding: 10px;
+  border-collapse: collapse;
+  margin-bottom: 5px;
+  table-layout: fixed;
 }
 
 .object_table_large {
@@ -438,6 +431,7 @@ div.big_text_div {
   border-collapse: collapse;
   margin-bottom: 5px;
   width: 100%;
+  table-layout: fixed;
 }
 tr.row {
   cursor: pointer;

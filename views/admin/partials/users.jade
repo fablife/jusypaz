@@ -5,18 +5,23 @@ div.data_container
             button.action_button.top_button(ng-click="add_user()") Agregar Usuario 
             table#users_table.object_table
                 thead
-                    tr
+                    tr.row
                       th Usuario
                       th Cedula
                       th Contraseña 
                       th Rol
                       th Acciones
                 tbody
-                    tr.row(ng-class="{editing: is_dirty(user)} " ng-repeat="user in usuarios" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
-                      td {{user.name}}
-                      td {{user.cedula}}
-                      td ************ 
-                      td {{user.role}}
+                    tr.row(ng-class="{editing: is_dirty(user)}" ng-repeat="user in usuarios" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
                       td 
-                          button.action Editar 
-                          button.action Eliminar
+                        div(input-inline-edit="user.username" tabindex="{{getIndex($index, 1)}}")
+                      td 
+                        div(input-inline-edit="user.cedula" tabindex="{{getIndex($index,2)}}")
+                      td 
+                        div(input-inline-password="user.password" tabindex="{{getIndex($index,3)}}")
+                      td 
+                        div(input-inline-edit="user.role" tabindex="{{getIndex($index,4)}}")
+                      td
+                            button.action(ng-show="is_dirty(user)" ng-click="save_user(user)") Salvar 
+                            button.action(ng-hide="is_dirty(user)") Editar 
+                            button.action(ng-hide="is_dirty(user)") Eliminar

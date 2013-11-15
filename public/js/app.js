@@ -41,17 +41,156 @@ app.config(['$routeProvider',
       });
 }]);
 
+var escape_function = function(scope, elm, attr) {
+    elm.bind('keydown', function(e) {
+      if (e.keyCode === 27) {
+        scope.$apply(attr.onEsc);
+      }
+    });
+  };
+// On esc event
+app.directive('onEsc', function() {
+    return escape_function;
+});
+
+app.directive('onBlur', function() {
+  return function(scope, elm, attr) {
+    elm.bind('blur', function(e) {
+        //scope.$apply(attr.onBlur);
+    });
+  };
+});
+
+// On enter event
+app.directive('onEnter', function() {
+  return function(scope, elm, attr) {
+    elm.bind('keypress', function(e) {
+      if (e.keyCode === 13) {
+        scope.$apply(attr.onEnter);
+      }
+    });
+  };
+});
+
+app.directive('onTab', function() {
+  return function(scope, elm, attr) {
+    elm.bind('keydown', function(e) {
+      if (e.keyCode === 9) {
+        scope.$apply(attr.onTab);
+      }
+    });
+  };
+});
+// Inline edit directive
+// Inline edit directive
+app.directive('tabFormInputInlineEdit', function($timeout) {
+    return get_inline_edit_widget($timeout, "text", "=tabFormInputInlineEdit", 'partials/tab-form-input-inline-edit');
+});
+
+app.directive('inputInlineEdit', function($timeout) {
+    return get_inline_edit_widget($timeout, "text", '=inputInlineEdit', 'partials/input-inline-edit');
+});
+
+app.directive('inputInlineDate', function($timeout) {
+    return get_inline_edit_widget($timeout, "date", '=inputInlineDate', 'partials/input-inline-date');
+});
+
+app.directive('inputInlinePassword', function($timeout) {
+    return get_inline_edit_widget($timeout, "masked", '=inputInlinePassword', 'partials/input-inline-password');
+});
+
+get_inline_edit_widget = function($timeout, type, model, template) { 
+
+  return {
+    scope: {      
+      model: model,
+      handleSave: '&onSave',
+      handleCancel: '&onCancel'
+    },
+    link: function(scope, elm, attr) {
+      var previousValue;
+      
+      scope.tabindex = attr.tabindex;
+      
+      scope.edit = function() {
+        scope.editMode = true;
+        previousValue = scope.model;
+
+        $timeout(function() {
+          //elm.find('input')[0].focus();
+          elm.find('input')[0].select();
+        }, 0, false);
+      };
+      scope.tab = function() {
+        scope.editMode = false;
+        scope.handleSave({value: scope.model});
+      };
+      scope.save = function() {
+        scope.editMode = false;
+        if (type == "date") {
+          if (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(scope.model)) {
+            scope.date_invalid = false;
+          } else {
+            scope.date_invalid = true;
+          } 
+        }
+        scope.handleSave({value: scope.model});
+      };
+      scope.cancel = function() {
+        scope.editMode = false;
+        scope.model = previousValue;
+        scope.handleCancel({value: scope.model});
+      };
+      scope.blur = function() {
+        scope.editMode = false;
+      }
+    },
+    templateUrl: template
+  };
+}
+
 app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $http){
   $scope.postulado_id = $routeParams.postuladoId;
+
+  $scope.active = "hv";
+
+
+  $scope.save = function() {
+    switch($scope.active) { 
+      case "hv": $scope.save_hr();
+    }
+    
+  }
   $scope.hv = function() {
+    $scope.active = "hv";
     $http.get('/postulados/' + $scope.postulado_id + "/hv").success(function(data, status, headers, config) {
-      $scope.hoja = data;
+      $scope.hoja = data[0];
+      if (data.length == 0 ) {
+        $scope.hoja = get_initial_hv_data();
+      } else {
+        delete $scope.hoja._id;
+      }
     }).error(function(data, status, headers, config) {
 
     });
   }
 
+  $scope.save_hr = function() {
+    if ($scope.hoja.cedula === "undefined" || $scope.hoja.cedula == null) {
+      $scope.hoja.cedula = $scope.postulado_id;
+    }
+    console.log($scope.hoja);
+    $http.put('/admin/postulados/' + $scope.postulado_id + "/hv", $scope.hoja).
+           success(function() {
+            $scope.notification = "Hoja de vida salvada con éxito"; 
+            //user.dirty = false;
+        }).error(function() {
+            $scope.error = "Error al salvar el postulado."; 
+        });
+  }
+
   $scope.jyp = function() {
+    $scope.active = "jyp";
     $http.get('/postulados/' + $scope.postulado_id + "/jyp")
     .success(function(data, status, headers, config) {
       $scope.hv_data = data;
@@ -62,6 +201,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   }
 
   $scope.proc = function() {
+    $scope.active = "proc";
     $http.get('/postulados/' + $scope.postulado_id + "/proc")
     .success(function(data, status, headers, config) {
       $scope.proc = data;
@@ -72,6 +212,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   }
 
   $scope.bienes = function() {
+    $scope.active = "bienes";
     $http.get('/postulados/' + $scope.postulado_id + "/bienes")
     .success(function(data, status, headers, config) {
       $scope.bienes = data;
@@ -82,6 +223,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   }
 
   $scope.menores = function() {
+    $scope.active = "menores";
     $http.get('/postulados/' + $scope.postulado_id + "/menores")
     .success(function(data, status, headers, config) {
       $scope.menores = data;
@@ -123,13 +265,27 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
     $scope.usuarios = Usuario.query()
     $scope.postulados = Postulado.query()
 
+    $scope.getIndex = function(index,i) {
+      return index*10 + i;
+    }
+
+    $scope.save_user = function(user) {
+        $http.put('/admin/save_user', user).
+           success(function() {
+            $scope.notification = "Postulado salvado con éxito."; 
+            user.dirty = false;
+        }).error(function() {
+            $scope.error = "Error al salvar el postulado."; 
+        });
+      
+    }
     $scope.add_user = function() {
         $scope.usuarios.push({
             dirty: true,
-            name: null,
-            cedula: null,
-            password: null,
-            rol: null
+            username: "Nombre",
+            cedula: "00000000",
+            password: "*******",
+            role: "usuario" 
         });
     }
 
@@ -142,51 +298,72 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
             dirty: true,
             nombres: "Nombres",
             apellidos: "Apellidos",
-            cedula: "Cédula",
-            fecha_nacimiento: "Fecha de nacimiento",
+            cedula: "00000000",
+            fecha_nacimiento: "01/12/1950",
             ciudad: "Ciudad"
         });
     }
+
+    $scope.save_postulado = function(postulado) {
+        $http.put('/admin/save_postulado', postulado).
+           success(function() {
+            $scope.notification = "Postulado salvado con éxito."; 
+            postulado.dirty = false;
+        }).error(function() {
+            $scope.error = "Error al salvar el postulado."; 
+        });
+    };
+
     $scope.is_dirty = function(item){
        return item.dirty == true;
     }
-
-    $scope.post = {
-        nombres:          'Nombres',
-        apellidos:        'Apellidos',
-        cedula:           'Cédula',
-        fecha_nacimiento: "Fecha nacimiento",
-        estado_civil:     "Estado civil",
-        direccion:        "Dirección",
-        ciudad:           "Ciudad",
-        telefono_fijo:    "Telefono fijo",
-        telefono_movil:   "Telefono movil",
-        correo:           "Correo electrónico"
-    };
-
-    $scope.ver_hechos = function(cedula) {
-      location.href = "/hechos/" + cedula;
-    } 
 
     $scope.cancel = function() {
       $scope.notification = "";
       $scope.error = "";
     };
 
-    $scope.create_postulado = function() {
-      location.href = '/admin#crea_postulado';
-    };
-  
-    $scope.crea_hecho = function() {
-      location.href = '/admin#crea_hecho';
-    };
-
-    $scope.save_postulado = function() {
-        $http.put('/admin/save_postulado',$scope.post).
-           success(function() {
-            $scope.notification = "Postulado salvado con éxito."; 
-        }).error(function() {
-            $scope.error = "Error al salvar el postulado."; 
-        });
-    };
 }]);
+
+
+get_initial_hv_data = function() {
+  return {
+    estado_civil : "No especificado",
+    alias : "No especificado",
+    lugar_cedula : "No especificado",
+    lugar_nacimiento : "No especificado",
+    frente_bec : "No especificado",
+    num_desmovil : "No especificado",
+    licencia_cond : "No especificado",
+    pasaporte : "No especificado",
+    salud : "No especificado",
+    clinica : "No especificado",
+    otros_nombres : "No especificado",
+    estatura       : "No especificado",
+    peso  : "No especificado",        
+    domicilio : "No especificado",
+    residencia : "No especificado",
+    fijo : "No especificado",
+    celular : "No especificado",
+    profesion : "No especificado",
+    militar : "No especificado",
+    grado : "No especificado",
+    conyugue : "No especificado",
+    madre : "No especificado",
+    padre : "No especificado",
+    hijos : "No especificado",
+    hermanos : "No especificado",
+    cuentas_ahorro : "No especificado",
+    cuentas_corriente : "No especificado",
+    tarjetas_credito : "No especificado",
+    cdt : "No especificado",
+    obligaciones_entidades : "No especificado",
+    obligaciones_familiares : "No especificado",
+    seguros_vida : "No especificado",
+    inmuebles : "No especificado",
+    muebles : "No especificado",
+    sociedades : "No especificado",
+    otros : "No especificado",
+    bienes_fondo : "No especificado"
+  }
+}

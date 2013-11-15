@@ -1,2 +1,139 @@
-div.hv_info
-	{{hoja[0].estado_civil}}
+div.info
+   h2.info_subtitle Información personal del desmovilizado
+   table.tab_form_table
+      tr
+         td
+            label.small_form Estado civil
+            div(input-inline-edit="hoja.estado_civil" tabindex="1")
+         td
+            label.small_form Alias al momento de la desmovilización
+            div(input-inline-edit="hoja.alias" tabindex="2")
+         td
+            label.small_form Lugar de expedición cédula
+            div(input-inline-edit="hoja.lugar_cedula" tabindex="3")
+      tr
+         td
+            label.small_form Lugar de nacimiento
+            div(input-inline-edit="hoja.lugar_nacimiento" tabindex="5")
+         td
+            label.small_form Edad
+         td
+            label.small_form Frente del BEC con el cual se desmovilizó
+            div(input-inline-edit="hoja.frente_bec" tabindex="11")
+      tr
+         td
+            label.small_form Numero de certificación de desmovilización 
+            div(input-inline-edit="hoja.num_desmovil" tabindex="12")
+         td
+            label.small_form Numero de licencia de conducción
+            div(input-inline-edit="hoja.licencia_cond" tabindex="13")
+         td
+            label.small_form Numero de pasaporte
+            div(input-inline-edit="hoja.pasaporte" tabindex="14")
+      tr
+         td
+            label.small_form Salud - EPS - SISBEN
+            div(input-inline-edit="hoja.salud" tabindex="15")
+         td
+            label.small_form Historia clínica
+            div(input-inline-edit="hoja.clinica" tabindex="16")
+         td
+            label.small_form Otros nombres y apellidos adoptados
+            div(input-inline-edit="hoja.otros_nombres" tabindex="17")
+      tr
+         td
+            label.small_form Estatura
+            div(input-inline-edit="hoja.estatura" tabindex="18")
+         td
+            label.small_form Peso
+            div(input-inline-edit="hoja.peso" tabindex="19")
+         td
+            label.small_form Domicilio
+            div(input-inline-edit="hoja.domicilio" tabindex="20")
+      tr
+         td
+            label.small_form Residencia
+            div(input-inline-edit="hoja.residencia" tabindex="21")
+         td
+            label.small_form Teléfono fijo
+            div(input-inline-edit="hoja.fijo" tabindex="22")
+         td
+            label.small_form Teléfono celular
+            div(input-inline-edit="hoja.celular" tabindex="23")
+      tr
+         td
+            label.small_form Profesión - Ocupación
+            div(input-inline-edit="hoja.profesion" tabindex="24")
+         td
+            label.small_form Servicio Militar
+            div(input-inline-edit="hoja.militar" tabindex="25")
+         td
+            label.small_form Grado de instrucción - Nivél academico
+            div(input-inline-edit="hoja.grado" tabindex="26")
+
+   h2.info_subtitle Datos familiares 
+   table.tab_form_table
+      tr
+         td
+            label.small_form Conyugue o compañera/o permanente
+            div(input-inline-edit="hoja.conyugue" tabindex="31")
+         td
+            label.small_form Nombre de la madre
+            div(input-inline-edit="hoja.madre" tabindex="32")
+         td
+            label.small_form Nombre del padre
+            div(input-inline-edit="hoja.padre" tabindex="33")
+      tr
+         td
+            label.small_form Hijos
+            div(input-inline-edit="hoja.hijos" tabindex="34")
+         td
+            label.small_form Hermanos
+            div(input-inline-edit="hoja.hermanos" tabindex="35")
+
+   h2.info_subtitle Información financiera 
+   table.tab_form_table
+      tr
+         td
+            label.small_form Cuentas de ahorro
+            div(input-inline-edit="hoja.cuentas_ahorro" tabindex="41")
+         td
+            label.small_form Cuentas corrientes
+            div(input-inline-edit="hoja.cuentas_corriente" tabindex="42")
+         td
+            label.small_form Tarjetas de crédito
+            div(input-inline-edit="hoja.tarjetas_credito" tabindex="43")
+      tr
+         td
+            label.small_form CDT
+            div(input-inline-edit="hoja.cdt" tabindex="44")
+         td
+            label.small_form Obligaciones financieras con entidades financieras
+            div(input-inline-edit="hoja.obligaciones_entidades" tabindex="45")
+         td
+            label.small_form Obligaciones financieras con particulares / otras entidades
+            div(input-inline-edit="hoja.obligaciones_familiares" tabindex="46")
+      tr
+         td
+            label.small_form Seguros de vida
+            div(input-inline-edit="hoja.seguros_vida" tabindex="47")
+
+   h2.info_subtitle Bienes 
+   table.tab_form_table
+      tr
+         td
+            label.small_form Inmuebles
+            div(input-inline-edit="hoja.inmuebles" tabindex="51")
+         td
+            label.small_form Muebles
+            div(input-inline-edit="hoja.muebles" tabindex="52")
+         td
+            label.small_form Sociedades y otros 
+            div(input-inline-edit="hoja.sociedades" tabindex="53")
+      tr
+         td
+            label.small_form Otros
+            div(input-inline-edit="hoja.otros" tabindex="54")
+         td
+            label.small_form Bienes que ofrece al fondo nacional de reparación
+            div(input-inline-edit="hoja.bienes_fondo" tabindex="55")

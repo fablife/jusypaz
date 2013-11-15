@@ -5,7 +5,7 @@ div.data_container
             button.action_button.top_button(ng-click="add_postulado()") Agregar Postulado 
             table#users_table.object_table
                 thead
-                    tr
+                    tr.row
                       th Nombres 
                       th Apellidos 
                       th Cedula 
@@ -13,12 +13,20 @@ div.data_container
                       th Ciudad 
                       th Acciones 
                 tbody
-                    tr.row(ng-click="view_postulado(p.cedula)" ng-class="{editing: is_dirty(p)}" ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
-                      td {{p.nombres}}
-                      td {{p.apellidos}}
-                      td {{p.cedula}} 
-                      td {{p.fecha_nacimiento}}
-                      td {{p.ciudad}}
+                    tr.row(ng-class="{editing: is_dirty(p)}" ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
                       td 
-                          button.action Editar 
-                          button.action Eliminar
+                        div(input-inline-edit="p.nombres" tabindex="{{ $index*10 + 1 }}")
+                        div(tabindex="{{ $index*10 + 1 }}")
+                      td 
+                        div(input-inline-edit="p.apellidos" tabindex="{{ $index*10 + 1 }}")
+                      td
+                        div(input-inline-edit="p.cedula" tabindex="{{ $index*10 + 1 }}")
+                      td
+                        div(input-inline-date="p.fecha_nacimiento" tabindex="{{ $index*10 + 1 }}")
+                      td
+                        div(input-inline-edit="p.ciudad" tabindex="{{ $index*10 + 1 }}")
+                      td 
+                        button.action(ng-show="is_dirty(p)" ng-click="save_postulado(p)") Salvar 
+                        button.action(ng-hide="is_dirty(p)") Editar 
+                        button.action(ng-hide="is_dirty(p)") Eliminar
+                        button.action(ng-click="view_postulado(p.cedula)" ) Ver

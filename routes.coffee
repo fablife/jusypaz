@@ -1,5 +1,6 @@
 Postulado = require('./models/models').Postulado
 Usuario = require('./models/models').User
+Hoja = require("./models/models").Hoja
 
 exports.index = (req,res) ->
   res.render('index')
@@ -10,7 +11,23 @@ exports.tablero = (req,res) ->
 exports.admin = (req,res) ->
   res.render('admin/index')
 
+exports.save_user = (req,res) ->
+    console.log ("save_user")
+    console.log (req.body)
+    try
+      u = new Usuario(req.body)
+      u.save((err) -> 
+        if err?
+          throw err
+        else
+          console.log("Usuario " + u.username + " salvado.")
+          res.send("Usuario salvado")
+      )
+    catch e
+      handle_error(e,"Error creando nuevo usuario!",res)
+
 exports.save_postulado = (req,res) ->
+    console.log ("save_postulado")
     console.log (req.body)
     try
       p = new Postulado(req.body)
@@ -18,6 +35,7 @@ exports.save_postulado = (req,res) ->
         if err?
           throw err
         else
+          console.log("Postulado " + p.nombres + " " + p.apellidos + " salvado.")
           res.send("Postulado salvado")
       )
     catch e
@@ -48,20 +66,8 @@ exports.postulados = (req, res) ->
   catch e
     handle_error(e, "Error retornando lista de postulados")
 
-exports.hechos = (req, res) ->
-  console.log("hechos")
-  cedula = req.params.cedula
-  can_access(req,res,cedula, (err) ->
-        if err?
-          handle_error(err,err.message,res)
-        else
-          console.log "going to render"
-          res.render('hechos')
-        )
-        #Hecho.find({'cedula':cedula}, (err, hechos) {
-        #  res.render('hechos',{hechos: hechos})
-        #  console.log("Lista de hechos mandada")
-        #  })
+
+
 exports.hv = (req, res) ->
   console.log "Hoja de vida"
   cedula = req.params.postuladoId
@@ -71,19 +77,18 @@ exports.hv = (req, res) ->
     if err?
       handle_error(err, err.message, res)
     else
-      getPostulado(req, res)
+      getHv(req, res)
   )
-exports.consulta_cedula = (req,res) ->
-  console.log "Consulta cedula"
-  cedula = req.body.cedula
-  console.log cedula
-  role = req.user.role
-  console.log role
-  can_access(req,res,cedula, (err) ->
-      if err?
-        handle_error(err,err.message,res)
-      else
-        res.redirect('/hechos/'+cedula)
+
+exports.save_hv = (req, res) ->
+  console.log "Salvar hoja de vida"
+  cedula = req.params.postuladoId
+  console.log "Cedula: " + cedula
+  can_access(req, res, cedula, (err) ->
+    if err?
+      handle_error(err, err.message, res)
+    else
+      saveHv(req, res)
   )
 
 handle_error = (exception, text, res, code=500) ->
@@ -123,3 +128,35 @@ getPostulado = (req, res) ->
       )
   catch error
       handle_error(error, "Error accedendo a postulado.")
+
+
+getHv = (req, res) ->
+  console.log("_get hoja de vida")
+  try
+    p = req.params.postuladoId
+    if not p?
+      throw new Error("Postulado invalido")
+    return_obj = {}
+    Hoja.find({'cedula':p}, (err, hv_postulado) ->
+      if err?
+        throw err      
+      res.send(hv_postulado)
+      console.log("Hoja de vida de postulado retornada")
+      )
+  catch error
+      handle_error(error, "Error accedendo a postulado.", res)
+
+saveHv = (req, res) ->
+  console.log("_salvando hoja de vida...")
+  try
+    p = req.params.postuladoId
+    Hoja.update('cedula': p, req.body , {upsert: true}, (err) ->
+      if err?
+        throw err
+      res.send("HV saved ok")
+      console.log("Hoja de vida salvada con exito");
+      )
+  catch e
+    handle_error(e, "Error salvando hoja de vida.", res)
+    # ...
+  

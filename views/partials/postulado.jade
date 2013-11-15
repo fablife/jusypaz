@@ -2,8 +2,8 @@ div(ng-controller="PostuladoCtrl")
     //- form(id="postulado_form")
     h1.inline Postulado
     div.actions.right
-      button.buttons.action_button Salvar
-      button.buttons.action_button Cancelar
+      button.buttons.action_button(ng-click="save()") Salvar
+      button.buttons.action_button(ng-click="cancel()") Cancelar
       div.save_indicator
     div.postulado_info
       div.postulado_img
