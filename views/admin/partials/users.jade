@@ -14,13 +14,13 @@ div.data_container
                 tbody
                     tr.row(ng-class="{editing: is_dirty(user)}" ng-repeat="user in usuarios" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
                       td 
-                        div(input-inline-edit="user.username" tabindex="{{getIndex($index, 1)}}")
+                        div(input-inline-edit="user.username" tabindex="{{ $index*10 + 1 }}")
                       td 
-                        div(input-inline-edit="user.cedula" tabindex="{{getIndex($index,2)}}")
+                        div(input-inline-edit="user.cedula" tabindex="{{ $index*10 + 2 }}")
                       td 
-                        div(input-inline-password="user.password" tabindex="{{getIndex($index,3)}}")
+                        div(input-inline-password="user.password" tabindex="{{ $index*10 + 3 }}")
                       td 
-                        div(input-inline-edit="user.role" tabindex="{{getIndex($index,4)}}")
+                        div(input-inline-edit="user.role" tabindex="{{ $index*10 + 4 }}")
                       td
                             button.action(ng-show="is_dirty(user)" ng-click="save_user(user)") Salvar 
                             button.action(ng-hide="is_dirty(user)") Editar 

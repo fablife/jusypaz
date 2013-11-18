@@ -1,5 +1,4 @@
 div(ng-controller="PostuladoCtrl") 
-    //- form(id="postulado_form")
     h1.inline Postulado
     div.actions.right
       button.buttons.action_button(ng-click="save()") Salvar
@@ -7,21 +6,27 @@ div(ng-controller="PostuladoCtrl")
       div.save_indicator
     div.postulado_info
       div.postulado_img
-      div.nombres
+      div.info_general
         label Nombres
-        input(placeholder="Nombres")
+        div(input-inline-edit="postulado.nombres" tabindex="1")
         label Apellidos
-        input(placeholder="Apellidos")
-      div.cedula
+        div(input-inline-edit="postulado.apellidos" tabindex="2")
+      div.info_general
         label Cédula
-        input(placeholder="Cédula")
-
+        div(input-inline-edit="postulado.cedula" tabindex="3")
+        label Fecha de nacimiento
+        div(input-inline-edit="postulado.fecha_nacimiento" tabindex="4")
+      div.info_general
+        label Ciudad
+        div(input-inline-edit="postulado.ciudad" tabindex="5")
 
     tabset.info_tabs
       tab.info_tab.active(heading="Hoja de Vida" select="hv()")
-        div.tab_content(ng-include="'/partials/hv'" ng-controller="PostuladoCtrl")        
-      tab.info_tab(heading="Justicia y Paz" select="jyp()") 
+        div.tab_content(ng-include="'/partials/hv'")        
+      tab.info_tab(heading="Justicia y Paz") 
+        div.tab_content(ng-include="'/partials/jyp'")
       tab.info_tab(heading="Procesos" select="proc()") 
+        div.tab_content(ng-include="'/partials/proc'")
       tab.info_tab(heading="Bienes" select="bienes()") 
       tab.info_tab(heading="Menores" select="menores()") 
 

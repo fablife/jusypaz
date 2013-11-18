@@ -1,0 +1,159 @@
+div.info
+   div.navegacion_hechos
+      button.add_action.right(ng-click="add_delito()")
+      div.empty(ng-hide="delitos.length") No hay delitos para este postulado.
+      div.hecho_lista(ng-show="delitos.length") Hay {{delitos.length}} delitos para este postulado.
+         div.hecho_titulo(ng-repeat = "delito in delitos") {{delito.titulo}}
+
+
+   div.dialog.create_delito(ng-show="create_delito")    
+      h2.info_subtitle Agregar nuevo delito
+      label.form Titulo del hecho
+      br
+      input.dialog_input(ng-model="newdelitotitle" name="newdelitotitle" required type="text")
+      br
+      button.buttons(ng-click="crea_delito()" ng-disabled="invalid_form") Crear delito
+      button.buttons(ng-click="cancela_crea_delito()") Cancelar
+
+   div.datos_version(ng-show="delitos.length")
+      h2.info_subtitle Datos versión
+      table.tab_form_table
+         tr
+            td
+               label.small_form Delito
+               div(input-inline-edit="delito.codigo_penal" tabindex="1")
+            td
+               label.small_form Tipo de versión
+               div(input-inline-edit="delito.tipo_version" tabindex="2")
+            td
+               label.small_form Fecha de la versión
+               div(input-inline-edit="delito.fecha_version" tabindex="3")
+         tr
+            td
+               label.small_form Fiscalía
+               div(input-inline-edit="delito.fiscalia" tabindex="5")
+            td
+               label.small_form Sitio de reclusión
+               div(input-inline-edit="delito.reclusion" tabindex="5")
+            td
+               label.small_form Bloque de postulación
+               div(input-inline-edit="delito.bloque_post" tabindex="11")
+
+      h2.info_subtitle Datos de la acción
+      table.tab_form_table
+         tr
+            td
+               label.small_form Hora en mención del hecho
+               div(input-inline-edit="delito.hora_mencion" tabindex="12")
+            td
+               label.small_form Hecho enunciado con/sin responsabilidad
+               div(input-inline-edit="delito.responsabilidad" tabindex="13")
+            td
+               label.small_form Hecho confesado
+               div(input-inline-edit="delito.confesado" tabindex="14")
+         tr
+            td
+               label.small_form Narración del hecho
+               div(input-inline-edit="delito.narracion" tabindex="15")
+            td
+               label.small_form Clasificación del delito
+               div(input-inline-edit="delito.clasificacion" tabindex="16")
+            td
+               label.small_form Fecha ocurrencia del hecho
+               div(input-inline-edit="delito.fecha_ocurrencia" tabindex="17")
+
+      h2.info_subtitle Georeferenciación
+      table.tab_form_table
+         tr
+            td
+               label.small_form Pais
+               div(input-inline-edit="delito.pais" tabindex="18")
+            td
+               label.small_form Departamento
+               div(input-inline-edit="delito.dept" tabindex="19")
+            td
+               label.small_form Municipio
+               div(input-inline-edit="delito.municipio" tabindex="20")
+         tr
+            td
+               label.small_form Corregimiento
+               div(input-inline-edit="delito.corregimiento" tabindex="21")
+            td
+               label.small_form Vereda
+               div(input-inline-edit="delito.vereda" tabindex="22")
+            td
+               label.small_form Finca
+               div(input-inline-edit="delito.finca" tabindex="23")
+         tr
+            td
+               label.small_form Profesión - Ocupación
+               div(input-inline-edit="delito.via" tabindex="24")
+            td
+               label.small_form Servicio Militar
+               div(input-inline-edit="delito.direccion" tabindex="25")
+            td
+               label.small_form Grado de instrucción - Nivél academico
+               div(input-inline-edit="delito.otro_lugar" tabindex="26")
+
+         button.action(ng-click="map()") Ver mapa
+
+      h2.info_subtitle Autores participantes
+      button.add_action_small(ng-click="add_participante()")
+      table.tab_form_table.addition(ng-repeat="participante in participantes")
+         tr
+            td
+               label.small_form Nombres
+               div(input-inline-edit="participante.nombres" tabindex="31")
+            td
+               label.small_form Apellidos
+               div(input-inline-edit="participante.apellidos" tabindex="32")
+            td
+               label.small_form Alias
+               div(input-inline-edit="participante.alias" tabindex="33")
+         tr
+            td
+               label.small_form Grupo armado pertenencia
+               div(input-inline-edit="participante.pertenencia" tabindex="34")
+            td
+               label.small_form Hecho confesado en versión libre del coparticipe
+               div(input-inline-edit="participante.confesado" tabindex="35")
+            td
+               label.small_form Hora en mención del hecho
+               div(input-inline-edit="participante.hora_mencion" tabindex="36")
+         tr
+            td
+               label.small_form Otros implicados en el hecho
+               div.participante(ng-repeat="otro in participante.otros_implicados")
+                  button.add_action(ng-click="add_otro()") 
+                  div(input-inline-edit="otro.nombres" tabindex="36")
+                  div(input-inline-edit="otro.apellidos" tabindex="36")
+                  div(input-inline-edit="otro.alias" tabindex="36")
+                  div(input-inline-edit="otro.pertenencia" tabindex="36")
+                  div(input-inline-edit="otro.participacion" tabindex="36")
+
+      h2.info_subtitle Victimas
+      div.victimas Numero de victimas: {{ victimas.length }}
+      button.add_action_small(ng-click="add_victima()")
+      table.tab_form_table.additions(ng-repeat="v in participante.victimas")
+         tr
+            td
+               label.small_form Nombre de la victima
+               div(input-inline-edit="v.nombres" tabindex="31")
+            td
+               label.small_form Apellidos de la victima
+               div(input-inline-edit="v.apellidos" tabindex="32")
+            td
+               label.small_form Oficio de la victima
+               div(input-inline-edit="v.oficio" tabindex="33")
+         tr
+            td
+               label.small_form Perfil de la victima
+               div(input-inline-edit="v.perfil" tabindex="34")
+            td
+               label.small_form Victima enunciada por el postulado o por fiscalía
+               div(input-inline-edit="v.enunciada_por" tabindex="35")
+            td
+               label.small_form Victima enunciada por el postulado o por fiscalía
+               div(input-inline-edit="v.datos_completos" tabindex="35") 
+
+      

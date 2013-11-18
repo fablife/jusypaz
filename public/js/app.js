@@ -21,6 +21,32 @@ adminServices.factory('Postulado', ['$resource',
     });
   }]);
 
+/*
+adminServices.factory('PostuladoService', ['$http', function($http) {
+  var posts = [];
+  var server_queried = false;
+  console.log("running PostuladoService")
+  var promise;
+  return {
+     postulado_info: function(postulado_id) {
+       if(!promise || !server_queried) {
+         promise = $http.get('/postulados/' + postulado_id )
+            .then(function(postulado, status, headers, config) {
+            console.log("PostuladoService returned ok.")  
+            server_queried = true;
+            console.log(postulado[0]);
+            return postulado[0];            
+        })
+        .error(function(data, status, headers, config){
+        
+        });
+       }
+       return promise;
+     }
+  };
+}])
+*/
+
 app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
@@ -33,8 +59,8 @@ app.config(['$routeProvider',
         controller: 'AdminCtrl'
       }).
       when('/postulados/:postuladoId', {
-        templateUrl: 'partials/postulado',
-        controller: 'PostuladoCtrl'
+        templateUrl: 'partials/postulado' /*,
+        controller: 'PostuladoCtrl' */
       }).
       otherwise({
         redirectTo: '/index'
@@ -149,18 +175,58 @@ get_inline_edit_widget = function($timeout, type, model, template) {
   };
 }
 
+//app.controller("PostuladoCtrl", function PostuladoCtrl(PostuladoService, $scope, $routeParams, $http){
 app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $http){
   $scope.postulado_id = $routeParams.postuladoId;
+  $scope.create_delito = false;
+  $scope.newdelitotitle = "bla";
 
   $scope.active = "hv";
-
+  $scope.subtab_active = "jyp_delitos";
+  console.log("postulado ctrl");
+  //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
+  $http.get('/postulados/' + $scope.postulado_id )
+            .success(function(postulado, status, headers, config) {
+            console.log(postulado[0]);
+            $scope.postulado = postulado[0];            
+        })
+        .error(function(data, status, headers, config){
+        
+        });
 
   $scope.save = function() {
     switch($scope.active) { 
       case "hv": $scope.save_hr();
-    }
-    
+      case "jyp": switch($scope.subtab_active) {
+                    case "jyp_delitos": $scope.save_delito();
+                  };
+    }    
   }
+
+  $scope.add_delito = function() {
+    $scope.create_delito = true;
+  }
+
+  $scope.crea_delito = function() {
+    $scope.create_delito = false;
+    console.log($scope.newdelitotitle);
+    var json = '{ "titulo": "' + $scope.newdelitotitle + '"}';    
+    $http.put('/admin/postulados/' + $scope.postulado_id + "/jyp", json).
+     success(function(data, status, headers, config) {
+      $scope.delito = data[0];
+      $scope.newdelitotitle = "";
+      $scope.delitos.push($scope.delito);
+    }).error(function(data, status, headers, config) {
+
+    });
+  }
+
+  $scope.cancela_crea_delito = function() {
+    $scope.create_delito = false;
+    console.log($scope.newdelitotitle);
+    $scope.newdelitotitle = "";
+  }  
+    
   $scope.hv = function() {
     $scope.active = "hv";
     $http.get('/postulados/' + $scope.postulado_id + "/hv").success(function(data, status, headers, config) {
@@ -189,11 +255,13 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         });
   }
 
-  $scope.jyp = function() {
+  $scope.jyp_delitos = function() {
     $scope.active = "jyp";
-    $http.get('/postulados/' + $scope.postulado_id + "/jyp")
+    $http.get('/postulados/' + $scope.postulado_id + "/jyp_delitos")
     .success(function(data, status, headers, config) {
-      $scope.hv_data = data;
+      $scope.delitos = data;      
+      console.log($scope.delitos);
+      console.log($scope.delitos.length);
     })
     .error(function(data, status, headers, config){
         

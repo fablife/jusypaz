@@ -97,7 +97,8 @@ body {
    width: 100%;
 }
 
-.login input {
+.login input, 
+input.dialog_input {
     border: 1px solid #003b6f;
     width: 100%;
     border-radius: 5px;
@@ -109,6 +110,15 @@ body {
 
 /*  App */
 /* ================================================== */
+.dialog {
+    margin: 0 auto;
+    width: 500px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #5EBAD9;
+    box-shadow: 5px 5px 2px #010101;
+}
+
 .navigation_header {
   height: 44px;
   margin: 0 0 15px 0;
@@ -229,6 +239,22 @@ h2.info_subtitle {
   margin-top: 10px;
 }
 
+.add_action {
+  background-image: url('../img/add.png');
+  width: 64px;
+  height: 64px;
+  background-color: white;
+  border: none;
+}
+
+.add_action_small {
+  background-image: url('../img/add_small.png');
+  width: 32px;
+  height: 32px;
+  background-color: white;
+  border: none;
+}
+
 
 li.info_tab.active a {  
   background-color: #003b6f !important;
@@ -291,9 +317,9 @@ li.info_tab:hover {
     margin-top: 20px;
 }
 
-.nombres {
+.info_general {
   margin-left: 20px;
-  width: 200px;
+  width: 250px;
   float: left;
 }
 
@@ -526,5 +552,24 @@ td.actions {
 }
 
 .editing {
-    background-color: #EDB44A;
+  background-color: #EDB44A;
+}
+
+.navegacion_hechos {
+  float: left;
+  min-height: 400px;
+  padding-top: 20px;
+  width: 10%;
+}
+
+.empty {
+  color: #010101;
+  font-weight: bold;
+}
+
+
+.datos_version {
+  float: left;
+  width: 85%;
+  margin-left: 20px;
 }

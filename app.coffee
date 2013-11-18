@@ -100,7 +100,9 @@ app.post('/login', passport.authenticate('local', passport_options))
 app.all('*',ensureAuthenticated)
 
 app.get('/tablero', routes.tablero)
+app.get('/postulados/:postuladoId', routes.postulado)
 app.get('/postulados/:postuladoId/hv', routes.hv)
+app.get('/postulados/:postuladoId/jyp_delitos', routes.jyp_delitos)
 
 #admin routes
 app.get('/admin', ensureAdmin, routes.admin)
@@ -108,12 +110,15 @@ app.put('/admin/save_user', routes.save_user)
 app.put('/admin/save_postulado', routes.save_postulado)
 app.get('/admin/usuarios/usuarios.json', ensureAdmin, routes.usuarios)
 app.put('/admin/postulados/:postuladoId/hv', routes.save_hv)
+app.put('/admin/postulados/:postuladoId/jyp', routes.create_delito)
+app.put('/admin/postulados/:postuladoId/jyp_delito', routes.save_delito)
 app.get('/admin/postulados/postulados.json', ensureAdmin, routes.postulados)
 
 app.get('/admin/partials/:name',(req, res) ->
    name = req.params.name
    res.render('admin/partials/' + name)
 )
+
 
 app.get('/partials/:name',(req, res) ->
    name = req.params.name
