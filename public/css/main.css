@@ -62,7 +62,7 @@ body {
     background-color: #003b6f;
     color: white;
     font-weight:bold;
-    height: 40px;
+    height: 40px !important;
     width: 60px;
     padding: 10px;
     margin-top: 15px;
@@ -100,10 +100,19 @@ body {
 .login input, 
 input.dialog_input {
     border: 1px solid #003b6f;
-    width: 100%;
+    width: 350px;
     border-radius: 5px;
     height: 28px;
     margin-bottom: 20px;
+}
+
+.login input[type=text],
+.login input[type=password] {
+    width: 336px;
+    padding: 0 6px;
+}
+
+input.dialog_input {
     padding: 0 6px;
 }
 
@@ -551,7 +560,8 @@ td.actions {
   width: 100%;
 }
 
-.editing {
+.editing,
+.dirty {
   background-color: #EDB44A;
 }
 
@@ -572,4 +582,28 @@ td.actions {
   float: left;
   width: 85%;
   margin-left: 20px;
+}
+.hecho_titulo {
+  border : 1px solid #D6D6D6;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.hecho_titulo.selected {
+  background-color: #003b6f;
+  font-weight: bold;
+  color: white;
+}
+
+.hecho_titulo:hover {
+  background-color: #D6D6D6;
+  font-weight: bold;
+  word-wrap: break-word;
+}
+
+.inline_edit_select {
+  width: 90%;
+  height: 25px;
+  border: 1px solid #010101;
+  background-color: white;
 }

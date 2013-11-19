@@ -1,7 +1,8 @@
-Postulado = require('./models/models').Postulado
-Usuario = require('./models/models').User
-Hoja = require("./models/models").Hoja
-Delito = require("./models/models").Delito
+Postulado   = require('./models/models').Postulado
+Usuario     = require('./models/models').User
+Hoja        = require("./models/models").Hoja
+Delito      = require("./models/models").Delito
+CodigoPenal = require("./models/models").CodigoPenal
 
 exports.index = (req,res) ->
   res.render('index')
@@ -120,6 +121,15 @@ exports.jyp_delitos = (req, res) ->
       getDelitos(req, res)
   )
 
+exports.codigos = (req, res) ->
+  console.log "GET codigos"
+  CodigoPenal.find({}, (err, codigos) ->
+    if err?
+      handle_error(err, "Error accediendo a la lista de codigos penales", res)
+    res.send(codigos)
+    console.log "Lista codigos penales retornada con éxito."
+  )
+
 handle_error = (exception, text, res, code=500) ->
     console.log(text)
     console.log exception
@@ -206,9 +216,6 @@ crea_delito = (req, res) ->
   console.log(req.body)
   p = req.params.postuladoId
   d = new Delito()
-  for p in d
-    if (typeof p == "string")
-      p = "No especificado"
   d.titulo = req.body.titulo
   d.cedula = p
   d.save((err) ->

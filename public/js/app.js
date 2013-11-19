@@ -113,6 +113,10 @@ app.directive('tabFormInputInlineEdit', function($timeout) {
     return get_inline_edit_widget($timeout, "text", "=tabFormInputInlineEdit", 'partials/tab-form-input-inline-edit');
 });
 
+app.directive('inputInlineSelectCodigo', function($timeout) {
+    return get_inline_edit_widget($timeout, "select", '=inputInlineSelectCodigo', 'partials/input-inline-select-codigo');
+});
+
 app.directive('inputInlineEdit', function($timeout) {
     return get_inline_edit_widget($timeout, "text", '=inputInlineEdit', 'partials/input-inline-edit');
 });
@@ -129,22 +133,38 @@ get_inline_edit_widget = function($timeout, type, model, template) {
 
   return {
     scope: {      
+      codigos: "=codigos",
+      tabindex: "=tabindex",
       model: model,
       handleSave: '&onSave',
       handleCancel: '&onCancel'
     },
     link: function(scope, elm, attr) {
+      if (type == "select") {
+        attr.$observe('opts',function(){
+          scope.options = attr.opts;
+          console.log(attr.opts);
+        });
+      }
       var previousValue;
-      
+      /*
       scope.tabindex = attr.tabindex;
-      
+      if (type == "select") {
+        scope.options = attr.options; 
+        console.log(scope.options);
+      } 
+      */
       scope.edit = function() {
         scope.editMode = true;
         previousValue = scope.model;
 
         $timeout(function() {
           //elm.find('input')[0].focus();
-          elm.find('input')[0].select();
+          if (type == "select") {
+            elm.find('select')[0].focus();
+          } else {
+            elm.find('input')[0].select();
+          }
         }, 0, false);
       };
       scope.tab = function() {
@@ -179,16 +199,25 @@ get_inline_edit_widget = function($timeout, type, model, template) {
 app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $http){
   $scope.postulado_id = $routeParams.postuladoId;
   $scope.create_delito = false;
-  $scope.newdelitotitle = "bla";
+  $scope.newdelitotitle = "";
 
   $scope.active = "hv";
   $scope.subtab_active = "jyp_delitos";
   console.log("postulado ctrl");
   //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
   $http.get('/postulados/' + $scope.postulado_id )
-            .success(function(postulado, status, headers, config) {
+        .success(function(postulado, status, headers, config) {
             console.log(postulado[0]);
             $scope.postulado = postulado[0];            
+        })
+        .error(function(data, status, headers, config){
+        
+        });
+
+  $http.get('/codigopenal/')
+            .success(function(codigos, status, headers, config) {
+            console.log(codigos);
+            $scope.codigos = codigos;
         })
         .error(function(data, status, headers, config){
         
@@ -213,7 +242,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     var json = '{ "titulo": "' + $scope.newdelitotitle + '"}';    
     $http.put('/admin/postulados/' + $scope.postulado_id + "/jyp", json).
      success(function(data, status, headers, config) {
-      $scope.delito = data[0];
+      $scope.delito = data;
+      console.log($scope.delito);
       $scope.newdelitotitle = "";
       $scope.delitos.push($scope.delito);
     }).error(function(data, status, headers, config) {
@@ -241,7 +271,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     });
   }
 
-  $scope.save_hr = function() {
+  $scope.save_hv = function() {
     if ($scope.hoja.cedula === "undefined" || $scope.hoja.cedula == null) {
       $scope.hoja.cedula = $scope.postulado_id;
     }
@@ -255,16 +285,24 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         });
   }
 
+
+  $scope.get_delito = function(index) {
+    $scope.delito = $scope.delitos[index];
+    $scope.selectedDelitoIndex = index;
+  }
+
   $scope.jyp_delitos = function() {
     $scope.active = "jyp";
     $http.get('/postulados/' + $scope.postulado_id + "/jyp_delitos")
     .success(function(data, status, headers, config) {
       $scope.delitos = data;      
+      $scope.delito = $scope.delitos[0];
+      $scope.selectedDelitoIndex = 0;
       console.log($scope.delitos);
       console.log($scope.delitos.length);
     })
     .error(function(data, status, headers, config){
-        
+        $scope.error = "Error al salvar el postulado."; 
     }); 
   }
 

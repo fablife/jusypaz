@@ -1,0 +1,7 @@
+div(class="input_inline_edit_div")
+  select(class="inline_edit_select" ng-options="c.nombre as c.nombre for c in codigos" ng-model="model" on-tab="tab()" on-enter="save()" on-blur="blur()" on-esc="cancel()" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()")
+  span(ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false")
+    span(ng-hide="editMode" ng-click="edit()" ) 
+      div(class="inline_edit_text")
+        {{model}}
+     

@@ -100,6 +100,7 @@ app.post('/login', passport.authenticate('local', passport_options))
 app.all('*',ensureAuthenticated)
 
 app.get('/tablero', routes.tablero)
+app.get('/codigopenal', routes.codigos)
 app.get('/postulados/:postuladoId', routes.postulado)
 app.get('/postulados/:postuladoId/hv', routes.hv)
 app.get('/postulados/:postuladoId/jyp_delitos', routes.jyp_delitos)

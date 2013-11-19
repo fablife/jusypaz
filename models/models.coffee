@@ -11,6 +11,10 @@ UserSchema = new Schema({
   role: { type: String }
 })
 
+CodigoPenalSchema = new Schema({
+  nombre: { type: String, required: true, index: { unique: true }}
+})
+
 PostuladoSchema = new Schema({
     nombres:    { type: String, required: true},
     apellidos:  { type: String, required: true},
@@ -42,27 +46,27 @@ VictimaSchema = new Schema({
 DelitoSchema = new Schema({
   cedula:         { type: String, required: true},  
   titulo:         { type: String, required: true},
-  tipo_version:   { type: String},
-  fecha_version:  { type: String},
-  codigo_penal:   { type: String },
-  fiscalia:       { type: String },
-  sitio_reclusion:{ type: String },
-  bloque_post:    { type: String },
-  hora_mencion:   { type: String },
-  responsabilidad:{ type: Boolean },
-  confesado:      { type: Boolean },
-  narracion:      { type: String },
-  clasificacion:  { type: String },
+  tipo_version:   { type: String, default: "No especificado"},
+  fecha_version:  { type: String, default: "No especificado"},
+  codigo_penal:   { type: String, default: "No especificado" },
+  fiscalia:       { type: String, default: "No especificado" },
+  sitio_reclusion:{ type: String, default: "No especificado" },
+  bloque_post:    { type: String, default: "No especificado" },
+  hora_mencion:   { type: String, default: "No especificado" },
+  responsabilidad:{ type: Boolean, default: false },
+  confesado:      { type: Boolean, default: false },
+  narracion:      { type: String, default: "No especificado" },
+  clasificacion:  { type: String, default: "No especificado" },
   fecha_ocurrencia: { type: Date },
-  pais:           { type: String },
-  dept:           { type: String },
-  municipio:      { type: String },
-  corregimiento:  { type: String },
-  vereda:         { type: String },
-  finca:          { type: String },
-  via:            { type: String },
-  direccion:      { type: String },
-  otro_lugar:     { type: String },
+  pais:           { type: String, default: "No especificado" },
+  dept:           { type: String, default: "No especificado" },
+  municipio:      { type: String, default: "No especificado" },
+  corregimiento:  { type: String, default: "No especificado" },
+  vereda:         { type: String, default: "No especificado" },
+  finca:          { type: String, default: "No especificado" },
+  via:            { type: String, default: "No especificado" },
+  direccion:      { type: String, default: "No especificado" },
+  otro_lugar:     { type: String, default: "No especificado" },
   lat:            { type: Number },
   long:           { type: Number },
   participantes:  { type: Array },
@@ -116,3 +120,4 @@ exports.Hoja        = mongoose.model('Hoja', HojaSchema)
 exports.Delito       = mongoose.model('Delito', DelitoSchema)
 exports.Participante= mongoose.model('Participante', ParticipanteSchema)
 exports.Victima     = mongoose.model('Victima', VictimaSchema)
+exports.CodigoPenal = mongoose.model('CodigoPenal', CodigoPenalSchema)
