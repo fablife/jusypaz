@@ -4,6 +4,8 @@ Hoja        = require("./models/models").Hoja
 Delito      = require("./models/models").Delito
 CodigoPenal = require("./models/models").CodigoPenal
 
+fs = require('fs')
+
 exports.index = (req,res) ->
   res.render('index')
 
@@ -65,6 +67,16 @@ exports.postulado = (req, res) ->
       getPostulado(req, res)
   )
 
+exports.upload_video = (req, res) ->
+  console.log("POST video_upload")
+  cedula = req.params.postuladoId
+  can_access(req, res, cedula, (err) ->
+    if err?
+      handle_error(err, err.message, res)
+    else
+      video_upload(req, res)
+  )
+  
 exports.hv = (req, res) ->
   console.log "Hoja de vida"
   cedula = req.params.postuladoId
@@ -208,7 +220,7 @@ save_delito = (req, res) ->
     if err?
       handle_error(err, "Error salvando delito.", res)
     res.send("Delito salvado ok")
-    console.log("Delito salvado con exito");
+    console.log("Delito salvado con exito")
   )
 
 crea_delito = (req, res) ->
@@ -221,6 +233,46 @@ crea_delito = (req, res) ->
   d.save((err) ->
     if err?
       handle_error(err, "Error en get_empty_delito", res)
-    res.send(d)  
+    res.send(d)
     console.log("Nuevo delito creado y retornado")
   )
+
+video_upload = (req, res) ->
+  console.log("_video_upload")
+  console.log req.body
+  console.log req.files.uploadedFile.path
+  root_dir =  __dirname + "/media/delitos/"
+  p = req.body.postuladoId
+  id = req.body.delitoId
+
+  fs.readFile(req.files.uploadedFile.path, (err, data) ->
+    try
+      newPath = root_dir + p + "/" + id + "/" + req.files.uploadedFile.name
+      if not fs.existsSync(root_dir + p)
+        fs.mkdirSync(root_dir + p)
+      if not fs.existsSync(root_dir + p + "/" + id)
+        fs.mkdirSync(root_dir + p + "/" + id)
+      fs.writeFile(newPath, data, (err, delito) ->
+        if err?
+         handle_error(err, "Error guardando video subido", res)
+        else
+          Delito.findById(id,(err, delito) ->
+            if err?
+              handle_error(err, "Video subido pero no se encontro delito asociado", res)
+            else
+              console.log delito
+              if delito?
+                delito.video_path = req.files.uploadedFile.name
+                delito.save((err) ->
+                if err?
+                  handle_error(err, "Video subido ok, delito encontrado, pero al salvarlo hubo error", res)
+                else
+                  res.send(delito)
+                )
+              else
+                handle_error(new Error("Delito es vacio"), "No se encontro el delito asociado a esa id", res)
+          )
+        )
+    catch e
+      handle_error(e, "Error guardando video", res)
+    )

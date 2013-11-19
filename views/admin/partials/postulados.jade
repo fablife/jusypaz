@@ -15,18 +15,16 @@ div.data_container
                 tbody
                     tr.row(ng-class="{editing: is_dirty(p)}" ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
                       td 
-                        div(input-inline-edit="p.nombres" tabindex="{{ $index*10 + 1 }}")
-                        div(tabindex="{{ $index*10 + 1 }}")
+                        div(input-inline-edit="p.nombres" ng-focus="edit()" tabindex="{{ $index*10 + 1 }}")
                       td 
-                        div(input-inline-edit="p.apellidos" tabindex="{{ $index*10 + 1 }}")
+                        div(input-inline-edit="p.apellidos" ng-focus="edit()"  tabindex="{{ $index*10 + 1 }}")
                       td
-                        div(input-inline-edit="p.cedula" tabindex="{{ $index*10 + 1 }}")
+                        div(input-inline-edit="p.cedula" ng-focus="edit()"  tabindex="{{ $index*10 + 1 }}")
                       td
-                        div(input-inline-date="p.fecha_nacimiento" tabindex="{{ $index*10 + 1 }}")
+                        div(input-inline-date="p.fecha_nacimiento" ng-focus="edit()"  tabindex="{{ $index*10 + 1 }}")
                       td
-                        div(input-inline-edit="p.ciudad" tabindex="{{ $index*10 + 1 }}")
+                        div(input-inline-edit="p.ciudad" ng-focus="edit()"  tabindex="{{ $index*10 + 1 }}")
                       td 
                         button.action(ng-show="is_dirty(p)" ng-click="save_postulado(p)") Salvar 
-                        button.action(ng-hide="is_dirty(p)") Editar 
                         button.action(ng-hide="is_dirty(p)") Eliminar
                         button.action(ng-click="view_postulado(p.cedula)" ) Ver

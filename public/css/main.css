@@ -1,6 +1,19 @@
 /* color: #003b6f */
 /* GENERALES */
 /* ================================================== */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url('OpenSansNormal.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Open Sans Bold'), local('OpenSans-Bold'), url('OpenSansBold.ttf') format('truetype');
+}
+
 img, li, ul {
     margin:0;
     padding: 0;
@@ -33,6 +46,10 @@ body {
 
 .mbottom15 {
     margin-bottom: 15px;
+}
+
+.mleft10 {
+  margin-left: 10px;
 }
 
 .w65 {
@@ -234,7 +251,8 @@ input.inline_edit_input {
     padding: 0 0 5px 5px;
 }
 
-.info {
+.info,
+.info_wrapper {
   font-size: 12px;
 }
 h2.info_subtitle {
@@ -311,7 +329,7 @@ li.info_tab:hover {
   width: 100%;
   font-size: 20px;
   line-height: 140%;
-  padding-top: 10px;
+  padding-top: 0px !important;
   padding: 15px;
   box-sizing: border-box;
   -webkit-animation-duration: 0.5s;
@@ -404,6 +422,10 @@ div.big_text_div {
 }
 .action_buttons {
   height: 50px;
+}
+
+input[type=file] {
+  display: inline-block;
 }
 
 .buttons {
@@ -560,10 +582,15 @@ td.actions {
   width: 100%;
 }
 
-.editing,
-.dirty {
+.editing {
   background-color: #EDB44A;
 }
+
+.dirty {
+  background-color: #EDB44A;
+  color: red !important;
+}
+  
 
 .navegacion_hechos {
   float: left;
@@ -601,9 +628,36 @@ td.actions {
   word-wrap: break-word;
 }
 
+.inline-heading {
+  margin-left: 10px;
+  height: 35px;
+  background-color: #EBF7F7;
+  padding-right: 8px;
+}
 .inline_edit_select {
   width: 90%;
   height: 25px;
   border: 1px solid #010101;
   background-color: white;
+}
+.small_text {
+  font-size: 10px;
+}
+
+.percent {
+    position: absolute; width: 300px; height: 14px; z-index: 1; text-align: center; font-size: 0.8em; color: white;
+}
+.progress-bar {
+    width: 300px; height: 14px;
+    border-radius: 10px;
+    border: 1px solid #CCC;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#6666cc), to(#4b4b95));
+    border-image: initial;
+}
+.uploaded {
+    padding: 0;
+    height: 14px;
+    border-radius: 10px;
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#66cc00), to(#4b9500));
+    border-image: initial;
 }

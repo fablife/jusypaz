@@ -5,6 +5,129 @@ var app = angular.module('jusypazApp', [
         'ui.bootstrap',
         'ngRoute']);
 
+
+angular.module('app', [], function() {})
+FileUploadCtrl.$inject = ['$scope']
+function FileUploadCtrl(scope) {
+    //============== DRAG & DROP =============
+    // source for drag&drop: http://www.webappers.com/2011/09/28/drag-drop-file-upload-with-html5-javascript/
+    /*
+    var dropbox = document.getElementById("dropbox")
+    scope.dropText = 'Arrastre el archivo aqui';
+
+    // init event handlers
+    function dragEnterLeave(evt) {
+        evt.stopPropagation()
+        evt.preventDefault()
+        scope.$apply(function(){
+            scope.dropText = 'Arrastre el archivo aqui'
+            scope.dropClass = ''
+        })
+    }
+    dropbox.addEventListener("dragenter", dragEnterLeave, false)
+    dropbox.addEventListener("dragleave", dragEnterLeave, false)
+    dropbox.addEventListener("dragover", function(evt) {
+        evt.stopPropagation()
+        evt.preventDefault()
+        var clazz = 'not-available'
+        var ok = evt.dataTransfer && evt.dataTransfer.types && evt.dataTransfer.types.indexOf('Files') >= 0
+        scope.$apply(function(){
+            scope.dropText = ok ? 'Drop files here...' : 'Only files are allowed!'
+            scope.dropClass = ok ? 'over' : 'not-available'
+        })
+    }, false)
+    dropbox.addEventListener("drop", function(evt) {
+        console.log('drop evt:', JSON.parse(JSON.stringify(evt.dataTransfer)))
+        evt.stopPropagation()
+        evt.preventDefault()
+        scope.$apply(function(){
+            scope.dropText = 'Drop files here...'
+            scope.dropClass = ''
+        })
+        var files = evt.dataTransfer.files
+        if (files.length > 0) {
+            scope.$apply(function(){
+                scope.files = []
+                for (var i = 0; i < files.length; i++) {
+                    scope.files.push(files[i])
+                }
+            })
+        }
+    }, false)
+    //============== DRAG & DROP =============
+    */
+    scope.subirVideo = false
+    scope.setFiles = function(element) {
+    scope.$apply(function(scope) {
+      console.log('files:', element.files);
+      // Turn the FileList object into an Array
+        scope.files = []
+        for (var i = 0; i < element.files.length; i++) {
+          scope.files.push(element.files[i])
+        }
+      scope.progressVisible = false
+      });
+      var label  = document.getElementById("uploadFileName"); 
+      label.innerHTML = document.getElementById("fileToUpload").value;
+    };
+    scope.busca_video = function() {
+      scope.subirVideo = true;
+      var dropbox = document.getElementById("fileToUpload");
+      dropbox.click();
+    }
+
+    scope.ver_video = function() {
+
+    }
+
+    scope.uploadFile = function() {
+        var fd = new FormData()
+        for (var i in scope.files) {
+            fd.append("uploadedFile", scope.files[i])
+        }
+        fd.append("postuladoId",scope.delito.cedula);
+        fd.append("delitoId",scope.delito._id);
+        var xhr = new XMLHttpRequest()
+        xhr.upload.addEventListener("progress", uploadProgress, false)
+        xhr.addEventListener("load", uploadComplete, false)
+        xhr.addEventListener("error", uploadFailed, false)
+        xhr.addEventListener("abort", uploadCanceled, false)
+        xhr.open("POST", "/admin/postulados/" + scope.delito.cedula + "/videoupload")
+        scope.progressVisible = true
+        xhr.send(fd)
+    }
+
+    function uploadProgress(evt) {
+        scope.$apply(function(){
+            if (evt.lengthComputable) {
+                scope.progress = Math.round(evt.loaded * 100 / evt.total)
+            } else {
+                scope.progress = 'no puedo evaluar progreso'
+            }
+        })
+    }
+
+    function uploadComplete(evt) {
+        /* This event is raised when the server send back a response */
+        scope.delito = evt.target.response
+        alert("Video subido con exito")
+    }
+
+    function uploadFailed(evt) {
+        alert("Hubo un error al subir el archivo.")
+    }
+
+    function uploadCanceled(evt) {
+        scope.$apply(function(){
+            scope.progressVisible = false
+        })
+        alert("El usuario canceló subir el archivo o el browser cortó la conexión.")
+    }
+}
+
+
+
+
 var adminServices = angular.module('adminServices', ['ngResource']);
      
 adminServices.factory('Usuario', ['$resource',
@@ -134,7 +257,7 @@ get_inline_edit_widget = function($timeout, type, model, template) {
   return {
     scope: {      
       codigos: "=codigos",
-      tabindex: "=tabindex",
+      tabindex: "@tabindex",
       model: model,
       handleSave: '&onSave',
       handleCancel: '&onCancel'
@@ -147,13 +270,7 @@ get_inline_edit_widget = function($timeout, type, model, template) {
         });
       }
       var previousValue;
-      /*
-      scope.tabindex = attr.tabindex;
-      if (type == "select") {
-        scope.options = attr.options; 
-        console.log(scope.options);
-      } 
-      */
+
       scope.edit = function() {
         scope.editMode = true;
         previousValue = scope.model;
@@ -169,7 +286,9 @@ get_inline_edit_widget = function($timeout, type, model, template) {
       };
       scope.tab = function() {
         scope.editMode = false;
-        scope.handleSave({value: scope.model});
+        if (previousValue != scope.model) {
+          scope.handleSave({value: scope.model});
+        }
       };
       scope.save = function() {
         scope.editMode = false;
@@ -204,6 +323,10 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.active = "hv";
   $scope.subtab_active = "jyp_delitos";
   console.log("postulado ctrl");
+
+  $scope.set_dirty = function(model) { 
+    $scope.delito.dirty = true;
+  }
   //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
   $http.get('/postulados/' + $scope.postulado_id )
         .success(function(postulado, status, headers, config) {
@@ -225,7 +348,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.save = function() {
     switch($scope.active) { 
-      case "hv": $scope.save_hr();
+      case "hv": $scope.save_hv();
       case "jyp": switch($scope.subtab_active) {
                     case "jyp_delitos": $scope.save_delito();
                   };
@@ -272,8 +395,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   }
 
   $scope.save_hv = function() {
-    if ($scope.hoja.cedula === "undefined" || $scope.hoja.cedula == null) {
-      $scope.hoja.cedula = $scope.postulado_id;
+   if ($scope.hoja.cedula === "undefined" || $scope.hoja.cedula == null) {
+     $scope.hoja.cedula = $scope.postulado_id;
     }
     console.log($scope.hoja);
     $http.put('/admin/postulados/' + $scope.postulado_id + "/hv", $scope.hoja).
@@ -282,6 +405,20 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             //user.dirty = false;
         }).error(function() {
             $scope.error = "Error al salvar el postulado."; 
+        });
+  }
+
+  $scope.save_delito = function() {
+   if ($scope.delito.cedula === "undefined" || $scope.delito.cedula == null) {
+     $scope.delito.cedula = $scope.postulado_id;
+    }
+    delete $scope.delito._id;
+    $http.put('/admin/postulados/' + $scope.postulado_id + "/jyp_delito", $scope.delito).
+           success(function() {
+            $scope.notification = "Información delito salvada con éxito"; 
+            $scope.delito.dirty = false;
+        }).error(function() {
+            $scope.error = "Error al salvar la información del delito."; 
         });
   }
 

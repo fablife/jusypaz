@@ -67,6 +67,7 @@ DelitoSchema = new Schema({
   via:            { type: String, default: "No especificado" },
   direccion:      { type: String, default: "No especificado" },
   otro_lugar:     { type: String, default: "No especificado" },
+  video_path:     { type: String },
   lat:            { type: Number },
   long:           { type: Number },
   participantes:  { type: Array },
