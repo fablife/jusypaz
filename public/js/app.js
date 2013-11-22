@@ -112,19 +112,19 @@ function FileUploadCtrl(scope, timeout) {
       label.innerHTML = document.getElementById("fileToUpload").value;
     };
 
-    scope.upload = function() {
-      scope.subirImagen = true;
-      var upload_btn = document.getElementById("fileToUpload");
+    scope.upload = function(elem) {
+      var upload_btn = document.getElementById(elem);
       upload_btn.click();
     }
 
     scope.busca_video = function() {
       scope.subirVideo = true;
-      scope.upload();      
+      scope.upload("videoToUpload");      
     }
 
-    scope.upload_pic = function() {
-      scope.upload();
+    scope.upload_pic = function() {      
+      scope.subirImagen = true;
+      scope.upload("fileToUpload");
     }
 
     scope.uploadImagen = function() {
