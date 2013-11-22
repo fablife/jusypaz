@@ -20,7 +20,8 @@ PostuladoSchema = new Schema({
     apellidos:  { type: String, required: true},
     cedula:     { type: String, required: true},
     fecha_nacimiento: {type: Date },
-    ciudad      : { type: String }
+    ciudad      : { type: String },
+    picture     : { type: String, default: ""}
 })
 
 ParticipanteSchema = new Schema({
@@ -114,11 +115,31 @@ HojaSchema = new Schema({
    otros:           { type: String },
    bienes_fondo:    { type: String }
 })
+
+FosaSchema = new Schema({
+  enunciadas: { type: Boolean},
+  cedula: { type: String, required: true},
+  delito: { type: String },
+  delito_id: {type: String},
+  postulado_nombre: { type: String },
+  victima_nombre: {type: String},
+  perfil_victima: {type: String},
+  pais: {type: String},
+  departamento: {type: String},
+  municipio: {type: String},
+  corregimiento: {type: String},
+  vereda: {type: String},
+  lat: { type: Number},
+  long: { type: Number},
+  id_victima: { type: String},
+  entregada_familia: { type: String}
+})
  
 exports.User        = mongoose.model('User', UserSchema)
 exports.Postulado   = mongoose.model('Postulado', PostuladoSchema)
 exports.Hoja        = mongoose.model('Hoja', HojaSchema)
-exports.Delito       = mongoose.model('Delito', DelitoSchema)
+exports.Delito      = mongoose.model('Delito', DelitoSchema)
 exports.Participante= mongoose.model('Participante', ParticipanteSchema)
 exports.Victima     = mongoose.model('Victima', VictimaSchema)
 exports.CodigoPenal = mongoose.model('CodigoPenal', CodigoPenalSchema)
+exports.Fosas       = mongoose.model('Fosa', FosaSchema)

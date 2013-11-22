@@ -6,9 +6,48 @@ var app = angular.module('jusypazApp', [
         'ngRoute']);
 
 
+var ModalCtrl = function ($scope, $modal, $log) {
+
+  $scope.open = function () {
+
+    var modalInstance = $modal.open({
+      //templateUrl: 'myModalContent.html',
+      controller: ModalInstanceCtrl,
+      resolve: {
+        /*items: function () {
+          return $scope.items;
+        }
+        */
+      }
+    });
+
+    modalInstance.result.then(function () {
+      //$scope.selected = selectedItem;
+    }, function () {
+      
+    });
+  };
+};
+
+var ModalInstanceCtrl = function ($scope, $modalInstance, items) {
+  /*
+  $scope.items = items;
+  $scope.selected = {
+    item: $scope.items[0]
+  };
+  */
+  $scope.ok = function () {
+    $modalInstance.close();
+  };
+
+  $scope.cancel = function () {
+    $modalInstance.dismiss('cancel');
+  };
+};
+
 angular.module('app', [], function() {})
-FileUploadCtrl.$inject = ['$scope']
-function FileUploadCtrl(scope) {
+FileUploadCtrl.$inject = ['$scope', '$timeout']
+function FileUploadCtrl(scope, timeout) {
     //============== DRAG & DROP =============
     // source for drag&drop: http://www.webappers.com/2011/09/28/drag-drop-file-upload-with-html5-javascript/
     /*
@@ -57,6 +96,8 @@ function FileUploadCtrl(scope) {
     //============== DRAG & DROP =============
     */
     scope.subirVideo = false
+    scope.video = null
+
     scope.setFiles = function(element) {
     scope.$apply(function(scope) {
       console.log('files:', element.files);
@@ -70,14 +111,60 @@ function FileUploadCtrl(scope) {
       var label  = document.getElementById("uploadFileName"); 
       label.innerHTML = document.getElementById("fileToUpload").value;
     };
+
+    scope.upload = function() {
+      scope.subirImagen = true;
+      var upload_btn = document.getElementById("fileToUpload");
+      upload_btn.click();
+    }
+
     scope.busca_video = function() {
       scope.subirVideo = true;
-      var dropbox = document.getElementById("fileToUpload");
-      dropbox.click();
+      scope.upload();      
+    }
+
+    scope.upload_pic = function() {
+      scope.upload();
+    }
+
+    scope.uploadImagen = function() {
+        var fd = new FormData()
+        for (var i in scope.files) {
+            fd.append("uploadedFile", scope.files[i])
+        }
+        fd.append("postuladoId",scope.postulado.cedula);
+        var xhr = new XMLHttpRequest()
+        xhr.upload.addEventListener("progress", uploadImgProgress, false)
+        xhr.addEventListener("load", uploadImgComplete, false)
+        xhr.addEventListener("error", uploadImgFailed, false)
+        xhr.addEventListener("abort", uploadImgCanceled, false)
+        xhr.open("POST", "/admin/postulados/" + scope.postulado.cedula + "/avatarupload")
+        scope.progressVisible = true
+        xhr.send(fd)
     }
 
     scope.ver_video = function() {
+      if (scope.video === null) {
+        scope.video   = document.createElement('video');
+        scope.video.controls = "controls";
+        var source  = document.createElement('source');        
+        source.src  = "/videos/" + scope.delito.cedula + "/" + scope.delito._id + "/" + scope.delito.video_path;
+        if (scope.delito.hora_mencion) {
+          scope.video.addEventListener('loadedmetadata', function() {            
+            this.currentTime = scope.delito.hora_mencion;
+          }, false);          
+        }
+        source.type = "video/mp4";
 
+        scope.video.appendChild(source);
+        document.getElementById("video_container").appendChild(scope.video);
+      }
+      scope.play_video = true;
+    }
+
+    scope.cerrar = function() {
+      scope.play_video = false;
+      console.log(scope.play_video);
     }
 
     scope.uploadFile = function() {
@@ -109,7 +196,7 @@ function FileUploadCtrl(scope) {
 
     function uploadComplete(evt) {
         /* This event is raised when the server send back a response */
-        scope.delito = evt.target.response
+        scope.delito = evt.target.response   
         alert("Video subido con exito")
     }
 
@@ -118,6 +205,36 @@ function FileUploadCtrl(scope) {
     }
 
     function uploadCanceled(evt) {
+        scope.$apply(function(){
+            scope.progressVisible = false
+        })
+        alert("El usuario canceló subir el archivo o el browser cortó la conexión.")
+    }
+
+    function uploadImgProgress(evt) {
+        scope.$apply(function(){
+            if (evt.lengthComputable) {
+                scope.progress = Math.round(evt.loaded * 100 / evt.total)
+            } else {
+                scope.progress = 'no puedo evaluar progreso'
+            }
+        })
+    }
+
+    function uploadImgComplete(evt) {
+        /* This event is raised when the server send back a response */
+        scope.postulado = evt.target.response        
+        scope.subirImagen = false;
+        alert("Video subido con exito")
+    }
+
+    function uploadImgFailed(evt) {
+        scope.subirImagen = false;
+        alert("Hubo un error al subir el archivo.")
+    }
+
+    function uploadImgCanceled(evt) {
+        scope.subirImagen = false;
         scope.$apply(function(){
             scope.progressVisible = false
         })
@@ -173,6 +290,10 @@ adminServices.factory('PostuladoService', ['$http', function($http) {
 app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
+      when('/index', {
+        templateUrl: 'admin/partials/index',
+        controller: 'AdminCtrl'
+      }).
       when('/adminUsers', {
         templateUrl: 'admin/partials/users',
         controller: 'AdminCtrl'
@@ -355,6 +476,43 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
   }
 
+  $scope.add_victima = function() {
+    p = {};
+    p.nombres         = "No especificado";
+    p.apellidos       = "No especificado";
+    p.perfil          = "No especificado";
+    p.oficio          = "No especificado";
+    p.enunciada_por   = "No especificado";
+    p.datos_completos = "No especificado";
+
+    $scope.delito.victimas.push(p);
+  }
+
+  $scope.add_participante = function() {
+    p = {};
+    p.nombres         = "No especificado";
+    p.apellidos       = "No especificado";
+    p.alias           = "No especificado";
+    p.pertenencia     = "No especificado";
+    p.confesado       = "No especificado";
+    p.hora_mencion    = "No especificado";
+    p.otros_implicados = [];
+    p.participacion   = "No especificado";
+
+    $scope.delito.participantes.push(p);
+  }
+
+  $scope.add_otro = function(participante) {
+    p = {};
+    p.nombres         = "No especificado";
+    p.apellidos       = "No especificado";
+    p.alias           = "No especificado";
+    p.pertenencia     = "No especificado";
+    p.participacion   = "No especificado";
+
+    participante.otros_implicados.push(p);
+  }
+
   $scope.add_delito = function() {
     $scope.create_delito = true;
   }
@@ -437,6 +595,21 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.selectedDelitoIndex = 0;
       console.log($scope.delitos);
       console.log($scope.delitos.length);
+    })
+    .error(function(data, status, headers, config){
+        $scope.error = "Error al salvar el postulado."; 
+    }); 
+  }
+
+  $scope.jyp_fosas = function() {
+    $scope.active = "jyp";
+    $http.get('/postulados/' + $scope.postulado_id + "/jyp_fosas")
+    .success(function(data, status, headers, config) {
+      $scope.fosas = data;      
+      $scope.fosa = $scope.fosas[0];
+      $scope.selectedFosaIndex = 0;
+      console.log($scope.fosas);
+      console.log($scope.fosas.length);
     })
     .error(function(data, status, headers, config){
         $scope.error = "Error al salvar el postulado."; 

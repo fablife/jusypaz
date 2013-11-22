@@ -2,7 +2,9 @@ div.info_wrapper(ng-controller="PostuladoCtrl" )
    div.navegacion_hechos
       button.add_action.right(ng-click="add_delito()")
       div.empty(ng-hide="delitos.length") No hay delitos para este postulado.
-      div.hecho_lista(ng-show="delitos.length") Hay {{delitos.length}} delitos para este postulado.
+      div.hecho_lista(ng-show="delitos.length") 
+         div.hecho_lista_title
+            Hay {{delitos.length}} delitos para este postulado.
          div.hecho_titulo(ng-class="{selected: $index==selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in delitos") {{delito.titulo}}
 
 
@@ -42,15 +44,25 @@ div.info_wrapper(ng-controller="PostuladoCtrl" )
 
       h2.info_subtitle.inline Datos de la acción
       div.inline.datos_acciones(ng-controller="FileUploadCtrl")
-        button.buttons.mleft10(ng-show='delito.video_path' ng-click="ver_video()") Ver video
-        button.buttons.mleft10(ng-hide='delito.video_path' ng-click="busca_video()") Cargar video 
-        input(style="display: none" type="file" ng-model-instant id="fileToUpload" onchange="angular.element(this).scope().setFiles(this)") 
-        button.buttons.mleft10( ng-show="subirVideo" ng-click="uploadFile()") Subir video 
-        label.inline.small_text(ng-show="subirVideo" id="uploadFileName")
-        div(ng-show="progressVisible")
+         button.buttons.mleft10(ng-show='delito.video_path' ng-click="ver_video()") Ver video
+         button.buttons.mleft10(ng-hide='delito.video_path' ng-click="busca_video()") Cargar video 
+         input(style="display: none" type="file" ng-model-instant id="fileToUpload" onchange="angular.element(this).scope().setFiles(this)") 
+         button.buttons.mleft10( ng-show="subirVideo" ng-click="uploadFile()") Subir video 
+         label.inline.small_text(ng-show="subirVideo" id="uploadFileName")
+         div(ng-show="progressVisible")
             div.percent {{progress}}%
             div.progress-bar
                 div.uploaded(ng-style="{'width': progress+'%'}")
+
+        
+         div#overlay(ng-show="play_video")
+         div.video_wrapper
+            div#video_container(ng-show="play_video")
+               br
+               button.btn(ng-click="cerrar()") Cerrar
+            
+
+         
 
       table.tab_form_table
          tr
@@ -107,11 +119,11 @@ div.info_wrapper(ng-controller="PostuladoCtrl" )
                label.small_form Grado de instrucción - Nivél academico
                div(input-inline-edit="delito.otro_lugar" on-save="set_dirty()" ng-focus="edit()" tabindex="26")
 
-         button.action(ng-click="map()") Ver mapa
+         button.buttons(ng-click="map()") Ver mapa
 
       h2.info_subtitle Autores participantes
       button.add_action_small(ng-click="add_participante()")
-      table.tab_form_table.addition(ng-repeat="participante in participantes")
+      table.tab_form_table.addition(ng-repeat="participante in delito.participantes")
          tr
             td
                label.small_form Nombres
@@ -135,18 +147,23 @@ div.info_wrapper(ng-controller="PostuladoCtrl" )
          tr
             td
                label.small_form Otros implicados en el hecho
+               button.add_action_small(ng-click="add_otro(participante)") 
                div.participante(ng-repeat="otro in participante.otros_implicados")
-                  button.add_action(ng-click="add_otro()") 
-                  div(input-inline-edit="otro.nombres" on-save="set_dirty()" ng-focus="edit()" tabindex="36")
-                  div(input-inline-edit="otro.apellidos" on-save="set_dirty()" ng-focus="edit()" tabindex="36")
-                  div(input-inline-edit="otro.alias" on-save="set_dirty()" ng-focus="edit()" tabindex="36")
-                  div(input-inline-edit="otro.pertenencia" on-save="set_dirty()" ng-focus="edit()" tabindex="36")
-                  div(input-inline-edit="otro.participacion" on-save="set_dirty()" ng-focus="edit()" tabindex="36")
+                  label.small_form Nombres
+                  div(input-inline-edit="otro.nombres" on-save="set_dirty()" ng-focus="edit()" tabindex="100")
+                  label.small_form Apellidos
+                  div(input-inline-edit="otro.apellidos" on-save="set_dirty()" ng-focus="edit()" tabindex="101")
+                  label.small_form Alias
+                  div(input-inline-edit="otro.alias" on-save="set_dirty()" ng-focus="edit()" tabindex="102")
+                  label.small_form Pertenencia
+                  div(input-inline-edit="otro.pertenencia" on-save="set_dirty()" ng-focus="edit()" tabindex="103")
+                  label.small_form Participación
+                  div(input-inline-edit="otro.participacion" on-save="set_dirty()" ng-focus="edit()" tabindex="104")
 
       h2.info_subtitle Victimas
-      div.victimas Numero de victimas: {{ victimas.length }}
+      div.victimas Numero de victimas: {{ delito.victimas.length }}
       button.add_action_small(ng-click="add_victima()")
-      table.tab_form_table.additions(ng-repeat="v in participante.victimas")
+      table.tab_form_table.additions(ng-repeat="v in delito.victimas")
          tr
             td
                label.small_form Nombre de la victima
@@ -167,5 +184,3 @@ div.info_wrapper(ng-controller="PostuladoCtrl" )
             td
                label.small_form Victima enunciada por el postulado o por fiscalía
                div(input-inline-edit="v.datos_completos" on-save="set_dirty()" ng-focus="edit()" tabindex="35") 
-
-      

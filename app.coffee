@@ -7,7 +7,11 @@ mongoose  = require('mongoose')
 config    = require('./config')
 urls      = require('./urls')
 routes    = require('./routes')
+media     = require('./media')
 User      = require('./models/models').User
+
+handle_error = require('./utils').handle_error
+can_access   = require('./access').can_access
 
 #Connect to DB
 db = mongoose.connect(config.creds.mongoose_auth_local)
@@ -27,6 +31,29 @@ passport.deserializeUser((id, done) ->
       #   done(err, user)
       #)
 )
+
+#Middleware to check that user can view video
+can_view_video = (req, res, next) ->
+    url = req.url
+    url_params_only = url.substring("/videos/".length)
+    cedula = url_params_only.substring(0, url_params_only.indexOf("/"))
+    can_access(req, res, cedula, (err) ->
+      if err?
+        handle_error(err, err.message, res)
+      else
+        return next() 
+    )
+
+can_view_imagen = (req, res, next) ->
+    url = req.url
+    url_params_only = url.substring("/img/".length)
+    cedula = url_params_only.substring(0, url_params_only.indexOf("/"))
+    can_access(req, res, cedula, (err) ->
+      if err?
+        handle_error(err, err.message, res)
+      else
+        return next() 
+    )
 
 #Middleware to check that a user is authenticated
 ensureAuthenticated = (req, res, next) ->
@@ -104,6 +131,8 @@ app.get('/codigopenal', routes.codigos)
 app.get('/postulados/:postuladoId', routes.postulado)
 app.get('/postulados/:postuladoId/hv', routes.hv)
 app.get('/postulados/:postuladoId/jyp_delitos', routes.jyp_delitos)
+app.get('/videos/:cedulaId/:delitoId/:name', can_view_video, media.play)
+app.get('/img/:cedulaId/:name', can_view_imagen, media.img_view)
 
 #admin routes
 app.get('/admin', ensureAdmin, routes.admin)
@@ -111,6 +140,7 @@ app.put('/admin/save_user', routes.save_user)
 app.put('/admin/save_postulado', routes.save_postulado)
 app.get('/admin/usuarios/usuarios.json', ensureAdmin, routes.usuarios)
 app.post('/admin/postulados/:postuladoId/videoupload', routes.upload_video)
+app.post('/admin/postulados/:postuladoId/avatarupload', routes.upload_avatar)
 app.put('/admin/postulados/:postuladoId/hv', routes.save_hv)
 app.put('/admin/postulados/:postuladoId/jyp', routes.create_delito)
 app.put('/admin/postulados/:postuladoId/jyp_delito', routes.save_delito)

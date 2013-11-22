@@ -3,6 +3,8 @@ Usuario     = require('./models/models').User
 Hoja        = require("./models/models").Hoja
 Delito      = require("./models/models").Delito
 CodigoPenal = require("./models/models").CodigoPenal
+can_access  = require("./access").can_access
+handle_error = require("./utils").handle_error 
 
 fs = require('fs')
 
@@ -76,6 +78,16 @@ exports.upload_video = (req, res) ->
     else
       video_upload(req, res)
   )
+
+exports.upload_avatar = (req, res) ->
+  console.log("POST avatar_upload")
+  cedula = req.params.postuladoId
+  can_access(req, res, cedula, (err) ->
+    if err?
+      handle_error(err, err.message, res)
+    else
+      avatar_upload(req, res)
+  )
   
 exports.hv = (req, res) ->
   console.log "Hoja de vida"
@@ -141,29 +153,6 @@ exports.codigos = (req, res) ->
     res.send(codigos)
     console.log "Lista codigos penales retornada con éxito."
   )
-
-handle_error = (exception, text, res, code=500) ->
-    console.log(text)
-    console.log exception
-    res.statusCode = code
-    res.end(text)
-
-can_access = (req, res, cedula, callback) ->
-  role = req.user.role
-  user_cedula = req.user.cedula
-  Postulado.findOne({ cedula:cedula }, (err, user) ->
-    if err?
-      callback(err)
-    if not user?
-      text = "No se encontró postulado con esa cédula"
-      console.log text
-      callback(new Error(text))
-    else if not cedula == user_cedula or role is not "admin"
-      callback(new Error("No tiene derecho a acceder a ver esta información"))
-    else
-      console.log "Can access"
-      callback(null)
-    )
 
 getPostulado = (req, res) ->
   console.log("_get postulado")
@@ -275,4 +264,41 @@ video_upload = (req, res) ->
         )
     catch e
       handle_error(e, "Error guardando video", res)
+    )
+
+avatar_upload = (req, res) ->
+  console.log("_avatar_upload")
+  console.log req.body
+  console.log req.files.uploadedFile.path
+  root_dir =  __dirname + "/media/postulados/"
+  p = req.body.postuladoId
+
+  fs.readFile(req.files.uploadedFile.path, (err, data) ->
+    try
+      newPath = root_dir + p + "/" + req.files.uploadedFile.name
+      if not fs.existsSync(root_dir + p)
+        fs.mkdirSync(root_dir + p)     
+      fs.writeFile(newPath, data, (err, delito) ->
+        if err?
+         handle_error(err, "Error guardando imagen subida", res)
+        else
+          Postulado.findOne({'cedula':p} ,(err, postulado) ->
+            if err?
+              handle_error(err, "Imagen subido pero no se encontro Postulado asociado", res)
+            else
+              console.log postulado
+              if postulado?
+                postulado.picture = "/img/" + p + "/" + req.files.uploadedFile.name;
+                postulado.save((err) ->
+                if err?
+                  handle_error(err, "Imagen subida ok, Postulado encontrado, pero al salvarlo hubo error", res)
+                else
+                  res.send(postulado)
+                )
+              else
+                handle_error(new Error("Postulado es vacio"), "No se encontro el Postulado asociado a esa cedula", res)
+          )
+        )
+    catch e
+      handle_error(e, "Error guardando imagen", res)
     )
