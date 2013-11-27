@@ -1,0 +1,18 @@
+div(class="input_inline_edit_div")
+  if is_admin
+    label.inline-radio-label(ng-show="editMode") Si
+    input(class="inline_edit_radio" type="radio" name="model" ng-value="true" ng-boolean-radio on-tab="tab()" 
+        on-enter="save()" on-blur="blur()" on-esc="cancel()" ng-model="model" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()")
+    label.inline-radio-label(ng-show="editMode") No
+    input(class="inline_edit_radio" type="radio" name="model" ng-value="false" ng-boolean-radio on-tab="tab()" 
+        on-enter="save()" on-blur="blur()" on-esc="cancel()" ng-model="model" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()")
+
+    span(ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false")
+      span(ng-hide="editMode" ng-click="edit()" ) 
+        div(class="inline_edit_text")
+           label(ng-show="model == true") Si
+           label(ng-show="model == false") No
+  else
+    div(class="inline_edit_text")
+           label(ng-show="model == true") Si
+           label(ng-show="model == false") No

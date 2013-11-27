@@ -11,7 +11,8 @@ html
           img(class="logo", src="/img/logo.png")
         form(action="/login",class="login_form", method="post")
           label.form_label Usuario: 
-          input(type="text", id="username", name="username") 
+          //-input(type="text", id="username", name="username") 
+          input(type="text", id="cedula", name="cedula") 
           label.form_label Contraseña: 
           input(type="password", id="password", name="password")
           input(type="Submit", class="submit", value="Login")

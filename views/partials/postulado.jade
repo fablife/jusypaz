@@ -4,33 +4,37 @@ div(ng-controller="PostuladoCtrl")
       button.buttons.action_button(ng-click="save()") Salvar
       button.buttons.action_button(ng-click="cancel()") Cancelar
     div.postulado_info
-      div.postulado_img(ng-controller="FileUploadCtrl" ng-click="upload_pic()")
+      div.postulado_img(ng-controller="FileUploadCtrl" ng-mouseenter="show_buttons()" ng-mouseleave="hide_buttons()" )
+        button.upload_button(ng-show="root.show_buttons" ng-click="upload_pic()") Busca imagen
+        button.upload_button(ng-show="(root.subirImagen && root.show_buttons)" ng-click="uploadImagen()") Subir imagen 
         div.picture()        
-        img(ng-show="postulado.picture" src="{{postulado.picture}}" width="100px" height="100px")
+        img(ng-show="root.postulado.picture" src="{{root.postulado.picture}}" width="100px" height="100px")
         input(style="display: none" type="file" ng-model-instant id="fileToUpload" onchange="angular.element(this).scope().setFiles(this)")
-        label.inline.small_text(ng-show="subirImagen" id="uploadFileName")
-        button.mleft10( ng-show="subirImagen" ng-click="uploadImagen()") Subir imagen 
+        //-label.inline.small_text(ng-show="root.subirImagen" id="uploadFileName")
+        
       div.info_general
         label Nombres
-        div(input-inline-edit="postulado.nombres" tabindex="1")
+        div(input-inline-edit="root.postulado.nombres" tabindex="1")
         label Apellidos
-        div(input-inline-edit="postulado.apellidos" tabindex="2")
+        div(input-inline-edit="root.postulado.apellidos" tabindex="2")
       div.info_general
         label Cédula
-        div(input-inline-edit="postulado.cedula" tabindex="3")
+        div(input-inline-edit="root.postulado.cedula" tabindex="3")
         label Fecha de nacimiento
-        div(input-inline-edit="postulado.fecha_nacimiento" tabindex="4")
+        div(input-inline-date="root.postulado.fecha_nacimiento" tabindex="4")
       div.info_general
         label Ciudad
-        div(input-inline-edit="postulado.ciudad" tabindex="5")
+        div(input-inline-edit="root.postulado.ciudad" tabindex="5")
 
     tabset.info_tabs
       tab.info_tab.active(heading="Hoja de Vida" select="hv()")
         div.tab_content(ng-include="'/partials/hv'")        
-      tab.info_tab(heading="Justicia y Paz") 
+      tab.info_tab(heading="Justicia y Paz" select="jyp()") 
         div.tab_content(ng-include="'/partials/jyp'")
-      tab.info_tab(heading="Procesos" select="proc()") 
+      tab.info_tab(heading="Procesos" select="proces()") 
         div.tab_content(ng-include="'/partials/proc'")
-      tab.info_tab(heading="Bienes" select="bienes()") 
+      tab.info_tab(heading="Bienes" select="bienes()")
+        div.tab_content(ng-include="'/partials/bienes'") 
       tab.info_tab(heading="Menores" select="menores()") 
+        div.tab_content(ng-include="'/partials/menores'")
 

@@ -1,0 +1,80 @@
+div.info_wrapper
+   div.navegacion_hechos
+      if (role == "admin")
+         button.add_action.right(ng-click="add_fosa()")
+      div.empty(ng-hide="root.fosas.length") No hay fosas para este postulado.
+      div.hecho_lista(ng-show="root.fosas.length") 
+         div.hecho_lista_title
+            Hay {{root.fosas.length}} fosas para este postulado.
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedFosaIndex, dirty: fosa.dirty}" ng-click="get_fosa($index)" ng-repeat="fosa in root.fosas") {{fosa.titulo}}
+
+
+   div.dialog.create_fosa(ng-show="root.create_fosa")    
+      h2.info_subtitle Agregar nueva fosa
+      label.form Titulo de la fosa
+      br
+      input.dialog_input(ng-model="root.newfosatitle" name="root.newfosatitle" required type="text")
+      br
+      button.buttons(ng-click="crea_fosa()" ng-disabled="invalid_form") Crear fosa
+      button.buttons(ng-click="cancela_crea_fosa()") Cancelar
+
+   div.datos_version(ng-show="root.fosas.length")
+      h2.info_subtitle Fosa
+        div(input-inline-edit="root.fosa.titulo" class="inline inline-heading" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="5")
+      table.tab_form_table
+         tr
+            td
+               label.small_form Enunciada en versión
+               div(input-inline-radio="root.fosa.enunciada" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="6")
+            td
+               label.small_form Hecho relacionado
+               div(input-inline-edit="root.fosa.delito" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="7")            
+            td
+               label.small_form Hora en mención
+               div(input-inline-edit="root.fosa.hora_mencion" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="8")
+         tr
+            td
+               label.small_form Nombre victima
+               div(input-inline-edit="root.fosa.victima_nombre" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="10")
+            td
+               label.small_form Perfil victima
+               div(input-inline-edit="root.fosa.perfil_victima" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="11")
+
+      h2.info_subtitle.inline Georeferenciación     
+      table.tab_form_table
+         tr
+            td
+               label.small_form Pais
+               div(input-inline-edit="root.fosa.pais" on-save="set_fosa_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="21")
+            td
+               label.small_form Departamento
+               div(input-inline-edit="root.fosa.departamento" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="22")
+            td
+               label.small_form Municipio
+               div(input-inline-edit="root.fosa.municipio" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="24")
+         tr
+            td
+               label.small_form Corregimiento
+               div(input-inline-edit="root.fosa.corregimiento" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="25")
+            td
+               label.small_form Vereda
+               div(input-inline-edit="root.fosa.vereda" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="26")
+         tr
+            td
+               label.small_form Latitud
+               div(input-inline-edit="root.fosa.lat" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="27")
+            td               
+               label.small_form Longitud
+               div(input-inline-edit="root.fosa.long" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="28")      
+
+
+      h2.info_subtitle Exumada
+      table.tab_form_table
+         tr
+            td
+               label.small_form Identificación victima
+               div(input-inline-edit="root.fosa.id_victima" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="41")
+            td
+               label.small_form Entregada a los familiares
+               div(input-inline-edit="root.fosa.entregada_familia" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="42")
+            

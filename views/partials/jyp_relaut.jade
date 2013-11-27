@@ -1,0 +1,85 @@
+div.info_wrapper
+   div.navegacion_hechos
+      if (role == "admin")
+         button.add_action.right(ng-click="add_relaut()")
+      div.empty(ng-hide="root.relauts.length") No hay asunto de Relaciones Autoridades para este postulado.
+      div.hecho_lista(ng-show="root.relauts.length") 
+         div.hecho_lista_title
+            Hay {{root.relauts.length}} asuntos de Relaciones Autoridades para este postulado.
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedRelautIndex, dirty: relaut.dirty}" ng-click="get_relaut($index)" ng-repeat="relaut in root.relauts") {{relaut.titulo}}
+
+
+   div.dialog.create_relaut(ng-show="root.create_relaut")    
+      h2.info_subtitle Agregar nuevo asunto de Relaciones Autoridades
+      label.form Titulo de la Relacion Autoridades
+      br
+      input.dialog_input(ng-model="root.new_relaut_title" name="root.new_relaut_title" required type="text")
+      br
+      button.buttons(ng-click="crea_relaut()" ng-disabled="invalid_form") Crear
+      button.buttons(ng-click="cancela_crea_relaut()") Cancelar
+
+   div.datos_version(ng-show="root.relauts.length")
+      h2.info_subtitle Datos
+        div(input-inline-edit="root.relaut.titulo" class="inline inline-heading" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="5")
+      table.tab_form_table
+         tr
+            td
+               label.small_form Relación
+               div(input-inline-select-relaut="root.relaut.tipo" on-save="set_relaut_dirty()" opciones="root.tipos_relaut" ng-focus="edit()" tabindex="15")
+            td
+               label.small_form Nombres implicado
+               div(input-inline-edit="root.relaut.nombres_implicado" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="16")
+            td
+               label.small_form Apellidos implicado
+               div(input-inline-edit="root.relaut.apellidos_implicado" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="17")
+         tr
+            td
+               label.small_form Compulsa de copias
+               div(input-inline-edit="root.relaut.compulsa_copias" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="21")
+            td
+               label.small_form Condenas
+               div(input-inline-edit="root.relaut.condenas" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="22")
+            td
+               label.small_form Absolución
+               div(input-inline-edit="root.relaut.absolucion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="23")
+         tr
+            td
+               label.small_form Narración de los hechos
+               div(input-inline-edit="root.relaut.narracion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="31")
+            td
+               label.small_form Rango
+               div(input-inline-edit="root.relaut.narracion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="32")
+            td
+               label.small_form Dependencia
+               div(input-inline-edit="root.relaut.narracion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="34")
+         tr
+            td
+               label.small_form Fecha
+               div(input-inline-edit="root.relaut.fecha" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="38")
+
+      h2.info_subtitle.inline Georeferenciación     
+      table.tab_form_table
+         tr
+            td
+               label.small_form Pais
+               div(input-inline-edit="root.relaut.pais" on-save="set_relaut_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="41")
+            td
+               label.small_form Departamento
+               div(input-inline-edit="root.relaut.departamento" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="42")
+            td
+               label.small_form Municipio
+               div(input-inline-edit="root.relaut.municipio" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="43")
+         tr
+            td
+               label.small_form Corregimiento
+               div(input-inline-edit="root.relaut.corregimiento" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="51")
+            td
+               label.small_form Vereda
+               div(input-inline-edit="root.relaut.vereda" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="52")
+         tr
+            td
+               label.small_form Latitud
+               div(input-inline-edit="root.relaut.lat" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="61")
+            td               
+               label.small_form Longitud
+               div(input-inline-edit="root.relaut.long" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="62") 

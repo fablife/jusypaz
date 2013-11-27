@@ -1,63 +1,64 @@
-div.info_wrapper(ng-controller="PostuladoCtrl" )
+div.info_wrapper
    div.navegacion_hechos
-      button.add_action.right(ng-click="add_delito()")
-      div.empty(ng-hide="delitos.length") No hay delitos para este postulado.
-      div.hecho_lista(ng-show="delitos.length") 
+      if (role == "admin")
+         button.add_action.right(ng-click="add_delito()")
+      div.empty(ng-hide="root.delitos.length") No hay delitos para este postulado.
+      div.hecho_lista(ng-show="root.delitos.length") 
          div.hecho_lista_title
-            Hay {{delitos.length}} delitos para este postulado.
-         div.hecho_titulo(ng-class="{selected: $index==selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in delitos") {{delito.titulo}}
+            Hay {{root.delitos.length}} delitos para este postulado.
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos") {{delito.titulo}}
 
 
-   div.dialog.create_delito(ng-show="create_delito")    
+   div.dialog.create_delito(ng-show="root.create_delito")    
       h2.info_subtitle Agregar nuevo delito
       label.form Titulo del hecho
       br
-      input.dialog_input(ng-model="newdelitotitle" name="newdelitotitle" required type="text")
+      input.dialog_input(ng-model="root.newdelitotitle" name="root.newdelitotitle" required type="text")
       br
       button.buttons(ng-click="crea_delito()" ng-disabled="invalid_form") Crear delito
       button.buttons(ng-click="cancela_crea_delito()") Cancelar
 
-   div.datos_version(ng-show="delitos.length")
+   div.datos_version(ng-show="root.delitos.length")
       h2.info_subtitle Datos versión
-        div(input-inline-edit="delito.titulo" class="inline inline-heading" on-save="set_dirty()" ng-focus="edit()" tabindex="5")
+        div(input-inline-edit="root.delito.titulo" class="inline inline-heading" on-save="set_dirty()" ng-focus="edit()" tabindex="5")
       table.tab_form_table
          tr
             td
                label.small_form Delito
-               div(input-inline-select-codigo="delito.codigo_penal" on-save="set_dirty()" codigos="codigos" opts="c.nombre for c in codigos" ng-focus="edit()" tabindex="6")
+               div(input-inline-select-codigo="root.delito.codigo_penal" on-save="set_dirty()" opciones="root.codigos" ng-focus="edit()" tabindex="6")
             td
                label.small_form Tipo de versión
-               div(input-inline-edit="delito.tipo_version" on-save="set_dirty()" ng-focus="edit()" tabindex="7")
+               div(input-inline-edit="root.delito.tipo_version" on-save="set_dirty()" ng-focus="edit()" tabindex="7")
             td
                label.small_form Fecha de la versión
-               div(input-inline-date="delito.fecha_version" on-save="set_dirty()" ng-focus="edit()" tabindex="8")
+               div(input-inline-date="root.delito.fecha_version" on-save="set_dirty()" ng-focus="edit()" tabindex="8")
          tr
             td
                label.small_form Fiscalía
-               div(input-inline-edit="delito.fiscalia" on-save="set_dirty()" ng-focus="edit()" tabindex="9")
+               div(input-inline-edit="root.delito.fiscalia" on-save="set_dirty()" ng-focus="edit()" tabindex="9")
             td
                label.small_form Sitio de reclusión
-               div(input-inline-edit="delito.sitio_reclusion" on-save="set_dirty()" ng-focus="edit()" tabindex="10")
+               div(input-inline-edit="root.delito.sitio_reclusion" on-save="set_dirty()" ng-focus="edit()" tabindex="10")
             td
                label.small_form Bloque de postulación
-               div(input-inline-edit="delito.bloque_post" on-save="set_dirty()" ng-focus="edit()" tabindex="11")
+               div(input-inline-edit="root.delito.bloque_post" on-save="set_dirty()" ng-focus="edit()" tabindex="11")
 
       h2.info_subtitle.inline Datos de la acción
       div.inline.datos_acciones(ng-controller="FileUploadCtrl")
-         button.buttons.mleft10(ng-show='delito.video_path' ng-click="ver_video()") Ver video
-         button.buttons.mleft10(ng-hide='delito.video_path' ng-click="busca_video()") Cargar video 
+         button.buttons.mleft10(ng-show='root.delito.video_path' ng-click="ver_video()") Ver video
+         button.buttons.mleft10(ng-hide='root.delito.video_path' ng-click="busca_video()") Cargar video 
          input(style="display: none" type="file" ng-model-instant id="videoToUpload" onchange="angular.element(this).scope().setFiles(this)") 
-         button.buttons.mleft10( ng-show="subirVideo" ng-click="uploadFile()") Subir video 
-         label.inline.small_text(ng-show="subirVideo" id="uploadFileName")
-         div(ng-show="progressVisible")
+         button.buttons.mleft10( ng-show="root.subirVideo" ng-click="uploadFile()") Subir video 
+         label.inline.small_text(ng-show="root.subirVideo" id="uploadFileName")
+         div(ng-show="root.progressVisible")
             div.percent {{progress}}%
             div.progress-bar
                 div.uploaded(ng-style="{'width': progress+'%'}")
 
         
-         div#overlay(ng-show="play_video")
+         div#overlay(ng-show="root.play_video")
          div.video_wrapper
-            div#video_container(ng-show="play_video")
+            div#video_container(ng-show="root.play_video")
                br
                button.btn(ng-click="cerrar()") Cerrar
             
@@ -68,62 +69,62 @@ div.info_wrapper(ng-controller="PostuladoCtrl" )
          tr
             td
                label.small_form Hora en mención del hecho
-               div(input-inline-edit="delito.hora_mencion" on-save="set_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="12")
+               div(input-inline-edit="root.delito.hora_mencion" on-save="set_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="12")
             td
                label.small_form Hecho enunciado con/sin responsabilidad
-               div(input-inline-edit="delito.responsabilidad" on-save="set_dirty()" ng-focus="edit()" tabindex="13")
+               div(input-inline-edit="root.delito.responsabilidad" on-save="set_dirty()" ng-focus="edit()" tabindex="13")
             td
                label.small_form Hecho confesado
-               div(input-inline-edit="delito.confesado" on-save="set_dirty()" ng-focus="edit()" tabindex="14")
+               div(input-inline-edit="root.delito.confesado" on-save="set_dirty()" ng-focus="edit()" tabindex="14")
          tr
             td
                label.small_form Narración del hecho
-               div(input-inline-edit="delito.narracion" on-save="set_dirty()" ng-focus="edit()" tabindex="15")
+               div(input-inline-edit="root.delito.narracion" on-save="set_dirty()" ng-focus="edit()" tabindex="15")
             td
                label.small_form Clasificación del delito
-               div(input-inline-edit="delito.clasificacion" on-save="set_dirty()" ng-focus="edit()" tabindex="16")
+               div(input-inline-edit="root.delito.clasificacion" on-save="set_dirty()" ng-focus="edit()" tabindex="16")
             td
                label.small_form Fecha ocurrencia del hecho
-               div(input-inline-date="delito.fecha_ocurrencia" on-save="set_dirty()" ng-focus="edit()" tabindex="17")
+               div(input-inline-date="root.delito.fecha_ocurrencia" on-save="set_dirty()" ng-focus="edit()" tabindex="17")
 
       h2.info_subtitle Georeferenciación
       table.tab_form_table
          tr
             td
                label.small_form Pais
-               div(input-inline-edit="delito.pais" on-save="set_dirty()" ng-focus="edit()" tabindex="18")
+               div(input-inline-edit="root.delito.pais" on-save="set_dirty()" ng-focus="edit()" tabindex="18")
             td
                label.small_form Departamento
-               div(input-inline-edit="delito.dept" on-save="set_dirty()" ng-focus="edit()" tabindex="19")
+               div(input-inline-edit="root.delito.dept" on-save="set_dirty()" ng-focus="edit()" tabindex="19")
             td
                label.small_form Municipio
-               div(input-inline-edit="delito.municipio" on-save="set_dirty()" ng-focus="edit()" tabindex="20")
+               div(input-inline-edit="root.delito.municipio" on-save="set_dirty()" ng-focus="edit()" tabindex="20")
          tr
             td
                label.small_form Corregimiento
-               div(input-inline-edit="delito.corregimiento" on-save="set_dirty()" ng-focus="edit()" tabindex="21")
+               div(input-inline-edit="root.delito.corregimiento" on-save="set_dirty()" ng-focus="edit()" tabindex="21")
             td
                label.small_form Vereda
-               div(input-inline-edit="delito.vereda" on-save="set_dirty()" ng-focus="edit()" tabindex="22")
+               div(input-inline-edit="root.delito.vereda" on-save="set_dirty()" ng-focus="edit()" tabindex="22")
             td
                label.small_form Finca
-               div(input-inline-edit="delito.finca" on-save="set_dirty()" ng-focus="edit()" tabindex="23")
+               div(input-inline-edit="root.delito.finca" on-save="set_dirty()" ng-focus="edit()" tabindex="23")
          tr
             td
                label.small_form Profesión - Ocupación
-               div(input-inline-edit="delito.via" on-save="set_dirty()" ng-focus="edit()" tabindex="24")
+               div(input-inline-edit="root.delito.via" on-save="set_dirty()" ng-focus="edit()" tabindex="24")
             td
                label.small_form Servicio Militar
-               div(input-inline-edit="delito.direccion" on-save="set_dirty()" ng-focus="edit()" tabindex="25")
+               div(input-inline-edit="root.delito.direccion" on-save="set_dirty()" ng-focus="edit()" tabindex="25")
             td
                label.small_form Grado de instrucción - Nivél academico
-               div(input-inline-edit="delito.otro_lugar" on-save="set_dirty()" ng-focus="edit()" tabindex="26")
+               div(input-inline-edit="root.delito.otro_lugar" on-save="set_dirty()" ng-focus="edit()" tabindex="26")
 
          button.buttons(ng-click="map()") Ver mapa
 
       h2.info_subtitle Autores participantes
       button.add_action_small(ng-click="add_participante()")
-      table.tab_form_table.addition(ng-repeat="participante in delito.participantes")
+      table.tab_form_table.addition(ng-repeat="participante in root.delito.participantes")
          tr
             td
                label.small_form Nombres
@@ -161,26 +162,26 @@ div.info_wrapper(ng-controller="PostuladoCtrl" )
                   div(input-inline-edit="otro.participacion" on-save="set_dirty()" ng-focus="edit()" tabindex="104")
 
       h2.info_subtitle Victimas
-      div.victimas Numero de victimas: {{ delito.victimas.length }}
+      div.victimas Numero de victimas: {{ root.delito.victimas.length }}
       button.add_action_small(ng-click="add_victima()")
-      table.tab_form_table.additions(ng-repeat="v in delito.victimas")
+      table.tab_form_table.additions(ng-repeat="v in root.delito.victimas")
          tr
             td
                label.small_form Nombre de la victima
-               div(input-inline-edit="v.nombres" on-save="set_dirty()" ng-focus="edit()" tabindex="31")
+               div(input-inline-edit="v.nombres" on-save="set_dirty()" ng-focus="edit()" tabindex="200")
             td
                label.small_form Apellidos de la victima
-               div(input-inline-edit="v.apellidos" on-save="set_dirty()" ng-focus="edit()" tabindex="32")
+               div(input-inline-edit="v.apellidos" on-save="set_dirty()" ng-focus="edit()" tabindex="202")
             td
                label.small_form Oficio de la victima
-               div(input-inline-edit="v.oficio" on-save="set_dirty()" ng-focus="edit()" tabindex="33")
+               div(input-inline-edit="v.oficio" on-save="set_dirty()" ng-focus="edit()" tabindex="203")
          tr
             td
                label.small_form Perfil de la victima
-               div(input-inline-edit="v.perfil" on-save="set_dirty()" ng-focus="edit()" tabindex="34")
+               div(input-inline-edit="v.perfil" on-save="set_dirty()" ng-focus="edit()" tabindex="204")
             td
                label.small_form Victima enunciada por el postulado o por fiscalía
-               div(input-inline-edit="v.enunciada_por" on-save="set_dirty()" ng-focus="edit()" tabindex="35")
+               div(input-inline-edit="v.enunciada_por" on-save="set_dirty()" ng-focus="edit()" tabindex="205")
             td
                label.small_form Victima enunciada por el postulado o por fiscalía
-               div(input-inline-edit="v.datos_completos" on-save="set_dirty()" ng-focus="edit()" tabindex="35") 
+               div(input-inline-edit="v.datos_completos" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 

@@ -131,6 +131,7 @@ input.dialog_input {
 
 input.dialog_input {
     padding: 0 6px;
+    width: 100%;
 }
 
 
@@ -201,12 +202,13 @@ a.action_link {
 }
 
 .cedula_input_div {
-  margin-top: 12px;
+  margin-top: 8px;
 }
 
 input.cedula_input {
-  height: 20px;
+  height: 26px;
   border: 1px solid #003b6f;
+  padding: 4px;
 }
 
 .menu_bar {
@@ -646,7 +648,8 @@ td.actions {
 }
 
 .percent {
-    position: absolute; width: 300px; height: 14px; z-index: 1; text-align: center; font-size: 0.8em; color: white;
+    position: absolute; width: 300px; height: 24px; z-index: 2; text-align: center; font-size: 0.8em; color: white;
+    background-color: #003b6f;
 }
 .progress-bar {
     width: 300px; height: 14px;
@@ -712,4 +715,14 @@ li.acciones_link {
   font-size: 18px;
   line-height: 32px;
   cursor: pointer;
+}
+
+.upload_button {
+  position: absolute;
+  width: 100px;
+  height: 50px;
+}
+.inline-radio-label {
+  margin-left:50px;
+  margin-right: 5px;
 }

@@ -23,4 +23,4 @@ div.data_container
                         div(input-inline-edit="user.role" ng-focus="edit()" tabindex="{{ $index*10 + 4 }}")
                       td
                             button.action(ng-show="is_dirty(user)" ng-click="save_user(user)") Salvar 
-                            button.action(ng-hide="is_dirty(user)") Eliminar
+                            button.action(ng-hide="is_dirty(user)" ng-click="delete_user(user)") Eliminar

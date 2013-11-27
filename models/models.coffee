@@ -4,8 +4,8 @@ mongoose  = require('mongoose')
 Schema    = mongoose.Schema
 
 UserSchema = new Schema({
-  username: { type: String, required : true, index: { unique: true }},
-  cedula:   { type: String, required: true},
+  username: { type: String },
+  cedula:   { type: String, required: true, index: { unique: true }},
   password: { type: String, required : true},
   name : { type: String },
   role: { type: String }
@@ -18,7 +18,7 @@ CodigoPenalSchema = new Schema({
 PostuladoSchema = new Schema({
     nombres:    { type: String, required: true},
     apellidos:  { type: String, required: true},
-    cedula:     { type: String, required: true},
+    cedula:     { type: String, required: true, index: { unique: true }},
     fecha_nacimiento: {type: Date },
     ciudad      : { type: String },
     picture     : { type: String, default: ""}
@@ -80,7 +80,7 @@ HojaSchema = new Schema({
    estado_civil:    { type: String },
    alias:           { type: String },
    lugar_cedula:    { type: String },
-   lugar_nacimiento5: { type: String },
+   lugar_nacimiento: { type: String },
    frente_bec:      { type: String },
    num_desmovil:    { type: String },
    licencia_cond:   { type: String },
@@ -117,22 +117,116 @@ HojaSchema = new Schema({
 })
 
 FosaSchema = new Schema({
-  enunciadas: { type: Boolean},
-  cedula: { type: String, required: true},
-  delito: { type: String },
-  delito_id: {type: String},
+  enunciada:        { type: Boolean, default: false },
+  titulo:           { type: String, required: true},
+  cedula:           { type: String, required: true},
+  delito:           { type: String },
+  delito_id:        { type: String },
   postulado_nombre: { type: String },
-  victima_nombre: {type: String},
-  perfil_victima: {type: String},
-  pais: {type: String},
-  departamento: {type: String},
-  municipio: {type: String},
-  corregimiento: {type: String},
-  vereda: {type: String},
-  lat: { type: Number},
-  long: { type: Number},
-  id_victima: { type: String},
-  entregada_familia: { type: String}
+  hora_mencion:     { type: String, default: "No especificado"  },
+  victima_nombre:   { type: String, default: "No especificado" },
+  perfil_victima:   { type: String, default: "No especificado" },
+  pais:             { type: String, default: "Colombia" },
+  departamento:     { type: String, default: "Antioquia" },
+  municipio:        { type: String, default: "No especificado" },
+  corregimiento:    { type: String, default: "No especificado" },
+  vereda:           { type: String, default: "No especificado" },
+  lat:              { type: Number, default: 0 },
+  long:             { type: Number, default: 0 },
+  id_victima:       { type: String, default: "No especificado" },
+  entregada_familia:{ type: String, default: "No especificado" }
+})
+
+BienSchema = new Schema({
+  cedula:           { type: String, required: true},
+  titulo:           { type: String, required: true}, 
+  delito:           { type: String },
+  delito_id:        { type: String },
+  postulado_nombre: { type: String },
+  datos_version:    { type: String, default: "No especificado" },
+  perfil:           { type: String, default: "No especificado" },
+  documentos:       { type: String, default: "No especificado" },
+  lat:              { type: Number, default: 0 },
+  long:             { type: Number, default: 0 },
+})
+
+MenorSchema = new Schema({
+  status:           { type: String, default: "No especificado" },
+  nombres:          { type: String, default: "No especificado" },
+  apellidos:        { type: String, default: "No especificado" },
+  cedula:           { type: String, required: true },
+  cedula_menor:     { type: String, required: true },
+  alias:            { type: String, default: "No especificado" },
+  fecha_ingreso:    { type: Date },
+  edad_ingreso:     { type: String, default: "No especificado" },
+  edad_desmovilizado:{ type: String, default: "No especificado" }
+  frente:           { type: String, default: "No especificado" },
+  comandante:       { type: String, default: "No especificado" },
+  labor:            { type: String, default: "No especificado" },
+  nivel_academico:  { type: String, default: "No especificado" },
+  acudiente:        { type: String, default: "No especificado" },
+  direccion:        { type: String, default: "No especificado" },
+  telefono:         { type: String, default: "No especificado" },
+  incapacidades:    { type: String, default: "No especificado" }
+})
+
+ProcesoSchema = new Schema({
+  tipo:             { type: String, default: "No especificado" },
+  cedula:           { type: String, required: true},
+  titulo:           { type: String, required: true}, 
+  imputaciones:     { type: String, default: "No especificado" },
+  condenas:         { type: String, default: "No especificado" },
+  absoluciones:     { type: String, default: "No especificado" },
+  investigaciones:  { type: String, default: "No especificado" }
+})
+
+ParapoliticaSchema = new Schema({
+  tipo:             { type: String, default: "No especificado" },
+  cedula:           { type: String, required: true },
+  nombres_implicado:    { type: String, default: "No especificado" },
+  apellidos_implicado:  { type: String, default: "No especificado" },
+  titulo:           { type: String, required: true},
+  compulsa_copias:  { type: String, default: "No especificado" },
+  condenas:         { type: String, default: "No especificado" },
+  absolucion:       { type: String, default: "No especificado" },
+  narracion:        { type: String, default: "No especificado" },
+  pais:             { type: String, default: "Colombia" },
+  departamento:     { type: String, default: "Antioquia" },
+  municipio:        { type: String, default: "No especificado" },
+  corregimiento:    { type: String, default: "No especificado" },
+  vereda:           { type: String, default: "No especificado" },
+  lat:              { type: Number, default: 0 },
+  long:             { type: Number, default: 0 },
+})
+
+RelacionesAutoridadesSchema = new Schema({
+  tipo:             { type: String, default: "No especificado" },
+  cedula:           { type: String, required: true },
+  nombres_implicado:    { type: String, default: "No especificado" },
+  apellidos_implicado:  { type: String, default: "No especificado" },
+  titulo:           { type: String, required: true},
+  compulsa_copias:  { type: String, default: "No especificado" },
+  condenas:         { type: String, default: "No especificado" },
+  absolucion:       { type: String, default: "No especificado" },
+  narracion:        { type: String, default: "No especificado" },
+  rango:            { type: String, default: "No especificado" },
+  dependencia:      { type: String, default: "No especificado" },
+  fecha:            { type: Date },
+  pais:             { type: String, default: "Colombia" },
+  departamento:     { type: String, default: "Antioquia" },
+  municipio:        { type: String, default: "No especificado" },
+  corregimiento:    { type: String, default: "No especificado" },
+  vereda:           { type: String, default: "No especificado" },
+  lat:              { type: Number, default: 0 },
+  long:             { type: Number, default: 0 },
+})
+
+OperacionesConjuntasSchema = new Schema({
+  tipo:             { type: String, default: "No especificado" },
+  cedula:           { type: String, required: true },
+  nombres_implicado:    { type: String, default: "No especificado" },
+  apellidos_implicado:  { type: String, default: "No especificado" },
+  titulo:           { type: String, required: true},
 })
  
 exports.User        = mongoose.model('User', UserSchema)
@@ -142,4 +236,10 @@ exports.Delito      = mongoose.model('Delito', DelitoSchema)
 exports.Participante= mongoose.model('Participante', ParticipanteSchema)
 exports.Victima     = mongoose.model('Victima', VictimaSchema)
 exports.CodigoPenal = mongoose.model('CodigoPenal', CodigoPenalSchema)
-exports.Fosas       = mongoose.model('Fosa', FosaSchema)
+exports.Fosa        = mongoose.model('Fosa', FosaSchema)
+exports.Bien        = mongoose.model('Bien', BienSchema)
+exports.Menor       = mongoose.model('Menor', MenorSchema)
+exports.Proceso     = mongoose.model('Proceso', ProcesoSchema)
+exports.Parapolitica= mongoose.model('Parapolitica', ParapoliticaSchema)
+exports.RelacionesAutoridades= mongoose.model('RelacionesAutoridades', RelacionesAutoridadesSchema)
+exports.OperacionesConjuntas= mongoose.model('OperacionesConjuntas', OperacionesConjuntasSchema)
