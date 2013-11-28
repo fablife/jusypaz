@@ -273,7 +273,8 @@ exports.save_menor = (req, res) ->
     #fosa.postulado_nombre = p.nombres + " " + p.apellidos
     obj = req.body
     date = obj.fecha_ingreso
-    obj.fecha_ingreso  = convert_date(date)
+    if date
+      obj.fecha_ingreso  = convert_date(date)
     Menor.update({'_id': id }, obj, (err) ->
       if err?
         handle_error(err, "Error salvando menor.", res)
