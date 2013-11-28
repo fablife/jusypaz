@@ -35,9 +35,17 @@ exports.admin = (req,res) ->
 
 exports.save_user = (req,res) ->
     console.log ("save_user")
-    console.log (req.body)    
-    u = new Usuario(req.body)
-    u.save((err) -> 
+    console.log (req.body)
+    u = {}
+    try
+      u = new Usuario(req.body)
+    catch e
+      handle_error(e, "Seems no valid data in save_user save request!", res)
+      return
+    upsert_data = u.toObject()
+    delete upsert_data._id
+
+    Usuario.update({_id: u.id}, upsert_data, {upsert: true}, (err) -> 
       if err?
         handle_error(err,"Error creando nuevo usuario!",res)
       else
@@ -50,24 +58,36 @@ exports.save_postulado = (req,res) ->
     console.log (req.body)
     obj = req.body
     obj.fecha_nacimiento = convert_date(obj.fecha_nacimiento)
-    p = new Postulado(obj)
-    p.save((err) -> 
+    p = {}
+    try
+      p = new Postulado(obj)
+    catch e
+      handle_error(e, "Seems no valid data in save_postulado save request!", res)
+      return
+    
+    upsert_data = p.toObject()
+    delete upsert_data._id
+
+    Postulado.update({_id: p.id}, upsert_data, {upsert: true}, (err, num_affected, details) ->       
       if err?
-       handle_error(err,"Error creando nuevo postulado!",res)
+        handle_error(err,"Error creando nuevo postulado!",res)
       else
-       console.log("Postulado " + p.nombres + " " + p.apellidos + " salvado.")
-       u = new Usuario()
-       u.username = p.nombres.substring(0,4) + p.apellidos.substring(0,4) + (""+ (Math.random())).substring(2,6)
-       u.cedula = p.cedula
-       u.password = "12cambialo34"
-       u.role = "usuario"
-       u.save((err) ->
-        if err?
-          handle_error(err, "Se creó el postulado pero no el usuario", res)
+        console.log("Postulado " + p.nombres + " " + p.apellidos + " salvado.")
+        if not details.updatedExisting 
+          u = new Usuario()
+          u.username = p.nombres.substring(0,4) + p.apellidos.substring(0,4) + (""+ (Math.random())).substring(2,6)
+          u.cedula = p.cedula
+          u.password = "12cambialo34"
+          u.role = "usuario"
+          u.save((err) ->
+          if err?
+            handle_error(err, "Se creó el postulado pero no el usuario", res)
+          else
+            console.log("Objeto usuario con contraseña estandar para postulado " + p.nombres + " " + p.apellidos + " creado.")
+            res.send("Postulado salvado")
+          )
         else
-          console.log("Objeto usuario con contraseña estandar para postulado " + p.nombres + " " + p.apellidos + " creado.")
-          res.send("Postulado salvado")   
-        )
+          res.send("Postulado salvado")
        
     )
 

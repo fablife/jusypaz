@@ -17,6 +17,7 @@ div.info
             div(input-inline-edit="root.hoja.lugar_nacimiento" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="15")
          td
             label.small_form Edad
+            <br>{{calc_age(root.postulado.fecha_nacimiento)}}
          td
             label.small_form Frente del BEC con el cual se desmovilizó
             div(input-inline-edit="root.hoja.frente_bec" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="16")

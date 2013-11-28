@@ -9,6 +9,15 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
     $scope.usuarios = Usuario.query()
     $scope.postulados = Postulado.query()
 
+    $scope.set_dirty = function(user) {
+        user.dirty = true;
+    }
+
+     $scope.set_p_dirty = function(postulado) {
+        postulado.dirty = true;
+    }
+
+
     $scope.getIndex = function(index,i) {
       return index*10 + i;
     }

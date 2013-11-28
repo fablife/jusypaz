@@ -114,15 +114,15 @@ LocalStrategy = require('passport-local').Strategy
 passport.use(new LocalStrategy({usernameField: 'cedula'}, (cedula, password, done) ->
 
     User.findOne({ cedula: cedula }, (err, user) ->
-      #console.log("findone")
+      console.log("findone")
       if err
-         #console.log "error"
+         console.log "error"
          return done(err)
       if not user
-        #console.log("incorrect username")
+        console.log("incorrect username")
         return done(null, false, { message: 'Incorrect username.' })
       else
-        #console.log(user.password) 
+        console.log(user.password) 
         if (password != user.password)
           return done(null, false, {message: "Incorrect password" })
         done(null,user)
@@ -162,36 +162,22 @@ app.get('/', routes.index)
 #  failureRedirect: '/'
 #  failureFlash: true
 
-#app.post('/login', passport.authenticate('local', passport_options))
-#app.post('/login', (req, res, next) ->    
-#    passport.authenticate('local', (err, user, info) ->
-#      if err?
-#        console.log "err!" + err
-#        return next(err) 
-#      if not user 
-#        console.log "not user"
-#        return res.redirect("/")
-#      req.logIn(user, (err) -> 
-#        console.login("haha")
-#        if err?
-#          return next(err)
-#        if user.role is "admin"
-#          console.login("jeje")
-#          res.redirect("/tablero")
-#        else
-#          res.redirect("/inicio")
-#      )
-#    )
-#)
+
 app.post '/login', (req, res, next) ->
   passport.authenticate('local', (err, user, info) ->
     return next(err) if err?
     return res.redirect('/login') if not user?
     req.logIn user, (err) ->
-      return next(err) if err?
-      if user.role is "admin" or "auditor"
+      if err?
+        console.log "err! " + err
+        res.redirect("/")
+        return 
+      console.log user.role
+      if user.role is "admin" or user.role is "auditor"
+        console.log "redirecting to tablero"
         res.redirect("/tablero")
       else
+        console.log "redirecting to inicio"
         res.redirect("/inicio") 
   )(req, res, next)
 

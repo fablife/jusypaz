@@ -18,6 +18,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.root.tipos_proc = [{nombre: "Justicia y Paz"}, {nombre: "Justicia ordinaria"}];
 
   console.log("postulado ctrl");
+  
+  $scope.calc_age = function(dateString) {
+    var birthday = +new Date(dateString);
+    return ~~((Date.now() - birthday) / (31557600000));
+  }
+
 
   $scope.set_dirty = function(model) { 
     $scope.root.delito.dirty = true;
