@@ -1,7 +1,7 @@
 div.info
    div.info_wrapper
       div.navegacion_hechos
-         if (role == "admin")
+         if (is_admin)
             button.add_action.right(ng-click="add_menor()")
          div.empty(ng-hide="root.menores.length") No hay menores para este postulado.
          div.hecho_lista(ng-show="root.menores.length") 

@@ -1,7 +1,7 @@
 div.info
    div.info_wrapper
       div.navegacion_hechos
-         if (role == "admin")
+         if (is_admin)
             button.add_action.right(ng-click="add_proc()")
          div.empty(ng-hide="root.proces.length") No hay procesos para este postulado.
          div.hecho_lista(ng-show="root.proces.length") 

@@ -1,6 +1,6 @@
 div.info_wrapper
    div.navegacion_hechos
-      if (role == "admin")
+      if (is_admin)
          button.add_action.right(ng-click="add_relaut()")
       div.empty(ng-hide="root.relauts.length") No hay asunto de Relaciones Autoridades para este postulado.
       div.hecho_lista(ng-show="root.relauts.length") 

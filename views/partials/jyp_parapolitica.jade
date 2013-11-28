@@ -1,6 +1,6 @@
 div.info_wrapper
    div.navegacion_hechos
-      if (role == "admin")
+      if (is_admin)
          button.add_action.right(ng-click="add_parapolitica()")
       div.empty(ng-hide="root.parapoliticas.length") No hay asunto de parapoliticas para este postulado.
       div.hecho_lista(ng-show="root.parapoliticas.length") 

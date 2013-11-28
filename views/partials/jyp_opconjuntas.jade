@@ -1,6 +1,6 @@
 div.info_wrapper
    div.navegacion_hechos
-      if (role == "admin")
+      if (is_admin)
          button.add_action.right(ng-click="add_op_conjunta()")
       div.empty(ng-hide="root.op_conjuntas.length") No hay asunto de Operaciones Conjuntas para este postulado.
       div.hecho_lista(ng-show="root.op_conjuntas.length") 

@@ -32,9 +32,10 @@ passport.deserializeUser((id, done) ->
       )
 )
 
-can_access = (req, res, next) ->
+can_access = (req, res, cedula=null, next) ->
   role = req.user.role
-  cedula = req.params.postuladoId
+  if cedula is null
+    cedula = req.params.postuladoId
   user_cedula = req.user.cedula
   Postulado.findOne({ cedula:cedula }, (err, user) ->
     if err?
@@ -80,9 +81,11 @@ can_view_video = (req, res, next) ->
     )
 
 can_view_imagen = (req, res, next) ->
-    url = req.url
-    url_params_only = url.substring("/img/".length)
-    cedula = url_params_only.substring(0, url_params_only.indexOf("/"))
+    #url = req.url
+    #url_params_only = url.substring("/img/".length)
+    #cedula = url_params_only.substring(0, url_params_only.indexOf("/"))
+    cedula = req.params.cedulaId
+    console.log "Requesting img for cedula: " + cedula
     can_access(req, res, cedula, (err) ->
       if err?
         handle_error(err, err.message, res)

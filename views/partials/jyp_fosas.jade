@@ -1,6 +1,6 @@
 div.info_wrapper
    div.navegacion_hechos
-      if (role == "admin")
+      if (is_admin)
          button.add_action.right(ng-click="add_fosa()")
       div.empty(ng-hide="root.fosas.length") No hay fosas para este postulado.
       div.hecho_lista(ng-show="root.fosas.length") 
