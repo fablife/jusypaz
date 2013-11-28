@@ -33,6 +33,10 @@ exports.inicio = (req,res) ->
 exports.admin = (req,res) ->
   res.render('admin/index')
 
+exports.informe_postulado = (req, res) ->
+  data_objects = [Fosa, Bien, Menor, Delito, Proceso, RelacionesAutoridades, OperacionesConjuntas, Parapolitica]
+  _get_all_data(data_objects, res)  
+
 exports.save_user = (req,res) ->
     console.log ("save_user")
     console.log (req.body)
@@ -706,3 +710,24 @@ avatar_upload = (req, res) ->
     catch e
       handle_error(e, "Error guardando imagen", res)
     )
+
+_get_all_data = (data_objects, res) ->
+  console.log "_get_all_data for informes"
+  try
+    returns = []
+    for o in data_objects
+      console.log "retrieving data for " + o
+      o.find((err, objects) ->
+        if err?
+          handle_error(err, err.message, res)
+        else
+          #console.log "Returned from " + o
+          #console.log "Results: " + objects
+          returns.push(objects)
+          if returns.length is data_objects.length
+            console.log "All data retrieved"
+            #console.log returns
+            res.send(returns)
+      )
+  catch e
+    handle_error(e, e.message, res )

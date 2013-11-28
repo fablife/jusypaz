@@ -9,14 +9,37 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
     $scope.usuarios = Usuario.query()
     $scope.postulados = Postulado.query()
 
+    $scope.informe_chosen = false
+
     $scope.set_dirty = function(user) {
         user.dirty = true;
     }
 
-     $scope.set_p_dirty = function(postulado) {
+    $scope.set_p_dirty = function(postulado) {
         postulado.dirty = true;
     }
 
+    $scope.choose_general = function() {
+        location.href = "#/informe_general";
+    }
+
+    $scope.choose_individual = function() {
+        $scope.informe_chosen = true;
+    }
+
+    $scope.informe_postulado = function(postulado) {
+        $http.get("/admin/postulados/" + postulado.cedula + "/informe")
+            .success(function(objetos, status, headers, config) {
+                console.log("Query for all postulado data successful");
+                for (var i in objetos) {
+                    console.log(objetos[i]);
+                }
+
+        })
+        .error(function(data, status, headers, config){
+        
+        });
+    }
 
     $scope.getIndex = function(index,i) {
       return index*10 + i;
@@ -41,6 +64,11 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
             role: "usuario" 
         });
     }
+
+    $scope.informes = function() {
+        location.href = "#/informes";    
+    }
+
 
     $scope.view_postulado = function(postulado_id) {
       location.href = '#/postulados/' + postulado_id;

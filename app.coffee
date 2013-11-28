@@ -224,6 +224,8 @@ app.delete('/admin/delete_postulado/:postuladoId', ensureAdmin, routes.delete_po
 app.delete('/admin/delete_user/:userId', ensureAdmin, routes.delete_user)
 app.get('/admin/usuarios/usuarios.json', ensureAdmin, routes.usuarios)
 
+app.get('/admin/postulados/:postuladoId/informe',can_access,  routes.informe_postulado)
+
 app.post('/admin/postulados/:postuladoId/videoupload', ensureAdmin, can_access, routes.upload_video)
 app.post('/admin/postulados/:postuladoId/avatarupload', ensureAdmin,can_access, routes.upload_avatar)
 app.put('/admin/postulados/:postuladoId/hv',can_access,  routes.save_hv)

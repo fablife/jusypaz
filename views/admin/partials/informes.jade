@@ -1,0 +1,35 @@
+div.informes_portal
+  h1.page_title Informes
+  div.acciones
+    div.prompt(ng-hide="informe_chosen")
+      h2 Quieres un informe general o individual?
+        br
+        div.actions.centered
+          button.action.inline(ng-click="choose_general()") General
+          button.action.inline.mleft10(ng-click="choose_individual()") Individual
+
+    div.informe_individual(ng-show="informe_chosen")
+      h2 Informe individual
+        h5 Escoja el postulado
+        table.object_table
+              thead
+                  tr.row
+                      th Nombres 
+                      th Apellidos
+                      th Cedula 
+                      th Ciudad 
+                      th Acciones 
+                  tbody
+                      tr.row(ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+                        td 
+                          div {{p.nombres}}
+                        td 
+                          div {{p.apellidos}}
+                        td 
+                          div {{p.cedula}}                                        
+                        td 
+                          div {{p.ciudad}}
+                        td 
+                          div {{p.nombres}}
+                        td
+                          button.action(ng-click="informe_postulado(p)") Generar
