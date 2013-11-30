@@ -1,0 +1,24 @@
+div.informes_portal
+  h1.page_title Informe
+  div.acciones
+    div.informe_individual
+      h2 Informe individual
+        Nombres   {{nombres}}
+        Apellidos {{apellidos}}
+        Cedula    {{cedula}}
+        br
+
+
+        
+        table.object_table
+          thead
+            tr.row
+              th Item 
+              th Cantidad 
+          tbody
+            tr.row(ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+              td 
+                div {{p.nombres}}
+              td 
+                div {{p.apellidos}}
+             

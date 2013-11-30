@@ -59,6 +59,10 @@ app.config(['$routeProvider',
         templateUrl: 'admin/partials/informes',
         controller: 'AdminCtrl'
       }).
+       when('/informe', {
+        templateUrl: 'admin/partials/informe',
+        controller: 'AdminCtrl'
+      }).
       when('/adminUsers', {
         templateUrl: 'admin/partials/users',
         controller: 'AdminCtrl'
