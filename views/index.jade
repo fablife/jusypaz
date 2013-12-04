@@ -9,6 +9,11 @@ html
       div.login
         div.center.mbottom15
           img(class="logo", src="/img/logo.png")
+        
+        if message 
+         p.error
+           = '' + message 
+
         form(action="/login",class="login_form", method="post")
           label.form_label Usuario: 
           //-input(type="text", id="username", name="username") 

@@ -25,11 +25,21 @@ div.info
          table.tab_form_table
             tr
                td
-                  label.small_form Datos versión
-                  div(input-inline-edit="root.bien.datos_version" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="21")
+                  label.small_form Descripción 
+                  div(input-inline-edit="root.bien.descripcion" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="21")
                td
-                  label.small_form Perfil
-                  div(input-inline-edit="root.bien.perfil" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="22")            
+                  label.small_form Valor 
+                  div(input-inline-edit="root.bien.valor" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="22")            
                td
-                  label.small_form Hora en mención
-                  div(input-inline-edit="root.bien.documentos" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")
+                  label.small_form Fecha entrega 
+                  div(input-inline-date="root.bien.fecha_entrega" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")
+            tr
+               td
+                  label.small_form Recibido acción social 
+                  div(input-inline-radio="root.bien.rec_acc_social" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="21")
+               td
+                  label.small_form Avalúo acción social 
+                  div(input-inline-edit="root.bien.avaluo_acc_social" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="22")            
+               td
+                  label.small_form observaciones 
+                  div(input-inline-date="root.bien.observaciones" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")

@@ -16,22 +16,6 @@ handle_error = require('./utils').handle_error
 #Connect to DB
 db = mongoose.connect(config.creds.mongoose_auth_local)
 
-# Passport session setup.
-# To support persistent login sessions, Passport needs to be able to
-# serialize users into and deserialize users out of the session. Typically,
-# this will be as simple as storing the user ID when serializing, and finding
-# the user by ID when deserializing.
-passport.serializeUser((user, done) ->      
-      done(null, user._id)
-)
-
-passport.deserializeUser((id, done) ->
-      #done(null,id)
-      User.findById(id, (err, user) ->
-         done(err, user)
-      )
-)
-
 can_access = (req, res, cedula=null, next) ->
   role = req.user.role
   if cedula is null
@@ -77,7 +61,7 @@ can_view_video = (req, res, next) ->
       if err?
         handle_error(err, err.message, res)
       else
-        return next() 
+        return next()
     )
 
 can_view_imagen = (req, res, next) ->
@@ -90,7 +74,7 @@ can_view_imagen = (req, res, next) ->
       if err?
         handle_error(err, err.message, res)
       else
-        return next() 
+        return next()
     )
 
 #Middleware to check that a user is authenticated
@@ -112,20 +96,22 @@ app = module.exports = express()
 #set up passport
 LocalStrategy = require('passport-local').Strategy
 passport.use(new LocalStrategy({usernameField: 'cedula'}, (cedula, password, done) ->
-
+    console.log("new local strategy")
     User.findOne({ cedula: cedula }, (err, user) ->
       console.log("findone")
-      if err
-         console.log "error"
+      if err?
+         console.log "error in findone"
          return done(err)
       if not user
-        console.log("incorrect username")
-        return done(null, false, { message: 'Incorrect username.' })
-      else
-        console.log(user.password) 
-        if (password != user.password)
-          return done(null, false, {message: "Incorrect password" })
-        done(null,user)
+        console.log("Acceso no otorgado: Usuario incorrecto")
+        return done(null, false, { message: 'Acceso no otorgado: Usuario invalido.' })
+      console.log(user.password)
+      console.log password
+      if password isnt user.password
+          console.log "NOT"
+          return done(null, false, {message: "Acceso no otorgado: Contraseña invalida." })
+      console.log "BUT YESS"
+      done(null,user)
     )
 ))
 
@@ -153,6 +139,24 @@ app.configure('production', () ->
       app.use(express.errorHandler())
 )
 
+
+# Passport session setup.
+# To support persistent login sessions, Passport needs to be able to
+# serialize users into and deserialize users out of the session. Typically,
+# this will be as simple as storing the user ID when serializing, and finding
+# the user by ID when deserializing.
+passport.serializeUser((user, done) ->
+      console.log "SerializeUser"
+      done(null, user._id)
+)
+
+passport.deserializeUser((id, done) ->
+      #done(null,id)
+      console.log "DeserializeUser"
+      User.findById(id, (err, user) ->
+         done(err, user)
+      )
+)
 ########################
 #  Routes
 ########################
@@ -165,20 +169,26 @@ app.get('/', routes.index)
 
 app.post '/login', (req, res, next) ->
   passport.authenticate('local', (err, user, info) ->
-    return next(err) if err?
-    return res.redirect('/login') if not user?
+    console.log "authenticate callback"
+    if err?
+      console.log "err in authenticate callback"
+      return next(err)
+    if not user
+      console.log "User NOT in auth callback"
+      req.flash("loginerror", info.message)
+      return res.redirect('/login')
     req.logIn user, (err) ->
       if err?
         console.log "err! " + err
-        res.redirect("/")
-        return 
+        res.redirect("/", { message: req.flash(err)})
+        return
       console.log user.role
       if user.role is "admin" or user.role is "auditor"
         console.log "redirecting to tablero"
         res.redirect("/tablero")
       else
         console.log "redirecting to inicio"
-        res.redirect("/inicio") 
+        res.redirect("/inicio")
   )(req, res, next)
 
 

@@ -18,11 +18,11 @@ convert_date = require("./utils").convert_date
 fs = require('fs')
 
 exports.index = (req,res) ->
-  res.render('index')
+  res.render('index', {message: req.flash('loginerror')})
 
 exports.logout = (req, res) ->
-  req.logout();
-  res.redirect('/');
+  req.logout()
+  res.redirect('/')
 
 exports.tablero = (req,res) ->
   res.render('tablero', {role: req.user.role})
@@ -35,7 +35,7 @@ exports.admin = (req,res) ->
 
 exports.informe_postulado = (req, res) ->
   data_objects = [Fosa, Bien, Menor, Delito, Proceso, RelacionesAutoridades, OperacionesConjuntas, Parapolitica]
-  _get_all_data(data_objects, res)  
+  _get_all_data(data_objects, res)
 
 exports.save_user = (req,res) ->
     console.log ("save_user")
@@ -49,7 +49,7 @@ exports.save_user = (req,res) ->
     upsert_data = u.toObject()
     delete upsert_data._id
 
-    Usuario.update({_id: u.id}, upsert_data, {upsert: true}, (err) -> 
+    Usuario.update({_id: u.id}, upsert_data, {upsert: true}, (err) ->
       if err?
         handle_error(err,"Error creando nuevo usuario!",res)
       else
@@ -72,12 +72,12 @@ exports.save_postulado = (req,res) ->
     upsert_data = p.toObject()
     delete upsert_data._id
 
-    Postulado.update({_id: p.id}, upsert_data, {upsert: true}, (err, num_affected, details) ->       
+    Postulado.update({_id: p.id}, upsert_data, {upsert: true}, (err, num_affected, details) ->
       if err?
         handle_error(err,"Error creando nuevo postulado!",res)
       else
         console.log("Postulado " + p.nombres + " " + p.apellidos + " salvado.")
-        if not details.updatedExisting 
+        if not details.updatedExisting
           u = new Usuario()
           u.username = p.nombres.substring(0,4) + p.apellidos.substring(0,4) + (""+ (Math.random())).substring(2,6)
           u.cedula = p.cedula
@@ -135,9 +135,9 @@ exports.delete_postulado = (req,res) ->
             handle_error(err, "Se eliminó el postulado con cedula: " + cedula + " pero no el usuario asociado!", res)
           else
             res.send("OK")
-            console.log "Postulado y usuario asociado eliminado con éxito"    
+            console.log "Postulado y usuario asociado eliminado con éxito"
         )
-      )     
+      )
   )
 
 exports.usuarios = (req, res) ->
@@ -159,7 +159,7 @@ exports.postulados = (req, res) ->
   )
 
 exports.postulado = (req, res) ->
-  console.log("GET postulado ")  
+  console.log("GET postulado ")
   getPostulado(req, res)
  
 
@@ -168,23 +168,23 @@ exports.upload_video = (req, res) ->
   video_upload(req, res)
 
 exports.upload_avatar = (req, res) ->
-  console.log("POST avatar_upload")  
+  console.log("POST avatar_upload")
   avatar_upload(req, res)
   
 exports.hv = (req, res) ->
-  console.log "Hoja de vida"  
+  console.log "Hoja de vida"
   getHv(req, res)
 
 exports.save_hv = (req, res) ->
-  console.log "Salvar hoja de vida"  
+  console.log "Salvar hoja de vida"
   saveHv(req, res)
 
 exports.create_delito = (req, res) ->
-  console.log "get empty delito"  
+  console.log "get empty delito"
   crea_delito(req, res)
 
 exports.save_delito = (req, res) ->
-  console.log "Salvar delito"  
+  console.log "Salvar delito"
   save_delito(req, res)
 
 exports.jyp_delitos = (req, res) ->
@@ -195,7 +195,7 @@ exports.jyp_delitos = (req, res) ->
 ## PROCESOS
 ########################################################
 exports.create_proces = (req, res) ->
-  console.log "create proces" 
+  console.log "create proces"
   console.log(req.body)
   p = req.params.postuladoId
   m = new Proceso()
@@ -292,7 +292,7 @@ exports.menores = (req, res) ->
   console.log "GET todos menores"
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error("Error accedendo a menores."), "Postulado con cedula " + p + " no encontrado." , res)  
+    handle_error(new Error("Error accedendo a menores."), "Postulado con cedula " + p + " no encontrado." , res)
   Menor.find({'cedula':p}, (err, menores) ->
     if err?
       handle_error(err, "Error accedendo a menores.", res)
@@ -304,7 +304,7 @@ exports.menores = (req, res) ->
 ## BIENES
 ########################################################
 exports.create_bien = (req, res) ->
-  console.log "create bien" 
+  console.log "create bien"
   console.log(req.body)
   p = req.params.postuladoId
   b = new Bien()
@@ -323,6 +323,14 @@ exports.save_bien = (req, res) ->
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
+  obj = req.body
+  obj.fecha_entrega = convert_date(obj.fecha_entrega)
+  p = {}
+  try
+    p = new Bien(obj)
+  catch e
+    handle_error(e, "Seems no valid data in save_postulado save request!", res)
+    return
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
@@ -342,7 +350,7 @@ exports.bienes = (req, res) ->
   console.log "GET todos bienes"
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error("Error accedendo a bienes."), "Postulado con cedula " + p + " no encontrado." , res)  
+    handle_error(new Error("Error accedendo a bienes."), "Postulado con cedula " + p + " no encontrado." , res)
   Bien.find({'cedula':p}, (err, bienes) ->
     if err?
       handle_error(err, "Error accedendo a bienes.", res)
@@ -355,7 +363,7 @@ exports.bienes = (req, res) ->
 ## OPERACIONES CONJUNTAS
 ########################################################
 exports.create_op_conjunta = (req, res) ->
-  console.log "get empty op_conjunta" 
+  console.log "get empty op_conjunta"
   console.log(req.body)
   p = req.params.postuladoId
   oc = new OperacionesConjuntas()
@@ -393,7 +401,7 @@ exports.jyp_op_conjunta = (req, res) ->
   console.log "GET todas op_conjuntas"
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)  
+    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
   OperacionesConjuntas.find({'cedula':p}, (err, pps) ->
     if err?
       handle_error(err, "Error accedendo a relaciones autoridades.", res)
@@ -406,7 +414,7 @@ exports.jyp_op_conjunta = (req, res) ->
 ## RELACIONES AUTORIDADES
 ########################################################
 exports.create_relaut = (req, res) ->
-  console.log "get empty RELAUT" 
+  console.log "get empty RELAUT"
   console.log(req.body)
   p = req.params.postuladoId
   ra = new RelacionesAutoridades()
@@ -443,7 +451,7 @@ exports.jyp_relaut = (req, res) ->
   console.log "GET todas relauts"
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)  
+    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
   RelacionesAutoridades.find({'cedula':p}, (err, pps) ->
     if err?
       handle_error(err, "Error accedendo a relaciones autoridades.", res)
@@ -457,7 +465,7 @@ exports.jyp_relaut = (req, res) ->
 ## PP
 ########################################################
 exports.create_pp = (req, res) ->
-  console.log "get empty pp" 
+  console.log "get empty pp"
   console.log(req.body)
   p = req.params.postuladoId
   pp = new Parapolitica()
@@ -494,7 +502,7 @@ exports.jyp_pp = (req, res) ->
   console.log "GET todas pps"
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)  
+    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
   Parapolitica.find({'cedula':p}, (err, pps) ->
     if err?
       handle_error(err, "Error accedendo a pps.", res)
@@ -507,7 +515,7 @@ exports.jyp_pp = (req, res) ->
 ## FOSAS
 ########################################################
 exports.create_fosa = (req, res) ->
-  console.log "get empty fosa" 
+  console.log "get empty fosa"
   console.log(req.body)
   p = req.params.postuladoId
   f = new Fosa()
@@ -544,7 +552,7 @@ exports.jyp_fosas = (req, res) ->
   console.log "GET todas fosas"
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)  
+    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
   Fosa.find({'cedula':p}, (err, fosas) ->
     if err?
       handle_error(err, "Error accedendo a fosas.", res)
@@ -578,7 +586,7 @@ getHv = (req, res) ->
   console.log("_get hoja de vida")
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error(), "Error accedendo a postulado.", res)  
+    handle_error(new Error(), "Error accedendo a postulado.", res)
   Hoja.find({'cedula':p}, (err, hv_postulado) ->
     if err?
       handle_error(err, "Error accedendo a postulado.", res)
@@ -593,14 +601,14 @@ saveHv = (req, res) ->
     if err?
       handle_error(err, "Error salvando hoja de vida.", res)
     res.send("HV saved ok")
-    console.log("Hoja de vida salvada con exito");
+    console.log("Hoja de vida salvada con exito")
   )
 
 getDelitos = (req, res) ->
   console.log("_get informacion justicia y paz")
   p = req.params.postuladoId
   if not p?
-    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)  
+    handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
   Delito.find({'cedula':p}, (err, hechos_postulado) ->
     if err?
       handle_error(err, "Error accedendo a postulado.", res)
@@ -685,7 +693,7 @@ avatar_upload = (req, res) ->
     try
       newPath = root_dir + p + "/" + req.files.uploadedFile.name
       if not fs.existsSync(root_dir + p)
-        fs.mkdirSync(root_dir + p)     
+        fs.mkdirSync(root_dir + p)
       fs.writeFile(newPath, data, (err, delito) ->
         if err?
          handle_error(err, "Error guardando imagen subida", res)
@@ -696,7 +704,7 @@ avatar_upload = (req, res) ->
             else
               console.log postulado
               if postulado?
-                postulado.picture = "/img/" + p + "/" + req.files.uploadedFile.name;
+                postulado.picture = "/img/" + p + "/" + req.files.uploadedFile.name
                 postulado.save((err) ->
                 if err?
                   handle_error(err, "Imagen subida ok, Postulado encontrado, pero al salvarlo hubo error", res)
