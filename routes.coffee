@@ -34,8 +34,9 @@ exports.admin = (req,res) ->
   res.render('admin/index')
 
 exports.informe_postulado = (req, res) ->
+  cedula = req.params.postuladoId
   data_objects = [Fosa, Bien, Menor, Delito, Proceso, RelacionesAutoridades, OperacionesConjuntas, Parapolitica]
-  _get_all_data(data_objects, res)
+  _get_all_data(cedula,data_objects, res)
 
 exports.save_user = (req,res) ->
     console.log ("save_user")
@@ -719,23 +720,27 @@ avatar_upload = (req, res) ->
       handle_error(e, "Error guardando imagen", res)
     )
 
-_get_all_data = (data_objects, res) ->
+_get_all_data = (cedula, data_objects, res) ->
   console.log "_get_all_data for informes"
+  console.log cedula
   try
-    returns = []
-    for o in data_objects
-      console.log "retrieving data for " + o
-      o.find((err, objects) ->
+    returns = {}
+    cnt = 0
+    data_objects.forEach (obj) ->
+      console.log "Getting objects for " + obj.modelName
+      obj.find({'cedula': cedula}, (err, objects) ->
         if err?
           handle_error(err, err.message, res)
         else
-          #console.log "Returned from " + o
           #console.log "Results: " + objects
-          returns.push(objects)
-          if returns.length is data_objects.length
+          name = obj.modelName
+          console.log name
+          returns[name] = objects
+          cnt += 1      
+          if cnt is data_objects.length
             console.log "All data retrieved"
             #console.log returns
             res.send(returns)
-      )
+        )
   catch e
     handle_error(e, e.message, res )
