@@ -24,7 +24,9 @@ app.directive('onEnter', function() {
   return function(scope, elm, attr) {
     elm.bind('keypress', function(e) {
       if (e.keyCode === 13) {
-        scope.$apply(attr.onEnter);
+        if (e.shiftKey !== true) {
+          scope.$apply(attr.onEnter);
+        }         
       }
     });
   };
@@ -63,6 +65,10 @@ app.directive('inputInlineSelectMenorStatus', function($timeout) {
 
 app.directive('inputInlineEdit', function($timeout) {
     return get_inline_edit_widget($timeout, "text", '=inputInlineEdit', 'partials/input-inline-edit');
+});
+
+app.directive('inputInlineText', function($timeout) {
+    return get_inline_edit_widget($timeout, "textarea", '=inputInlineText', 'partials/input-inline-text');
 });
 
 app.directive('inputInlineDate', function($timeout) {
@@ -145,7 +151,11 @@ get_inline_edit_widget = function($timeout, type, model, template) {
         previousValue = scope.model;
 
         $timeout(function() {
-          elm.find('input')[0].select();          
+          if (type == "textarea") {
+            elm.find('textarea')[0].focus();
+          } else {
+            elm.find('input')[0].select();
+          }
         }, 0, false);
       };
       scope.tab = function() {

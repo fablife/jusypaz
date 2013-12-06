@@ -1,10 +1,19 @@
 var app = angular.module('jusypazApp', [
         'ngAnimate',
         'adminControllers',
+        'jusypazFilters',
         'adminServices',
         'ui.bootstrap',
         'ngRoute']);
 
+
+angular.module('jusypazFilters', []).
+  filter('newline2br', function() {
+    return function(text) {
+      return String(text).replace(/\n/g, '<br />');
+    }
+  }
+);
 
 var adminServices = angular.module('adminServices', ['ngResource']);
      
@@ -111,4 +120,5 @@ app.controller("MenuCtrl", function MenuCtrl($scope, $http) {
     location.href = "/logout";
   }
 });
+
 

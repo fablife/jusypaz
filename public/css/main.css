@@ -726,3 +726,24 @@ li.acciones_link {
   margin-left:50px;
   margin-right: 5px;
 }
+
+.inline_edit_textarea,
+.textwrapper {
+  position: absolute;
+  float: left;
+  z-index: 2000;
+  padding: 10px;
+  border: 1px solid #003b6f;
+  width: 600px;
+  min-height: 400px;
+}
+
+.textwrapper {
+  background-color: #EBF7F7;
+}
+
+.inline_edit_longtext {
+  width: 550px;
+  height: 34px;
+  overflow-y: hidden;
+}

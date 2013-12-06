@@ -1,0 +1,16 @@
+div(class="input_inline_edit_div")
+   if is_admin
+      textarea(class="inline_edit_textarea" on-tab="tab()" on-enter="save()" on-blur="blur()" on-esc="cancel()" ng-model="model" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()") 
+      span(ng-mouseenter="showEdit = true"  ng-mouseover="showText = true" ng-mouseleave="showEdit = false")
+         span(ng-hide="editMode" ng-click="edit()" ) 
+            div(class="inline_edit_longtext")
+               {{model}}
+            div.textwrapper(ng-show="showText"  ng-mouseleave="showText = false")
+               pre
+                  {{model}}
+   else
+      div(class="inline_edit_longtext" ng-mouseover="showText = true")         
+         {{model}}
+      div.textwrapper(ng-show="showText"  ng-mouseleave="showText = false")
+         {{model}}
+     

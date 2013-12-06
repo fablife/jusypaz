@@ -25,6 +25,10 @@ app.directive('inputInlineEdit', function($timeout) {
     return get_inline_edit_widget($timeout, "text", '=inputInlineEdit', 'partials/input-inline-edit');
 });
 
+app.directive('inputInlineText', function($timeout) {
+    return get_inline_edit_widget($timeout, "textarea", '=inputInlineText', 'partials/input-inline-text');
+});
+
 app.directive('inputInlineDate', function($timeout) {
     return get_inline_edit_widget($timeout, "date", '=inputInlineDate', 'partials/input-inline-date');
 });
