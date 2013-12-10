@@ -31,31 +31,44 @@ adminServices.factory('Postulado', ['$resource',
     });
   }]);
 
-/*
-adminServices.factory('PostuladoService', ['$http', function($http) {
-  var posts = [];
-  var server_queried = false;
-  console.log("running PostuladoService")
-  var promise;
+
+adminServices.factory('UploadService', ['$http', function($http) {
+  console.log("running UploadService");
   return {
-     postulado_info: function(postulado_id) {
-       if(!promise || !server_queried) {
-         promise = $http.get('/postulados/' + postulado_id )
-            .then(function(postulado, status, headers, config) {
-            console.log("PostuladoService returned ok.")  
-            server_queried = true;
-            console.log(postulado[0]);
-            return postulado[0];            
-        })
-        .error(function(data, status, headers, config){
-        
-        });
-       }
-       return promise;
-     }
+    beginUpload: function(files, options) {
+        console.log("starting file upload at service");
+        var fd = new FormData();
+        for (var i in files) {
+            fd.append("uploadedFile", files[i]);
+        }
+        for (var y in options) {
+          fd.append(y, options[y]);
+        }
+        url = "/admin/postulados/" + options.post + "/docsupload";
+        console.log(url);
+        var xhr = new XMLHttpRequest();
+        xhr.upload.addEventListener("progress", this.onUploadProgress, false);
+        xhr.addEventListener("load", this.onUploadComplete, false);
+        xhr.addEventListener("error", this.onUploadFailed, false);
+        xhr.addEventListener("abort", this.onUploadCanceled, false);
+        xhr.open("POST", url);        
+        xhr.send(fd);
+    },
+    onUploadProgress: function(progress) {
+      console.log("upload progress");
+    },
+    onUploadComplete: function(result) {
+      console.log("upload complete");
+    },
+    onUploadFailed: function(result) {
+      console.log("upload failed");
+    },
+    onUploadCanceled: function(result) {
+      console.log("upload canceled");
+    }
   };
 }])
-*/
+
 
 app.config(['$routeProvider',
   function($routeProvider) {
@@ -101,7 +114,7 @@ app.controller("MenuCtrl", function MenuCtrl($scope, $http) {
 
   $scope.show_submenu = false; 
   $scope.animate_menu = function() {
-    $scope.show_submenu = true;1
+    $scope.show_submenu = true;
   }
 
   $scope.hide_menu = function() {

@@ -28,7 +28,7 @@ div.info_wrapper
                div(input-inline-select-codigo="root.delito.codigo_penal" on-save="set_dirty()" opciones="root.codigos" ng-focus="edit()" tabindex="6")
             td
                label.small_form Tipo de versión
-               div(input-inline-edit="root.delito.tipo_version" on-save="set_dirty()" ng-focus="edit()" tabindex="7")
+               div(input-inline-select="root.delito.tipo_version" opciones="root.tipos_version" on-save="set_dirty()" ng-focus="edit()" tabindex="7")
             td
                label.small_form Fecha de la versión
                div(input-inline-date="root.delito.fecha_version" on-save="set_dirty()" ng-focus="edit()" tabindex="8")
@@ -79,10 +79,10 @@ div.info_wrapper
          tr
             td
                label.small_form Narración del hecho
-               div(input-inline-edit="root.delito.narracion" on-save="set_dirty()" ng-focus="edit()" tabindex="15")
+               div(input-inline-text="root.delito.narracion" on-save="set_dirty()" ng-focus="edit()" tabindex="15")
             td
                label.small_form Clasificación del delito
-               div(input-inline-edit="root.delito.clasificacion" on-save="set_dirty()" ng-focus="edit()" tabindex="16")
+               div(input-inline-text="root.delito.clasificacion" on-save="set_dirty()" ng-focus="edit()" tabindex="16")
             td
                label.small_form Fecha ocurrencia del hecho
                div(input-inline-date="root.delito.fecha_ocurrencia" on-save="set_dirty()" ng-focus="edit()" tabindex="17")
@@ -101,23 +101,27 @@ div.info_wrapper
                div(input-inline-edit="root.delito.municipio" on-save="set_dirty()" ng-focus="edit()" tabindex="20")
          tr
             td
+               label.small_form Dirección
+               div(input-inline-edit="root.delito.direccion" on-save="set_dirty()" ng-focus="edit()" tabindex="21")
+            td
+               label.small_form Barrio
+               div(input-inline-edit="root.delito.barrio" on-save="set_dirty()" ng-focus="edit()" tabindex="21")
+            td
                label.small_form Corregimiento
                div(input-inline-edit="root.delito.corregimiento" on-save="set_dirty()" ng-focus="edit()" tabindex="21")
+         tr  
             td
                label.small_form Vereda
                div(input-inline-edit="root.delito.vereda" on-save="set_dirty()" ng-focus="edit()" tabindex="22")
             td
                label.small_form Finca
-               div(input-inline-edit="root.delito.finca" on-save="set_dirty()" ng-focus="edit()" tabindex="23")
-         tr
+               div(input-inline-edit="root.delito.finca" on-save="set_dirty()" ng-focus="edit()" tabindex="23")         
             td
-               label.small_form Profesión - Ocupación
+               label.small_form Via
                div(input-inline-edit="root.delito.via" on-save="set_dirty()" ng-focus="edit()" tabindex="24")
+         tr            
             td
-               label.small_form Servicio Militar
-               div(input-inline-edit="root.delito.direccion" on-save="set_dirty()" ng-focus="edit()" tabindex="25")
-            td
-               label.small_form Grado de instrucción - Nivél academico
+               label.small_form Otro lugar
                div(input-inline-edit="root.delito.otro_lugar" on-save="set_dirty()" ng-focus="edit()" tabindex="26")
 
          button.buttons(ng-click="map()") Ver mapa
@@ -138,13 +142,31 @@ div.info_wrapper
          tr
             td
                label.small_form Grupo armado pertenencia
-               div(input-inline-edit="participante.pertenencia" on-save="set_dirty()" ng-focus="edit()" tabindex="34")
+               div(input-inline-select="participante.pertenencia" opciones="root.grupos_armados" on-save="set_dirty()" ng-focus="edit()" tabindex="34")
             td
                label.small_form Hecho confesado en versión libre del coparticipe
                div(input-inline-edit="participante.confesado" on-save="set_dirty()" ng-focus="edit()" tabindex="35")
             td
                label.small_form Hora en mención del hecho
                div(input-inline-edit="participante.hora_mencion" on-save="set_dirty()" ng-focus="edit()" tabindex="36")
+         tr
+            td 
+               label.small_form Datos sobre pertenencia grupo armado
+               div(input-inline-text="participante.participacion_datos" on-save="set_dirty()" ng-focus="edit()" tabindex="39")
+         tr(ng-show="participante.pertenencia == 'Autodefensa'")
+            td
+               label.small_form Autodefensa Bloque
+               div(input-inline-edit="participante.autodefensa_bloque" on-save="set_dirty()" ng-focus="edit()" tabindex="41")
+            td 
+               label.small_form Autodefensa Frente
+               div(input-inline-edit="participante.autodefensa_frente" on-save="set_dirty()" ng-focus="edit()" tabindex="42")
+            td 
+               label.small_form Autodefensa Comandante
+               div(input-inline-edit="participante.autodefensa_comandante" on-save="set_dirty()" ng-focus="edit()" tabindex="43")
+         tr(ng-show="participante.pertenencia == 'Autodefensa'")
+            td
+               label.small_form Autodefensa Linea de mando
+               div(input-inline-edit="participante.autodefensa_mando" on-save="set_dirty()" ng-focus="edit()" tabindex="45")
          tr
             td
                label.small_form Otros implicados en el hecho
@@ -178,7 +200,7 @@ div.info_wrapper
          tr
             td
                label.small_form Perfil de la victima
-               div(input-inline-edit="v.perfil" on-save="set_dirty()" ng-focus="edit()" tabindex="204")
+               div(input-inline-text="v.perfil" on-save="set_dirty()" ng-focus="edit()" tabindex="204")
             td
                label.small_form Victima enunciada por el postulado o por fiscalía
                div(input-inline-edit="v.enunciada_por" on-save="set_dirty()" ng-focus="edit()" tabindex="205")

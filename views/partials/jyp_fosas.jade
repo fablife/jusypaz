@@ -38,9 +38,11 @@ div.info_wrapper
                div(input-inline-edit="root.fosa.victima_nombre" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="10")
             td
                label.small_form Perfil victima
-               div(input-inline-edit="root.fosa.perfil_victima" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="11")
+               div(input-inline-text="root.fosa.perfil_victima" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="11")
 
-      h2.info_subtitle.inline Georeferenciación     
+      h2.info_subtitle.inline Georeferenciación
+      file-upload.uploadContainer(path="'fosas'" path_id="root.fosa._id" post_id="root.postulado_id") Drop Files Here
+         input(type="file")
       table.tab_form_table
          tr
             td
@@ -76,5 +78,5 @@ div.info_wrapper
                div(input-inline-edit="root.fosa.id_victima" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="41")
             td
                label.small_form Entregada a los familiares
-               div(input-inline-edit="root.fosa.entregada_familia" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="42")
+               div(input-inline-radio="root.fosa.entregada_familia" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="42")
             

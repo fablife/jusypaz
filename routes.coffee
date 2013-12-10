@@ -163,6 +163,9 @@ exports.postulado = (req, res) ->
   console.log("GET postulado ")
   getPostulado(req, res)
  
+exports.upload_docs = (req, res) ->
+  console.log("POST docs_upload")
+  docs_upload(req, res)
 
 exports.upload_video = (req, res) ->
   console.log("POST video_upload")
@@ -642,6 +645,35 @@ crea_delito = (req, res) ->
     res.send(d)
     console.log("Nuevo delito creado y retornado")
   )
+
+docs_upload = (req, res) ->
+  console.log("_docs_upload")
+
+  #console.log(req.body)
+  #console.log(req)
+  p     = req.params.postuladoId
+  path  = req.body.path
+  root_dir =  __dirname + "/media/postulados/" + p + "/" + path + "/";
+  id    = req.body.path_id
+  console.log("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " +id)
+
+  fs.readFile(req.files.uploadedFile.path, (err, data) ->
+    try
+      newPath = root_dir + id + "/" + req.files.uploadedFile.name
+      if not fs.existsSync(root_dir)
+        fs.mkdirSync(root_dir)
+      if not fs.existsSync(root_dir + id)
+        fs.mkdirSync(root_dir + id)
+      fs.writeFile(newPath, data, (err, delito) ->
+        if err?
+          handle_error(err, "Error guardando archivo subido", res)
+        else
+          res.send("Archivo subido con éxito")
+        )
+    catch e
+      handle_error(e, "Error guardando archivo", res)
+    )
+
 
 video_upload = (req, res) ->
   console.log("_video_upload")

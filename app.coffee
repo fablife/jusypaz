@@ -146,13 +146,13 @@ app.configure('production', () ->
 # this will be as simple as storing the user ID when serializing, and finding
 # the user by ID when deserializing.
 passport.serializeUser((user, done) ->
-      console.log "SerializeUser"
+      #console.log "SerializeUser"
       done(null, user._id)
 )
 
 passport.deserializeUser((id, done) ->
       #done(null,id)
-      console.log "DeserializeUser"
+      #console.log "DeserializeUser"
       User.findById(id, (err, user) ->
          done(err, user)
       )
@@ -238,6 +238,7 @@ app.get('/admin/postulados/:postuladoId/informe',can_access,  routes.informe_pos
 
 app.post('/admin/postulados/:postuladoId/videoupload', ensureAdmin, can_access, routes.upload_video)
 app.post('/admin/postulados/:postuladoId/avatarupload', ensureAdmin,can_access, routes.upload_avatar)
+app.post('/admin/postulados/:postuladoId/docsupload', ensureAdmin, can_access, routes.upload_docs)
 app.put('/admin/postulados/:postuladoId/hv',can_access,  routes.save_hv)
 
 app.put('/admin/postulados/:postuladoId/jyp_fosa/c',can_access,  routes.create_fosa)

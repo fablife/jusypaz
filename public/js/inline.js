@@ -51,6 +51,10 @@ app.directive('inputInlineSelectRelaut', function($timeout) {
     return get_inline_select_widget($timeout, "select", '=inputInlineSelectRelaut', 'partials/input-inline-select-pp');
 });
 
+app.directive('inputInlineSelect', function($timeout) {
+    return get_inline_select_widget($timeout, "select", '=inputInlineSelect', 'partials/input-inline-select');
+});
+
 app.directive('inputInlineSelectPp', function($timeout) {
     return get_inline_select_widget($timeout, "select", '=inputInlineSelectPp', 'partials/input-inline-select-pp');
 });

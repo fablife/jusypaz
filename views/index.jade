@@ -10,9 +10,15 @@ html
         div.center.mbottom15
           img(class="logo", src="/img/logo.png")
         
-        if message 
-         p.error
-           = '' + message 
+
+        div.center.app_title
+          <h1>SIAR</h1>
+          <h3><strong>S</strong>istema de <strong>I</strong>nformación<br/>
+          <strong>A</strong>cciones <strong>R</strong>eveladas</h3>
+
+        if message != ""
+          p.error
+            = '' + message 
 
         form(action="/login",class="login_form", method="post")
           label.form_label Usuario: 

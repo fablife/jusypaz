@@ -27,12 +27,17 @@ PostuladoSchema = new Schema({
 ParticipanteSchema = new Schema({
     nombres:      { type: String, required: true},
     apellidos:    { type: String, required: true},
-    alias:        { type: String },
-    pertenencia:  { type: String },
+    alias:        { type: String, default: "No especificado"  },
+    pertenencia:  { type: String, default: "No especificado"  },
     confesado:    { type: Boolean }, 
-    hora_mencion: { type: String },
-    otros_implicados: { type: Array },
-    participacion: { type: String }
+    hora_mencion: { type: String, default: "No especificado"  },
+    otros_implicados:       { type: Array },
+    participacion:          { type: String, default: "No especificado"  },
+    participacion_datos:    { type: String, default: "No especificado" },
+    autodefensa_bloque:     { type: String, default: "No especificado"  },
+    autodefensa_frente:     { type: String, default: "No especificado"  },
+    autodefensa_comandante: { type: String, default: "No especificado"  },
+    autodefensa_mando:      { type: String, default: "No especificado" }
 })
 
 VictimaSchema = new Schema({
@@ -62,11 +67,12 @@ DelitoSchema = new Schema({
   pais:           { type: String, default: "No especificado" },
   dept:           { type: String, default: "No especificado" },
   municipio:      { type: String, default: "No especificado" },
+  direccion:      { type: String, default: "No especificado" },
+  barrio:         { type: String, default: "No especificado" },
   corregimiento:  { type: String, default: "No especificado" },
   vereda:         { type: String, default: "No especificado" },
   finca:          { type: String, default: "No especificado" },
   via:            { type: String, default: "No especificado" },
-  direccion:      { type: String, default: "No especificado" },
   otro_lugar:     { type: String, default: "No especificado" },
   video_path:     { type: String },
   lat:            { type: Number },
@@ -134,7 +140,7 @@ FosaSchema = new Schema({
   lat:              { type: Number, default: 0 },
   long:             { type: Number, default: 0 },
   id_victima:       { type: String, default: "No especificado" },
-  entregada_familia:{ type: String, default: "No especificado" }
+  entregada_familia:{ type: Boolean, default: false }
 })
 
 BienSchema = new Schema({

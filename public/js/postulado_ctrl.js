@@ -16,6 +16,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.root.tipos_relaut = [{nombre: "Ejercito"}, {nombre: "Armada"}, {nombre: "Policia"}];
   $scope.root.tipos_op_conjunta = [{nombre: "Grupos de autodefensa"}, {nombre: "Ejercito"}, {nombre: "Policia Nacional"}];
   $scope.root.tipos_proc = [{nombre: "Justicia y Paz"}, {nombre: "Justicia ordinaria"}];
+  $scope.root.tipos_version = [{nombre: "Individual"}, {nombre: "Conjunta"}];
+  $scope.root.grupos_armados = [{nombre: "Ejercito"}, {nombre: "Policia"}, {nombre: "Armada"}, {nombre: "Fuerza aérea"}, {nombre: "Autodefensa"}];
 
   console.log("postulado ctrl");
   
@@ -69,7 +71,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.postulado = postulado[0];            
         })
         .error(function(data, status, headers, config){
-        
+          $scope.root.error = "No se pudo descargar la lista de postulados!";
         });
 
   $http.get('/codigopenal/')
@@ -78,7 +80,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.codigos = codigos;
         })
         .error(function(data, status, headers, config){
-        
+          $scope.root.error = "No se pudo descargar la lista de codigo penales para delitos!";
         });
 
   $scope.save = function() {
@@ -133,6 +135,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     p.hora_mencion    = "No especificado";
     p.otros_implicados = [];
     p.participacion   = "No especificado";
+    p.participacion_datos  = "No especificado";
+    p.autodefensa_bloque   = "No especificado";
+    p.autodefensa_frente   = "No especificado";
+    p.autodefensa_comandante   = "No especificado";
+    p.autodefensa_mando    = "No especificado";
 
     $scope.root.delito.participantes.push(p);
   }
@@ -163,8 +170,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.newdelitotitle = "";
       $scope.root.delitos.push($scope.root.delito);
       $scope.root.selectedDelitoIndex = $scope.root.delitos.length -1;
+      $scope.root.notification = "Nuevo delito creado con éxito";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "No se pudo crear el delito!";
     });
   }
 
@@ -186,11 +194,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_delito/u", $scope.root.delito).
            success(function() {
-            $scope.notification = "Información delito salvada con éxito"; 
+            $scope.root.notification = "Información delito salvada con éxito"; 
             $scope.root.delito.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información del delito.");
-            $scope.error = "Error al salvar la información del delito."; 
+            $scope.root.error = "Error al salvar la información del delito."; 
         });
   }
 
@@ -214,7 +222,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       }
     })
     .error(function(data, status, headers, config){
-        $scope.error = "Error recibiendo los delitos de postulado."; 
+        $scope.root.error = "Error recibiendo los delitos de postulado."; 
     }); 
   }
 
@@ -237,8 +245,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.new_op_conjunta_title = "";
       $scope.root.op_conjuntas.push($scope.root.op_conjunta);
       $scope.root.selectedOp_conjuntaIndex = $scope.root.op_conjuntas.length -1;
+      $scope.root.notification = "Nueva operación conjunta creada con éxito.";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error al crear operación conjunta!";
     });
   }
 
@@ -260,11 +269,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_op_conjunta/u", $scope.root.op_conjunta).
            success(function() {
-            $scope.notification = "Información operación conjunta salvada con éxito"; 
+            $scope.root.notification = "Información operación conjunta salvada con éxito"; 
             $scope.root.op_conjunta.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información de la operación conjunta.");
-            $scope.error = "Error al salvar la información de la operación conjunta."; 
+            $scope.root.error = "Error al salvar la información de la operación conjunta."; 
         });
   }
 
@@ -281,7 +290,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       console.log($scope.root.op_conjuntas.length);
     })
     .error(function(data, status, headers, config){
-        $scope.error = "Error recibiendo op_conjuntas de postulado."; 
+        $scope.root.error = "Error recibiendo op_conjuntas de postulado."; 
     }); 
   }
 
@@ -307,8 +316,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.new_relaut_title = "";
       $scope.root.relauts.push($scope.root.relaut);
       $scope.root.selectedRelautIndex = $scope.root.relauts.length -1;
+      $scope.root.notification = "Nueva relación autoridades creada con éxito.";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error creando nueva relación autoridades.";
     });
   }
 
@@ -330,11 +340,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_relaut/u", $scope.root.relaut).
            success(function() {
-            $scope.notification = "Información relaut salvada con éxito"; 
+            $scope.root.notification = "Información relación autoridades salvada con éxito"; 
             $scope.root.relaut.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información de la relaut.");
-            $scope.error = "Error al salvar la información de la relaut."; 
+            $scope.root.error = "Error al salvar la información de la relación autoridades."; 
         });
   }
 
@@ -351,7 +361,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       console.log($scope.root.relauts.length);
     })
     .error(function(data, status, headers, config){
-        $scope.error = "Error recibiendo relauts de postulado."; 
+        $scope.root.error = "Error recibiendo información de relaciones autoridades de postulado."; 
     }); 
   }
 
@@ -376,8 +386,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.new_parapolitica_title = "";
       $scope.root.parapoliticas.push($scope.root.parapolitica);
       $scope.root.selectedparapoliticaIndex = $scope.root.parapoliticas.length -1;
+      $scope.root.notification = "Información parapolitica para postulado creada con éxito.";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error al crear elemento de parapolitica para postulado.";
     });
   }
 
@@ -399,11 +410,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_parapolitica/u", $scope.root.parapolitica).
            success(function() {
-            $scope.notification = "Información parapolitica salvada con éxito"; 
+            $scope.root.notification = "Información parapolitica salvada con éxito"; 
             $scope.root.parapolitica.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información de la parapolitica.");
-            $scope.error = "Error al salvar la información de la parapolitica."; 
+            $scope.root.error = "Error al salvar la información de la parapolitica."; 
         });
   }
 
@@ -420,7 +431,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       console.log($scope.root.parapoliticas.length);
     })
     .error(function(data, status, headers, config){
-        $scope.error = "Error recibiendo parapoliticas de postulado."; 
+        $scope.root.error = "Error recibiendo parapoliticas de postulado."; 
     }); 
   }
 
@@ -444,8 +455,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.newfosatitle = "";
       $scope.root.fosas.push($scope.root.fosa);
       $scope.root.selectedFosaIndex = $scope.root.fosas.length -1;
+      $scope.root.notification = "Información fosa salvada con éxito.";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error al salvar información fosa.";
     });
   }
 
@@ -467,11 +479,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_fosa/u", $scope.root.fosa).
            success(function() {
-            $scope.notification = "Información delito salvada con éxito"; 
+            $scope.root.notification = "Información fosa salvada con éxito"; 
             $scope.root.fosa.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información de la fosa.");
-            $scope.error = "Error al salvar la información de la fosa."; 
+            $scope.root.error = "Error al salvar la información de la fosa."; 
         });
   }
 
@@ -488,7 +500,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       console.log($scope.root.fosas.length);
     })
     .error(function(data, status, headers, config){
-        $scope.error = "Error recibiendo fosas de postulado."; 
+        $scope.error = "Error recibiendo información fosas de postulado."; 
     }); 
   }
 
@@ -511,8 +523,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.new_menor_title = "";
       $scope.root.menores.push($scope.root.menor);
       $scope.root.selectedMenorIndex = $scope.root.menores.length -1;
+      $scope.root.notification = "Información de menor para postulado salvada con éxito.";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error al salvar información de menor para postulado.";
     });
   }
 
@@ -534,11 +547,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/menores/u", $scope.root.menor).
            success(function() {
-            $scope.notification = "Información delito salvada con éxito"; 
+            $scope.root.notification = "Información de menor salvada con éxito"; 
             $scope.root.menor.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información del menor.");
-            $scope.error = "Error al salvar la información del menor."; 
+            $scope.root.error = "Error al salvar la información del menor."; 
         });
   }
 
@@ -554,7 +567,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       console.log($scope.root.menores.length);
     })
     .error(function(data, status, headers, config){
-        $scope.error = "Error recibiendo menores de postulado."; 
+        $scope.root.error = "Error recibiendo información de menores de postulado."; 
     }); 
   }
 
@@ -578,8 +591,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.new_proc_title = "";
       $scope.root.proces.push($scope.root.proc);
       $scope.root.selectedProcIndex = $scope.root.proces.length -1;
+      $scope.root.notification = "Información proceso para postulado creada con éxito.";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error al crear proceso para postulado.";
     });
   }
 
@@ -601,11 +615,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/proces/u", $scope.root.proc).
            success(function() {
-            $scope.notification = "Información proceso salvada con éxito"; 
+            $scope.root.notification = "Información proceso salvada con éxito"; 
             $scope.root.proc.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información del proceso.");
-            $scope.error = "Error al salvar la información del proceso."; 
+            $scope.root.error = "Error al salvar la información del proceso."; 
         });
   }
 
@@ -620,7 +634,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       console.log($scope.root.proces.length);
     })
     .error(function(data, status, headers, config){
-        
+      $scope.root.error = "Error al descargar información de procesos de postulado.!";
     });
   }
 
@@ -644,8 +658,9 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.new_bien_title = "";
       $scope.root.bienes.push($scope.root.bien);
       $scope.root.selectedBienIndex = $scope.root.bienes.length -1;
+      $scope.root.notification = "Información de bien para postulado creada con éxito.";
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error al crear información de bien para postulado.";
     });
   }
 
@@ -667,11 +682,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/bienes/u", $scope.root.bien).
            success(function() {
-            $scope.notification = "Información bienes salvada con éxito"; 
+            $scope.root.notification = "Información del bien salvada con éxito"; 
             $scope.root.bien.dirty = false;
         }).error(function() {
             console.log("Error al salvar la información del bien.");
-            $scope.error = "Error al salvar la información del bien."; 
+            $scope.root.error = "Error al salvar la información del bien."; 
         });
   }
 
@@ -686,7 +701,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       console.log($scope.root.bienes.length);
     })
     .error(function(data, status, headers, config){
-        
+      $scope.root.error = "Error al descargar información de bienes del postulado!";
     });
   }
 
@@ -706,7 +721,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         delete $scope.root.hoja._id;
       }
     }).error(function(data, status, headers, config) {
-
+      $scope.root.error = "Error al descargar información de hoja de vida del postulado!";
     });
   }
 
@@ -717,10 +732,10 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     console.log($scope.root.hoja);
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/hv", $scope.root.hoja).
            success(function() {
-            $scope.notification = "Hoja de vida salvada con éxito"; 
+            $scope.root.notification = "Hoja de vida salvada con éxito"; 
             $scope.root.hoja.dirty = false;
         }).error(function() {
-            $scope.error = "Error al salvar el postulado."; 
+            $scope.root.error = "Error al salvar información de hoja de vida del postulado."; 
         });
   }
 

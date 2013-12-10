@@ -91,7 +91,7 @@ function FileUploadCtrl(scope, timeout) {
     scope.uploadImagen = function() {
         var fd = new FormData()
         for (var i in scope.files) {
-            fd.append("uploadedFile", scope.files[i])
+            fd.append("uploadedFile", scope.files[i]);
         }
         fd.append("postuladoId",scope.root.postulado.cedula);
         var xhr = new XMLHttpRequest()
