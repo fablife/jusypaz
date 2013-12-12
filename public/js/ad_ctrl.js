@@ -176,7 +176,7 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
       $scope.root.notification = "";
       $scope.root.error = "";
     };
-
+    
     $scope.build_visualization = function(objects, postulado) {
 
         var width = 500,

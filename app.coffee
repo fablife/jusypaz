@@ -121,7 +121,9 @@ passport.use(new LocalStrategy({usernameField: 'cedula'}, (cedula, password, don
 app.configure( () ->
   app.set('views', __dirname + '/views')
   app.set('view engine', 'jade')
-  app.use(express.bodyParser())
+  app.use(express.urlencoded())
+  app.use(express.json())
+  #app.use(express.bodyParser())
   app.use(express.methodOverride())
   app.use(express.cookieParser('terces'))
   app.use(express.session())
@@ -223,6 +225,7 @@ app.get('/postulados/:postuladoId/bienes', can_access, routes.bienes)
 app.get('/postulados/:postuladoId/menores', can_access, routes.menores)
 app.get('/postulados/:postuladoId/proces', can_access, routes.proces)
 
+app.get('/postulados/:postuladoId/view_docs/:type/:typeId', can_access, media.view_docs)
 app.get('/videos/:cedulaId/:delitoId/:name', can_view_video, media.play)
 app.get('/img/:cedulaId/:name', can_view_imagen, media.img_view)
 

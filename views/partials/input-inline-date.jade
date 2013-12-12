@@ -3,7 +3,8 @@ div(class="input_inline_edit_div")
       input(class="inline_edit_input" type="text" on-tab="tab()" on-enter="save()" on-blur="blur()" on-esc="cancel()" ng-model="model" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()") 
       span(ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false")
          span(ng-hide="editMode" ng-click="edit()" ) 
-            div(class="inline_edit_text")   
+            div(class="inline_edit_text")
+               span.error(ng-show="date_invalid == true") Formato fecha es dd/mm/yyyy!
                {{model | date:'dd/MM/yyyy'  }}
    else
       div(class="inline_edit_text")

@@ -25,6 +25,9 @@ div.data_container
                       td
                         div(input-inline-edit="p.ciudad" on-save="set_p_dirty(p)" ng-focus="edit()"  tabindex="{{ $index*10 + 1 }}")
                       td 
-                        button.action(ng-show="is_dirty(p)" ng-click="save_postulado(p)") Salvar 
-                        button.action(ng-hide="is_dirty(p)" ng-click="delete_postulado(p)") Eliminar
-                        button.action(ng-click="view_postulado(p.cedula)" ) Ver
+                        button.action(ng-show="is_dirty(p)" ng-click="save_postulado(p)") 
+                          img(src="/img/save.png") Salvar 
+                        button.action(ng-hide="is_dirty(p)" ng-click="delete_postulado(p)") 
+                          img(src="/img/delete.png") Eliminar
+                        button.action(ng-click="view_postulado(p.cedula)" ) 
+                          img(src="/img/see.png") Ver

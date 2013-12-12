@@ -97,13 +97,7 @@ get_inline_select_widget = function($timeout, type, model, template) {
       handleSave: '&onSave',
       handleCancel: '&onCancel'
     },
-    link: function(scope, elm, attr) {
-      if (type == "select") {
-        attr.$observe('opts',function(){
-          scope.options = attr.opts;
-          console.log(attr.opts);
-        });
-      }
+    link: function(scope, elm, attr) {      
       var previousValue;
 
       scope.edit = function() {
@@ -165,18 +159,17 @@ get_inline_edit_widget = function($timeout, type, model, template) {
       scope.tab = function() {
         scope.editMode = false;
         if (previousValue != scope.model) {
+          if (type=="date") {
+            scope.check_date_format();
+          }
           scope.handleSave({value: scope.model});
         }
       };
       scope.save = function() {
         scope.editMode = false;
-        if (type == "date") {
-          if (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(scope.model)) {
-            scope.date_invalid = false;
-          } else {
-            scope.date_invalid = true;
-          } 
-        }
+        if (type=="date") {
+            scope.check_date_format();
+          }
         scope.handleSave({value: scope.model});
       };
       scope.cancel = function() {
@@ -186,7 +179,14 @@ get_inline_edit_widget = function($timeout, type, model, template) {
       };
       scope.blur = function() {
         scope.editMode = false;
-      }
+      };
+      scope.check_date_format = function() {
+          if (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(scope.model)) {
+            scope.date_invalid = false;
+          } else {
+            scope.date_invalid = true;
+          } 
+      };
     },
     templateUrl: template
   };

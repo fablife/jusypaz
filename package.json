@@ -11,5 +11,6 @@
     , "coffee-trace":"*"
     , "connect-flash":"*"
     , "mongoose":"*"
+    , "multiparty":"*"
   }
 }

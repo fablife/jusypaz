@@ -1,6 +1,25 @@
 fs            = require('fs')
 handle_error  = require("./utils").handle_error
 
+exports.view_docs = (req, res) ->
+    cedula  = req.params.postuladoId
+    type    = req.params.type
+    type_id = req.params.typeId
+
+    console.log cedula
+    console.log type
+    console.log type_id
+
+    docs_path =  __dirname + "/media/postulados/" + cedula + "/" + type + "/" + type_id
+
+    fs.readdir(docs_path, (err, files) ->
+        if err?
+            handle_error(err, "No se pudo leer el contenido de la carpeta " + docs_path, res)
+        else
+            console.log("Carpeta de documentos " + docs_path + " retornada con éxito.")
+            res.send(files)
+    )
+
 exports.play = (req,res) ->
 
     console.log req.params
@@ -18,7 +37,7 @@ exports.play = (req,res) ->
     console.log video
     console.log cedula 
 
-    video_path = __dirname + "/media/delitos/" + cedula + "/" + delito + "/" + video 
+    video_path = __dirname + "/media/postulados/" + cedula + "/delitos/" + delito + "/" + video 
 
     fs.readFile(video_path, (err, data) ->
         if err?

@@ -63,7 +63,26 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     $scope.root.proc.dirty = true;
   }
 
+  $scope.view_docs = function(area, id) {
+    $http.get('/postulados/' + $scope.root.postulado_id + "/view_docs/" + area + "/" + id)
+      .success(function(files, status, headers, config) {
+            console.log(files);
+            $scope.showFiles = true;
+            $scope.root.files = files;
+            //$scope.root.postulado = postulado[0];            
+        })
+        .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo a la lista de documentos de " + area + "!";
+        });
 
+  }
+  $scope.getLink = function(file) {
+    return "/docs/" + $scope.root.postuladoId + "/fosas/" + file
+  }
+
+  $scope.close_browser = function() {
+    $scope.showFiles = false;
+  }
   //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
   $http.get('/postulados/' + $scope.root.postulado_id )
         .success(function(postulado, status, headers, config) {

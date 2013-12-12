@@ -16,6 +16,7 @@ handle_error = require("./utils").handle_error
 convert_date = require("./utils").convert_date
 
 fs = require('fs')
+multiparty = require('multiparty')
 
 exports.index = (req,res) ->
   res.render('index', {message: req.flash('loginerror')})
@@ -62,39 +63,41 @@ exports.save_postulado = (req,res) ->
     console.log ("save_postulado")
     console.log (req.body)
     obj = req.body
-    obj.fecha_nacimiento = convert_date(obj.fecha_nacimiento)
-    p = {}
-    try
-      p = new Postulado(obj)
-    catch e
-      handle_error(e, "Seems no valid data in save_postulado save request!", res)
-      return
-    
-    upsert_data = p.toObject()
-    delete upsert_data._id
+    if not (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(obj.fecha_nacimiento))
+      handle_error(new Error(), "Formato fecha invalido!", res)
+    else
+      obj.fecha_nacimiento = convert_date(obj.fecha_nacimiento)
+      p = {}
+      try
+        p = new Postulado(obj)
+      catch e
+        handle_error(e, "Seems no valid data in save_postulado save request!", res)
+        return
+      
+      upsert_data = p.toObject()
+      delete upsert_data._id
 
-    Postulado.update({_id: p.id}, upsert_data, {upsert: true}, (err, num_affected, details) ->
-      if err?
-        handle_error(err,"Error creando nuevo postulado!",res)
-      else
-        console.log("Postulado " + p.nombres + " " + p.apellidos + " salvado.")
-        if not details.updatedExisting
-          u = new Usuario()
-          u.username = p.nombres.substring(0,4) + p.apellidos.substring(0,4) + (""+ (Math.random())).substring(2,6)
-          u.cedula = p.cedula
-          u.password = "12cambialo34"
-          u.role = "usuario"
-          u.save((err) ->
-          if err?
-            handle_error(err, "Se creó el postulado pero no el usuario", res)
-          else
-            console.log("Objeto usuario con contraseña estandar para postulado " + p.nombres + " " + p.apellidos + " creado.")
-            res.send("Postulado salvado")
-          )
+      Postulado.update({_id: p.id}, upsert_data, {upsert: true}, (err, num_affected, details) ->
+        if err?
+          handle_error(err,"Error creando nuevo postulado!",res)
         else
-          res.send("Postulado salvado")
-       
-    )
+          console.log("Postulado " + p.nombres + " " + p.apellidos + " salvado.")
+          if not details.updatedExisting
+            u = new Usuario()
+            u.username = p.nombres.substring(0,4) + p.apellidos.substring(0,4) + (""+ (Math.random())).substring(2,6)
+            u.cedula = p.cedula
+            u.password = "12cambialo34"
+            u.role = "usuario"
+            u.save((err) ->
+            if err?
+              handle_error(err, "Se creó el postulado pero no el usuario", res)
+            else
+              console.log("Objeto usuario con contraseña estandar para postulado " + p.nombres + " " + p.apellidos + " creado.")
+              res.send("Postulado salvado")
+            )
+          else
+            res.send("Postulado salvado")         
+      )
 
 exports.delete_user = (req,res) ->
   console.log "Delete user"
@@ -649,107 +652,145 @@ crea_delito = (req, res) ->
 docs_upload = (req, res) ->
   console.log("_docs_upload")
 
-  #console.log(req.body)
-  #console.log(req)
-  p     = req.params.postuladoId
-  path  = req.body.path
-  root_dir =  __dirname + "/media/postulados/" + p + "/" + path + "/";
-  id    = req.body.path_id
-  console.log("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " +id)
+  if req.method isnt "POST"
+    handle_error(new Error(), "Metodo ilegal de acceso", res)
+  else
+    form = new multiparty.Form()
 
-  fs.readFile(req.files.uploadedFile.path, (err, data) ->
-    try
-      newPath = root_dir + id + "/" + req.files.uploadedFile.name
-      if not fs.existsSync(root_dir)
-        fs.mkdirSync(root_dir)
-      if not fs.existsSync(root_dir + id)
-        fs.mkdirSync(root_dir + id)
-      fs.writeFile(newPath, data, (err, delito) ->
-        if err?
-          handle_error(err, "Error guardando archivo subido", res)
-        else
-          res.send("Archivo subido con éxito")
-        )
-    catch e
-      handle_error(e, "Error guardando archivo", res)
+    form.parse(req, (err, fields, files) ->
+      if err?
+        handle_error(err, "Error in form upload", res)
+      else
+        console.log(files)
+        p         = req.params.postuladoId
+        path      = fields.path
+        root_dir  =  __dirname + "/media/postulados/" + p + "/" + path + "/"
+        id        = fields.path_id
+        console.log("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " +id)
+
+        try 
+          fs.readFile(files.uploadedFile[0].path, (err, data) ->
+            try
+              newPath = root_dir + id + "/" + files.uploadedFile[0].originalFilename
+              if not fs.existsSync(root_dir)
+                fs.mkdirSync(root_dir)
+              if not fs.existsSync(root_dir + id)
+                fs.mkdirSync(root_dir + id)
+              fs.writeFile(newPath, data, (err, delito) ->
+                if err?
+                  handle_error(err, "Error guardando archivo subido", res)
+                else
+                  console.log("Archivo subido con éxito.")
+                  res.send("Archivo subido con éxito")
+                )
+            catch e
+              handle_error(e, "Error guardando archivo", res)
+          )
+        catch e
+          handle_error(e, "Error al subir archivo", res)
     )
 
 
 video_upload = (req, res) ->
   console.log("_video_upload")
-  console.log req.body
-  console.log req.files.uploadedFile.path
-  root_dir =  __dirname + "/media/delitos/"
-  p = req.body.postuladoId
-  id = req.body.delitoId
 
-  fs.readFile(req.files.uploadedFile.path, (err, data) ->
-    try
-      newPath = root_dir + p + "/" + id + "/" + req.files.uploadedFile.name
-      if not fs.existsSync(root_dir + p)
-        fs.mkdirSync(root_dir + p)
-      if not fs.existsSync(root_dir + p + "/" + id)
-        fs.mkdirSync(root_dir + p + "/" + id)
-      fs.writeFile(newPath, data, (err, delito) ->
-        if err?
-         handle_error(err, "Error guardando video subido", res)
-        else
-          Delito.findById(id,(err, delito) ->
-            if err?
-              handle_error(err, "Video subido pero no se encontro delito asociado", res)
-            else
-              console.log delito
-              if delito?
-                delito.video_path = req.files.uploadedFile.name
-                delito.save((err) ->
-                if err?
-                  handle_error(err, "Video subido ok, delito encontrado, pero al salvarlo hubo error", res)
-                else
-                  res.send(delito)
-                )
+  if req.method isnt "POST"
+    handle_error(new Error(), "Metodo ilegal de acceso", res)
+  else
+    form = new multiparty.Form()
+
+    form.parse(req, (err, fields, files) ->
+      if err?
+        handle_error(err, "Error in form upload", res)
+      else
+        root_dir = __dirname + "/media/postulados/"
+        full_dir = root_dir + p + "/delitos/"
+
+        p = req.params.postuladoId
+        id = fields.delitoId
+
+        fs.readFile(files.uploadedFile[0].path, (err, data) ->
+          try
+            newPath = full_dir + id + "/" + files.uploadedFile[0].originalFilename
+            if not fs.existsSync(root_dir)
+              fs.mkdirSync(root_dir)
+            if not fs.existsSync(root_dir + p)
+              fs.mkdirSync(root_dir + p)
+            if not fs.existsSync(full_dir)
+              fs.mkdirSync(full_dir)
+            if not fs.existsSync(full_dir + id)
+              fs.mkdirSync(full_dir + id)
+            fs.writeFile(newPath, data, (err, delito) ->
+              if err?
+               handle_error(err, "Error guardando video subido", res)
               else
-                handle_error(new Error("Delito es vacio"), "No se encontro el delito asociado a esa id", res)
+                Delito.findById(id,(err, delito) ->
+                  if err?
+                    handle_error(err, "Video subido pero no se encontro delito asociado", res)
+                  else
+                    console.log delito
+                    if delito?
+                      delito.video_path = req.files.uploadedFile[0].originalFilename
+                      delito.save((err) ->
+                      if err?
+                        handle_error(err, "Video subido ok, delito encontrado, pero al salvarlo hubo error", res)
+                      else
+                        console.log ("Video subido con exito.")
+                        res.send(delito)
+                      )
+                    else
+                      handle_error(new Error("Delito es vacio"), "No se encontro el delito asociado a esa id", res)
+                )
+              )
+          catch e
+            handle_error(e, "Error guardando video", res)
           )
-        )
-    catch e
-      handle_error(e, "Error guardando video", res)
     )
 
 avatar_upload = (req, res) ->
   console.log("_avatar_upload")
-  console.log req.body
-  console.log req.files.uploadedFile.path
-  root_dir =  __dirname + "/media/postulados/"
-  p = req.body.postuladoId
 
-  fs.readFile(req.files.uploadedFile.path, (err, data) ->
-    try
-      newPath = root_dir + p + "/" + req.files.uploadedFile.name
-      if not fs.existsSync(root_dir + p)
-        fs.mkdirSync(root_dir + p)
-      fs.writeFile(newPath, data, (err, delito) ->
-        if err?
-         handle_error(err, "Error guardando imagen subida", res)
-        else
-          Postulado.findOne({'cedula':p} ,(err, postulado) ->
-            if err?
-              handle_error(err, "Imagen subido pero no se encontro Postulado asociado", res)
-            else
-              console.log postulado
-              if postulado?
-                postulado.picture = "/img/" + p + "/" + req.files.uploadedFile.name
-                postulado.save((err) ->
-                if err?
-                  handle_error(err, "Imagen subida ok, Postulado encontrado, pero al salvarlo hubo error", res)
-                else
-                  res.send(postulado)
-                )
+  root_dir =  __dirname + "/media/postulados/"
+  p = req.params.postuladoId
+
+  if req.method isnt "POST"
+    handle_error(new Error(), "Metodo ilegal de acceso", res)
+  else
+    form = new multiparty.Form()
+
+    form.parse(req, (err, fields, files) ->
+      if err?
+        handle_error(err, "Error in form upload", res)
+      else
+        fs.readFile(files.uploadedFile[0].path, (err, data) ->
+          try
+            newPath = root_dir + p + "/" + files.uploadedFile[0].originalFilename
+            if not fs.existsSync(root_dir + p)
+              fs.mkdirSync(root_dir + p)
+            fs.writeFile(newPath, data, (err, delito) ->
+              if err?
+               handle_error(err, "Error guardando imagen subida", res)
               else
-                handle_error(new Error("Postulado es vacio"), "No se encontro el Postulado asociado a esa cedula", res)
+                Postulado.findOne({'cedula':p} ,(err, postulado) ->
+                  if err?
+                    handle_error(err, "Imagen subido pero no se encontro Postulado asociado", res)
+                  else
+                    console.log postulado
+                    if postulado?
+                      postulado.picture = "/img/" + p + "/" + files.uploadedFile[0].originalFilename
+                      postulado.save((err) ->
+                      if err?
+                        handle_error(err, "Imagen subida ok, Postulado encontrado, pero al salvarlo hubo error", res)
+                      else
+                        res.send(postulado)
+                      )
+                    else
+                      handle_error(new Error("Postulado es vacio"), "No se encontro el Postulado asociado a esa cedula", res)
+                )
+              )
+          catch e
+            handle_error(e, "Error guardando imagen", res)
           )
-        )
-    catch e
-      handle_error(e, "Error guardando imagen", res)
     )
 
 _get_all_data = (cedula, data_objects, res) ->

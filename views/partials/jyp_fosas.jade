@@ -21,6 +21,14 @@ div.info_wrapper
    div.datos_version(ng-show="root.fosas.length")
       h2.info_subtitle Fosa
         div(input-inline-edit="root.fosa.titulo" class="inline inline-heading" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="5")
+      label Subir archivo
+      file-upload.uploadContainer.inline(path="'fosas'" path_id="root.fosa._id" post_id="root.postulado_id")
+         div(ng-show="progressVisible")
+            div.percent {{uploadProgress}}%
+            div.progress-bar
+                div.uploaded(ng-style="{'width': uploadProgress+'%'}")
+      
+      button.buttons.inline(ng-click="view_docs('fosas',root.fosa._id)") Ver archivos
       table.tab_form_table
          tr
             td
@@ -40,9 +48,7 @@ div.info_wrapper
                label.small_form Perfil victima
                div(input-inline-text="root.fosa.perfil_victima" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="11")
 
-      h2.info_subtitle.inline Georeferenciación
-      file-upload.uploadContainer(path="'fosas'" path_id="root.fosa._id" post_id="root.postulado_id") Drop Files Here
-         input(type="file")
+      h2.info_subtitle.inline Georeferenciación      
       table.tab_form_table
          tr
             td
@@ -80,3 +86,14 @@ div.info_wrapper
                label.small_form Entregada a los familiares
                div(input-inline-radio="root.fosa.entregada_familia" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="42")
             
+   div.file_browser(ng-show="showFiles")
+      span.close_button.right
+         img(id="close_dialog_button" alt="Cerrar" title="Cerrar" ng-click="close_browser()" src="/img/close.png")
+      div.file_browser_content         
+         div.empty(ng-show="root.files.length < 1") 
+            h1 No hay archivos para esta fosa
+         div.files(ng-show="root.files.length > 0")
+            div.file(ng-repeat="file in root.files")
+               a(href="getLink(file)")
+                  img(src="/img/docs_icon.png")
+                  p.doc_title {{file}}
