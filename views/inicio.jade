@@ -3,14 +3,10 @@ html(ng-app="jusypazNormalApp" manifest="/cache.manifest" type="text/cache-manif
   head
     link(rel='stylesheet', href='/css/main.css') 
     link(href="/css/bootstrap.min.css" rel="stylesheet")
-    //- link(href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css')
-    //- link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet")
     script(src='/js/angular.min.js')
     script(src='/js/angular-route.min.js')
     script(src='/js/angular-animate.min.js')
-    script(src='/js/angular-animate.min.js')
     script(src="/js/angular-resource.min.js")
-    //script(src="/js/ui-bootstrap-0.6.0.min.js")
     script(src="/js/ui-bootstrap-tpls-0.6.0.min.js")
     script(src='/js/normalApp.js')
     script(src='/js/postulado_ctrl_normal.js')
@@ -30,11 +26,17 @@ html(ng-app="jusypazNormalApp" manifest="/cache.manifest" type="text/cache-manif
                 img.inline(width="24" src="/img/conf.png")
                 ul.header_submenu(ng-show="show_submenu")
                   li.header_submenu_item(ng-click="config()") Configuraciones 
+                  li.header_submenu_item(ng-click="message()") Deja un mensaje
                   li.header_submenu_item(ng-click="logout()") Logout 
 
-      
+    div.root(ng-controller="RootCtrl")
+      div.messages
+        div.notification(ng-show="root.notification" ng-animate="'animate'")
+          {{ root.notification }}
+        div.error_message(ng-show="root.error" ng-animate="'animate'")
+          {{ root.error }} 
 
-    div.page_wrapper
+      div.page_wrapper
         div(ng-view)
 
     

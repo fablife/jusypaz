@@ -239,6 +239,15 @@ OperacionesConjuntasSchema = new Schema({
   titulo:           { type: String, required: true},
 })
  
+MessageSchema = new Schema({
+  subject:   { type: String, required: true},
+  message:  { type: String, required: true},
+  read:     { type: Boolean, default: false},
+  sender:   { type: String},
+  sender_id:{ type: String},
+  date:     { type : Date}
+})
+
 exports.User        = mongoose.model('User', UserSchema)
 exports.Postulado   = mongoose.model('Postulado', PostuladoSchema)
 exports.Hoja        = mongoose.model('Hoja', HojaSchema)
@@ -253,3 +262,4 @@ exports.Proceso     = mongoose.model('Proceso', ProcesoSchema)
 exports.Parapolitica= mongoose.model('Parapolitica', ParapoliticaSchema)
 exports.RelacionesAutoridades= mongoose.model('RelacionesAutoridades', RelacionesAutoridadesSchema)
 exports.OperacionesConjuntas= mongoose.model('OperacionesConjuntas', OperacionesConjuntasSchema)
+exports.Message     = mongoose.model('Message', MessageSchema)

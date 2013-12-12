@@ -212,6 +212,8 @@ app.get('/minfo/jyp_op_conjunta', is_mine, routes.jyp_op_conjunta)
 app.get('/minfo/bienes', is_mine, routes.bienes)
 app.get('/minfo/menores', is_mine, routes.menores)
 app.get('/minfo/proces', is_mine, routes.proces)
+app.post('/minfo/pwd', routes.pwd)
+app.post('/send_message', routes.send_message)
 
 
 app.get('/postulados/:postuladoId', can_access, routes.postulado)
@@ -231,6 +233,11 @@ app.get('/img/:cedulaId/:name', can_view_imagen, media.img_view)
 
 #admin routes
 app.get('/admin', ensureAdmin, routes.admin)
+app.get('/admin/messages', ensureAdmin, routes.messages)
+app.get('/admin/get_messages', ensureAdmin, routes.get_messages)
+app.post('/admin/messages/:msgId', ensureAdmin, routes.msg_read)
+app.delete('/admin/messages/:msgId', ensureAdmin, routes.msg_delete)
+
 app.put('/admin/save_user', ensureAdmin, routes.save_user)
 app.put('/admin/save_postulado', ensureAdmin, routes.save_postulado)
 app.delete('/admin/delete_postulado/:postuladoId', ensureAdmin, routes.delete_postulado)

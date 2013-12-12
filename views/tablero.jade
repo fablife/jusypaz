@@ -47,6 +47,8 @@ html(ng-app="jusypazApp" manifest="/cache.manifest" type="text/cache-manifest")
           {{ root.notification }}
         div.error_message(ng-show="root.error" ng-animate="'animate'")
           {{ root.error }}
+        div.message_notification(ng-click="show_messages()" ng-show="root.new_messages")
+          {{ root.new_messages }}
 
       div.page_wrapper
         div(ng-view)

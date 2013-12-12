@@ -1,0 +1,21 @@
+div(ng-controller="MessageCtrl")
+    div.centered
+        h1.inline Deja un mensaje a la administración
+
+        div.dialog.send_message
+            label Asunto
+            br
+            input.dialog_input(type="text" ng-model="subject")
+            br
+            label Mensaje
+            textarea.dialog_input.message_text(ng-model="message")
+            br
+            br
+            button.buttons(ng-click="send_message()") Envia
+
+
+    
+
+
+
+

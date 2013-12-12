@@ -5,7 +5,7 @@ adminControllers.controller('RootCtrl', ['$scope', '$http', '$timeout',
     function RootCtrl($scope, $http, $timeout) {
         $scope.root = {};
         $scope.root.notification = false;
-        $scope.root.error = false;
+        $scope.root.error = false;        
 
         $scope.$watch('root.notification', function() {
             $scope.show_message();
@@ -15,17 +15,43 @@ adminControllers.controller('RootCtrl', ['$scope', '$http', '$timeout',
             $scope.show_message();
         });
 
+        $scope.show_messages = function() {            
+            $http.get("/admin/get_messages")
+                .success(function(messages, status, headers, config) {
+                    console.log("Query for all message data successful");
+                        if (messages.length > 0 ) {
+                            $scope.root.messages = messages;
+                    }
+                })
+                .error(function(data, status, headers, config){        
+                    $scope.root.error = "No pude bajar la lista de mensajes!";
+                });
+
+            $scope.root.new_messages = "";
+            location.href = "#/messages";
+        }
+
         $scope.show_message = function() {
             $timeout(function() {
                 if ($scope.root.notification || $scope.root.error) {
                     $scope.root.notification = false;
-                    $scope.root.error = false;
-                    
+                    $scope.root.error = false;                    
                 } else {
                     //$timeout.cancel(stop);
                 }
             }, 2000);
         }
+
+        $http.get("/admin/messages")
+            .success(function(message, status, headers, config) {
+                console.log("Query for all message data successful");
+                if (message.length > 0 ) {
+                    $scope.root.new_messages = "Tienes nuevos mensajes!";
+                }
+        })
+        .error(function(data, status, headers, config){
+        
+        });
 
     }]);
 
@@ -34,9 +60,46 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
 
     $scope.usuarios = Usuario.query()
     $scope.postulados = Postulado.query()
-    
 
-    $scope.informe_chosen = false
+    $scope.show_detail_msg = false;
+    $scope.informe_chosen = false;
+    $scope.current_msg = false;
+
+    $scope.show_msg = function(msg) {
+        $scope.current_msg = msg;
+        console.log(msg);
+        console.log(msg._id);
+        $http.post("/admin/messages/" + msg._id, {}).
+            success(function() {
+                msg.read = true;
+            }).error(function(data, status, headers, config) {
+                console.log("Actually, couldn't set message as 'read'");
+            });
+        $scope.show_detail_msg = true;
+    }
+
+    $scope.delete_msg = function(msg) {
+        $http.delete("/admin/messages/" + msg._id).
+            success(function() {
+                $scope.root.notification = "Mensaje eliminado con éxito.";
+                var idx = -1;
+                for (var i in $scope.root.messages) {
+                    if ($scope.root.messages[i]._id == msg._id) {
+                        idx = i;
+                        break;
+                    }
+                }
+                if (idx > -1) {
+                    $scope.root.messages.splice(idx, 1);
+                }
+                }).error(function(data, status, headers, config) {
+                    $scope.root.error = "No se pudo eliminar el mensaje.";;
+                });
+    }
+
+    $scope.close_msg = function(msg) {
+        $scope.show_detail_msg = false;
+    }    
 
     $scope.set_dirty = function(user) {
         user.dirty = true;

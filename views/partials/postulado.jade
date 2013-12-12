@@ -1,8 +1,9 @@
 div(ng-controller="PostuladoCtrl") 
     h1.inline Postulado
-    div.actions.right
-      button.buttons.action_button(ng-click="save()") Salvar
-      button.buttons.action_button(ng-click="cancel()") Cancelar
+    if (is_admin)
+      div.actions.right
+        button.buttons.action_button(ng-click="save()") Salvar
+        //-button.buttons.action_button(ng-click="cancel()") Cancelar
     div.postulado_info
       div.postulado_img(ng-controller="FileUploadCtrl" ng-mouseenter="show_buttons()" ng-mouseleave="hide_buttons()" )
         button.upload_button(ng-show="root.show_buttons" ng-click="upload_pic()") Busca imagen

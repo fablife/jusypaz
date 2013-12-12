@@ -6,6 +6,7 @@ Fosa        = require("./models/models").Fosa
 Bien        = require("./models/models").Bien
 Menor       = require("./models/models").Menor
 Proceso     = require("./models/models").Proceso
+Message     = require("./models/models").Message
 Parapolitica= require("./models/models").Parapolitica
 RelacionesAutoridades = require("./models/models").RelacionesAutoridades
 OperacionesConjuntas = require("./models/models").OperacionesConjuntas
@@ -33,6 +34,123 @@ exports.inicio = (req,res) ->
 
 exports.admin = (req,res) ->
   res.render('admin/index')
+
+exports.messages = (req, res) ->
+  console.log("messages")
+
+  Message.find({'read': false}, (err, messages) ->
+    if err?
+      handle_error(err, "Error chequeando los mensajes!", res)
+    else
+      console.log("Mensajes leidos")
+      res.send(messages)
+  )
+
+exports.msg_read = (req, res) ->
+  console.log("msg read")
+
+  if req.method isnt "POST"
+    handle_error(new Error(), "Invalid access", res)
+  else  
+    id = req.params.msgId
+    console.log id
+    console.log req.params
+
+    if id?
+      Message.findById(id, (err, message) ->
+        if err?
+          handle_error(err, "Error marcando mensaje leido!", res)
+        else
+          message.read = true;
+          message.save((err) ->
+            console.log("Mensaje marcado leidos")
+            res.send("OK")
+          )      
+      )
+    else
+      handle_error(new Error(), "Invalid message id", res)
+
+exports.msg_delete = (req, res) ->
+  console.log("msg delete")
+
+  id = req.params.msgId
+  if id?
+    Message.findById(id, (err, msg) ->
+      if err?
+        handle_error(err, "Error eliminando mensaje!", res)
+      else
+        msg.remove((err) ->
+          console.log "Mensaje eliminado con éxito"
+          res.send("OK")
+        )
+    )
+  else
+    handle_error(new Error(), "Invalid message id", res)
+
+exports.get_messages = (req, res) ->
+  console.log("messages")
+
+  Message.find((err, messages) ->
+    if err?
+      handle_error(err, "Error chequeando los mensajes!", res)
+    else
+      console.log("Mensajes leidos")
+      res.send(messages)
+  )
+
+exports.pwd = (req, res) ->
+  console.log("change pwd")
+
+  if req.method isnt "POST"
+    handle_error(new Error(), "Metodo ilegal de acceso", res)
+  else
+    form = req.body
+    Usuario.findById(req.user._id, (err, user) ->
+      if err?
+        handle_error(err, "Error accedendo al usuario al cambiar contraseña.", res)
+      else
+        if (user.password isnt form.current)
+          handle_error(new Error(), "La contraseña actual no es correcta!", res)
+        else if (form.new_pass.length < 6 or form.new_pass_confirm < 6) 
+          handle_error(new Error(), "La nueva contraseña tiene mínimo 6 caractéres!", res)
+        else if (form.new_pass isnt form.new_pass_confirm) 
+          handle_error(new Error(), "La nueva contraseña y su confirmación no coinciden!", res)
+        else
+          user.password = form.new_pass;
+          user.save((err) ->
+            if err?
+              handle_error(err, "No se pudo salvar la nueva contraseña!", res)
+            else
+              console.log "Nueva contraseña salvada con éxito"
+              res.send("OK")
+          )
+    )
+
+exports.send_message = (req, res) ->
+  console.log "send message"
+
+  if req.method isnt "POST"
+    handle_error(new Error(), "Metodo ilegal de acceso", res)
+  else
+    form = req.body
+    Postulado.findOne({'cedula': req.user.cedula}, (err, user) ->
+      if err?
+        handle_error(err, "Error accedendo al usuario para guardar mensaje.", res)
+      else
+        msg = new Message();
+        msg.sender = user.nombres + " " + user.apellidos
+        msg.sender_id = user._id
+        msg.subject = form.subject
+        msg.message = form.message
+        msg.date = Date.now()
+        msg.save((err) -> 
+          if err?
+            handle_error(err, "No se pudo salvar el mensaje mandado.", res)
+          else
+            console.log "Nuevo mensaje guardado en el sistema con éxito"
+            res.send "OK"
+        )
+    )
 
 exports.informe_postulado = (req, res) ->
   cedula = req.params.postuladoId

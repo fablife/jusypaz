@@ -1,0 +1,32 @@
+div(ng-controller="ConfigCtrl") 
+    h1.inline Configuraciones
+    div.acciones 
+      h2 Que puedes hacer:
+      ul.lista_acciones
+        li.acciones_link(ng-click="pwd()") Cambiar contraseña
+
+    div.dialog.pwd(ng-show="show_change")
+      h2 Cambiar contraseña
+      form(name="pwd_change_form")
+        label Contraseña actual
+        br
+        input.dialog_input(type="password" ng-model="current" id="current" name="current")
+        br
+        label Nueva contraseña
+        br
+        input.dialog_input(type="password" ng-minlength="6" id="new_pass" ng-model="new_pass" name="new_pass")
+        span.error(ng-show="pwd_change_form.new_pass.$error.minlength")
+            La contraseña tiene que ser minimo de 6 caractéres!
+        br
+        label Confirma nueva contraseña
+        br
+        input.dialog_input(type="password" ng-minlength="6" id="new_pass_confirm" ng-model="new_pass_confirm" name="new_pass_confirm")
+        span.error(ng-show="pwd_change_form.new_pass_confirm.$error.minlength")
+            La contraseña tiene que ser minimo de 6 caractéres!
+        br
+        button.buttons(ng-click="change_pwd()" ng-disabled="invalid_form") Cambiar
+        button.buttons(ng-click="cancel_pwd()") Cancelar
+
+
+
+

@@ -1,0 +1,38 @@
+div.data_container
+    div.users(ng-controller="AdminCtrl")
+        h1 Mensajes
+        div.data_table_container
+            
+            table#users_table.object_table
+                thead
+                    tr.row
+                      th De
+                      th Asunto
+                      th Fecha
+                      th Acciones
+                tbody
+                    tr.row(ng-class="{unread: msg.read == false}" ng-repeat="msg in root.messages" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+                      td
+                        {{ msg.sender }}
+                      td
+                        {{ msg.subject }}
+                      td
+                        {{ msg.message }}
+                      td
+                        button.action(ng-click="show_msg(msg)" ) 
+                          img(src="/img/see.png") Ver
+                        button.action(ng-click="delete_msg(msg)") 
+                          img(src="/img/delete.png") Eliminar
+
+        div.dialog.view_message(ng-show="show_detail_msg")
+            label Asunto
+            br
+            div.dialog_input(type="text")
+              {{ current_msg.subject }}
+            br
+            label Mensaje
+            div.dialog_input.message_text
+              {{ current_msg.message }}
+            br
+            br
+            button.buttons(ng-click="close_msg()") Cierra

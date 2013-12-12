@@ -38,7 +38,7 @@ app.directive('fileUpload', function() {
           $scope.notReady = true;
           alert("Upload cancelado.");
           console.log("Upload canceled");
-        })
+        });
 
         $scope.upload = function() {
              //scope.files is set in the linking function below.

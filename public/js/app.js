@@ -128,6 +128,13 @@ app.config(['$routeProvider',
         templateUrl: 'admin/partials/postulados',
         controller: 'AdminCtrl'
       }).
+      when('/config', {
+        templateUrl: 'partials/config'
+      }).
+      when('/messages', {
+        templateUrl: 'admin/partials/messages',
+        controller: 'AdminCtrl'
+      }).
       when('/postulados/:postuladoId', {
         templateUrl: 'partials/postulado' /*,
         controller: 'PostuladoCtrl' */
@@ -164,9 +171,69 @@ app.controller("MenuCtrl", function MenuCtrl($scope, $http) {
     location.href = "#/adminUsers";
   }
 
+  $scope.config = function() {
+    location.href = "#/config";
+  }
+
   $scope.logout = function() {
     location.href = "/logout";
   }
 });
 
+app.controller("ConfigCtrl", function MenuCtrl($scope, $http) {
+
+  $scope.show_change = false;
+  $scope.invalid_form = false;
+
+  $scope.pwd = function() {
+    $scope.show_change = true;
+  }
+
+  $scope.cancel_pwd = function () {
+    $scope.show_change = false;
+  }
+
+  $scope.change_pwd = function() {
+    if ($scope.is_empty($scope.current) ) {
+      $scope.root.error = "Contraseña actual no puede ser vacía!";
+      return;
+    }
+    if ($scope.is_empty($scope.new_pass) ) {
+      $scope.root.error = "Contraseña nueva no puede ser vacía!";
+      return;
+    }
+    if ($scope.is_empty($scope.new_pass_confirm) ) {
+      $scope.root.error = "Confirma contraseña nueva no puede ser vacía!";
+      return;
+    }
+
+    if ($scope.new_pass === $scope.new_pass_confirm) {
+      console.log($scope.pwd_change_form);
+
+      $http({
+            method : 'POST',
+            url : '/minfo/pwd',
+            data : 'current=' + $scope.current + '&new_pass_confirm=' + $scope.new_pass_confirm + '&new_pass=' + $scope.new_pass,
+            headers : {
+                'Content-Type' : 'application/x-www-form-urlencoded'
+            }
+        }).success(function() {
+            $scope.root.notification = "Contraseña cambiada con éxito.";
+        }).error(function(data) {
+            $scope.root.error = "Error al cambiar contraseña: " + data; 
+        }); 
+    } else {
+      $scope.root.error = "La nueva contraseña y su confirmación no coinciden!";
+      return;
+    }
+  }
+
+  $scope.is_empty = function(text) {
+    if ((text == null) || (text == '')) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+});
 
