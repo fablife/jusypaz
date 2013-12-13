@@ -7,6 +7,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   
   $scope.root.create_delito   = false;
   $scope.root.newdelitotitle  = "";
+  $scope.root.codigos = false;
 
   $scope.maintab.active = "hv";
   $scope.subtab.active = "jyp_delitos";
@@ -93,7 +94,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
           $scope.root.error = "No se pudo descargar la lista de postulados!";
         });
 
-  $http.get('/codigopenal/')
+  if (!$scope.root.codigos) {
+    $http.get('/codigopenal/')
             .success(function(codigos, status, headers, config) {
             console.log(codigos);
             $scope.root.codigos = codigos;
@@ -101,6 +103,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         .error(function(data, status, headers, config){
           $scope.root.error = "No se pudo descargar la lista de codigo penales para delitos!";
         });
+  }
 
   $scope.save = function() {
     switch($scope.maintab.active) { 

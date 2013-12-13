@@ -35,6 +35,29 @@ exports.inicio = (req,res) ->
 exports.admin = (req,res) ->
   res.render('admin/index')
 
+exports.new_codigo = (req, res) ->
+  console.log ("new codigo")
+
+  if req.method isnt "POST"
+    handle_error(new Error(), "Invalid access", res)
+  else
+    codigo = req.body.codigo
+    console.log req.body
+    
+    if codigo?
+      cp = new CodigoPenal()
+      cp.nombre = codigo
+      cp.save((err) ->
+        if err?
+          handle_error(err, "Error salvando el nuevo codigo penal.", res)
+        else
+          console.log "Nuevo código salvado con éxito"
+          res.send("OK")
+      )
+    else 
+      handle_error(new Error(), "Informacion enviada invalida.", res)
+
+
 exports.messages = (req, res) ->
   console.log("messages")
 

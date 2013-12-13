@@ -64,6 +64,52 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
     $scope.show_detail_msg = false;
     $scope.informe_chosen = false;
     $scope.current_msg = false;
+    $scope.show_add_codigo_dialog = false;
+
+/*
+    $scope.$on('$routeChangeSuccess', function(evt, current, previous) {
+        var diagram = document.getElementById("diagram_holder");
+        if (diagram && current.$$route.originalPath != "/informes") {
+            diagram.remove();
+        }
+    });
+*/
+    if (!$scope.root.codigos) {
+        $http.get('/codigopenal/')
+            .success(function(codigos, status, headers, config) {
+            console.log(codigos);
+            $scope.root.codigos = codigos;
+        })
+        .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo descargar la lista de codigo penales para delitos!";
+        });
+    }
+
+    $scope.add_codigo = function() {
+        $scope.show_add_codigo_dialog = true;
+    }
+
+    $scope.cancel_codigo = function() {
+        $scope.show_add_codigo_dialog = false;
+    }
+
+    $scope.save_codigo = function() {
+        var codigo = $scope.root.new_codigo_text;
+        $scope.show_add_codigo_dialog = false;
+        $http({
+            url: "/admin/codigopenal/new",
+            method: "POST",
+            data: "codigo=" + codigo,
+            headers : {
+                'Content-Type' : 'application/x-www-form-urlencoded'
+            }
+        }).success(function(new_codigo) {
+                $scope.root.notification = "Nuevo código agregado con éxito.";
+                $scope.root.codigos.push(new_codigo);
+            }).error(function(data, status, headers, config) {
+                $scope.root.error = "Error al agregar el nuevo código.";
+            });
+    }
 
     $scope.show_msg = function(msg) {
         $scope.current_msg = msg;
@@ -122,13 +168,13 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
             .success(function(objetos, status, headers, config) {
                 console.log("Query for all postulado data successful");
                 $scope.root.objetos_informe = objetos;
-                console.log(objetos);
-                $scope.build_visualization(objetos, postulado);
+                $scope.root.postulado_informe = postulado;
+                console.log(objetos);                
                 location = "#/informe"
 
         })
         .error(function(data, status, headers, config){
-        
+            $scope.root.error = "No se pudo acceder a la información necesaria para el informe!";
         });
     }
 
@@ -143,9 +189,9 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
             user.dirty = false;
         }).error(function() {
             $scope.error = "Error al salvar el postulado."; 
-        });
-      
+        });      
     }
+    
     $scope.add_user = function() {
         $scope.usuarios.push({
             dirty: true,
@@ -239,164 +285,5 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
       $scope.root.notification = "";
       $scope.root.error = "";
     };
-    
-    $scope.build_visualization = function(objects, postulado) {
-
-        var width = 500,
-        height = 500,
-        radius = Math.min(width, height) / 2;
-
-        var x = d3.scale.linear()
-            .range([0, 2 * Math.PI]);
-
-        var y = d3.scale.sqrt()
-            .range([0, radius]);
-
-        var color = d3.scale.category20c();
-
-        var svg = d3.select("body").append("svg")
-            .attr("width", width)
-            .attr("height", height)
-          .append("g")
-            .attr("transform", "translate(" + width / 2 + "," + (height / 2 + 10) + ")");
-
-
-        var partition = d3.layout.partition()
-            .value(function(d) { return d.size; });
-
-        var arc = d3.svg.arc()
-            .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
-            .endAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x + d.dx))); })
-            .innerRadius(function(d) { return Math.max(0, y(d.y)); })
-            .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
-
-        $scope.get_diagram_data(objects, postulado, function(error, root) {
-          var path = svg.selectAll("path")
-              .data(partition.nodes(root))
-            .enter().append("path")
-              .attr("d", arc)
-              .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
-              .on("click", click);
-
-          function click(d) {
-            path.transition()
-              .duration(750)
-              .attrTween("d", arcTween(d));
-          }
-
-          var g = svg.selectAll("g")
-            .data(partition.nodes(root))
-            .enter().append("g");
-
-        var path = g.append("path")
-            .attr("d", arc)
-            .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
-            .on("click", null);
-
-        var text = g.append("text")
-              .attr("x", function(d) { return y(d.y); })
-              .attr("dx", "6") // margin
-              .attr("dy", ".35em") // vertical-align
-              .text(function(d) { return d.name; });
-        });
-
-        
-
-
-        d3.select(self.frameElement).style("height", height + "px");
-
-    }
-
-    $scope.get_diagram_data = function(objects, postulado, callback) {
-        error = null;
-        children = []
-        
-        
-        root = {}
-        var total = 0;
-        for (var i in objects) {
-            total += objects[i].length;
-        }
-
-        for (var i in objects) {
-            if (objects.hasOwnProperty(i)) {
-                subchild = $scope.get_children_for_model(i, objects[i]);
-                var json = {"name" : i , "children": subchild};
-                children.push(json);
-            }
-        }
-        root = {
-            "children": children
-        }
-        console.log(root);
-
-        callback(error, root)
-    }
-
-    $scope.get_children_for_model = function(model, objects) {
-        switch(model) {
-            case "Delito" : return $scope.get_delito_children(objects);
-                            break;
-            case "Fosa"   : return $scope.get_fosa_children(objects);
-                            break;
-            default:        return $scope.get_fake_children();
-                            break;
-        }
-    }
-
-
-    $scope.get_fake_children = function() {
-        children = [];
-        for (var i=0; i<4; i++) {
-            children.push({"name" : "Bla", size: 3});
-        }
-        return children;
-    }
-
-    $scope.get_delito_children = function(objects) {
-        assoc = [];
-        objects.forEach(function(obj) {
-            console.log("looop");
-            //console.log (obj);
-            if (typeof assoc[obj.codigo_penal] == 'undefined') {
-                console.log("setting");
-                assoc[obj.codigo_penal] = 0;
-            }
-            console.log("assigning");
-            assoc[obj.codigo_penal] += 1;
-        });
-        children = [];
-        console.log("assoc.leng" + assoc.length);
-        for (var i in assoc) {
-            if (assoc.hasOwnProperty(i)) {
-                children.push({"name" : i, "size" : assoc[i]});
-            }
-        }
-
-        return children;
-    }
-
-    $scope.get_fosa_children = function(objects) {
-        enunciada = 0
-        no = 0;
-        objects.forEach(function(obj) {
-            if (obj.enunciada) {
-                enunciada += 1;
-            }else {
-                no += 1;
-            }
-        });
-        children = [];
-        children.push({"name" : "Enunciadas", size: enunciada});
-        children.push({"name" : "No Enunciadas", size: no});
-
-        return children;
-    }
-
 
 }]);
-
-
-
-
-

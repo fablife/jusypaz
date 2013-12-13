@@ -3,22 +3,51 @@ div.informes_portal
   div.acciones
     div.informe_individual
       h2 Informe individual
-        Nombres   {{nombres}}
-        Apellidos {{apellidos}}
-        Cedula    {{cedula}}
-        br
+      table
+        thead
+          th.hpad 
+            label Nombres       
+          th.hpad 
+            label Apellidos 
+          th.hpad
+            label Cedula     
+        tbody
+          td.hpad
+            {{root.postulado_informe.nombres}}
+          td.hpad
+            {{root.postulado_informe.apellidos}}
+          td.hpad
+            {{root.postulado_informe.cedula}}
 
+      br
+    
+      div#diagram_wrapper(ng-controller="DiagramCtrl")
 
-        
+    
+      div.individual_scores(ng-repeat="obj in root.diagram_json.children")
+        b 
+          {{ obj.name }}
         table.object_table
           thead
             tr.row
-              th Item 
-              th Cantidad 
-          tbody
-            tr.row(ng-repeat="p in postulados" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
-              td 
-                div {{p.nombres}}
-              td 
-                div {{p.apellidos}}
-             
+              th Tipo
+              th Cantidad            
+          tbody            
+            tr(ng-show="obj.children == null")
+              td.object_row_odd(colspan="4") No hay casos de este tipo!
+
+            tr.row(ng-repeat="child in obj.children"  ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+              td
+                {{ child.name }}
+              td
+                {{ child.size }}
+            //-tr.row
+            //-  td.unread Total
+            //-  td.unread {{ obj.children.length }} //-length is all children, not sum of individual sizes...
+
+          
+            
+
+  
+
+

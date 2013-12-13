@@ -1,0 +1,27 @@
+div.data_container
+    div.users(ng-controller="AdminCtrl")
+        h1 Codigos Penales
+        pre 
+          p Esta es la lista de los códigos penales usados para los delitos.
+          p Si no figura un código penal se puede agreagar aqui."
+
+        div.data_table_container            
+            button.action_button.top_button(ng-click="add_codigo()") Agregar codigo
+
+            div.dialog.add_codigo(ng-show="show_add_codigo_dialog")
+              label Término del nuevo código penal
+              br
+              input.dialog_input(type="text" ng-model="root.new_codigo_text")
+              button.buttons(ng-click="save_codigo()") Salvar
+              button.buttons(ng-click="cancel_codigo()") Cancelar
+
+            table#users_table.object_table
+                thead
+                    tr.row
+                      th Codigo Penal                      
+                tbody
+                    tr.row(ng-repeat="codigo in root.codigos" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+                      td
+                        {{ codigo.nombre }}
+
+        

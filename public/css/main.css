@@ -442,6 +442,13 @@ input[type=file] {
   display: inline-block;
 }
 
+.big_button {  
+  cursor: pointer;
+  border: none;
+  margin-right: 20px;
+  padding: 10px;
+}
+
 .buttons {
   cursor: pointer;
   height: 45px;
@@ -873,4 +880,9 @@ div.uploadContainer input[type=file] {
 
 tr.unread {
   font-weight: bold;
+}
+
+td.hpad,
+th.hpad {
+  padding: 0 8px;
 }

@@ -5,8 +5,8 @@ div.informes_portal
       h2 Quieres un informe general o individual?
         br
         div.actions.centered
-          button.action.inline(ng-click="choose_general()") General
-          button.action.inline.mleft10(ng-click="choose_individual()") Individual
+          button.action_button.big_button.inline(ng-click="choose_general()") General
+          button.action_button.big_button.inline.mleft10(ng-click="choose_individual()") Individual
 
     div.informe_individual(ng-show="informe_chosen")
       h2 Informe individual
@@ -29,7 +29,5 @@ div.informes_portal
                 div {{p.cedula}}                                        
               td 
                 div {{p.ciudad}}
-              td 
-                div {{p.nombres}}
               td
-                button.buttons(ng-click="informe_postulado(p)") Generar
+                button.list_buttons(ng-click="informe_postulado(p)") Generar
