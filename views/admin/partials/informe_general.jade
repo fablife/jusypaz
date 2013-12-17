@@ -1,0 +1,38 @@
+div.informes_portal
+  h1.page_title Informe
+  div.acciones
+    div.informe_general
+      h2 Informe general 
+
+      br
+    
+      div#diagram_wrapper(ng-controller="DiagramCtrl")
+
+    
+      div.individual_scores(ng-repeat="obj in root.diagram_json.children")
+        b 
+          {{ obj.name }}
+        table.object_table
+          thead
+            tr.row
+              th Tipo
+              th Cantidad            
+          tbody            
+            tr(ng-show="obj.children == null")
+              td.object_row_odd(colspan="4") No hay casos de este tipo!
+
+            tr.row(ng-repeat="child in obj.children"  ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+              td
+                {{ child.name }}
+              td
+                {{ child.size }}
+            //-tr.row
+            //-  td.unread Total
+            //-  td.unread {{ obj.children.length }} //-length is all children, not sum of individual sizes...
+
+          
+            
+
+  
+
+

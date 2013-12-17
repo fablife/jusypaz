@@ -120,6 +120,10 @@ app.config(['$routeProvider',
         templateUrl: 'admin/partials/informe',
         controller: 'AdminCtrl'
       }).
+       when('/informe_general', {
+        templateUrl: 'admin/partials/informe_general',
+        controller: 'AdminCtrl'
+      }).
       when('/adminUsers', {
         templateUrl: 'admin/partials/users',
         controller: 'AdminCtrl'
@@ -159,7 +163,7 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
   var objetos = $scope.root.objetos_informe;
   var p = $scope.root.postulado_informe;  
 
-  $scope.build_visualization = function(objects, postulado) {
+  $scope.build_visualization = function(objects, postulado, all) {
 
         var width = 500,
         height = 600,
@@ -192,7 +196,7 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
             .innerRadius(function(d) { return Math.max(0, y(d.y)); })
             .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
-        $scope.get_diagram_data(objects, postulado, function(error, root) {
+        $scope.get_diagram_data(objects, postulado, all, function(error, root) {
             $scope.root.diagram_json = root;
             var g = svg.selectAll("g")
                 .data(partition.nodes(root))
@@ -280,24 +284,43 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
 
     }
 
-    $scope.get_diagram_data = function(objects, postulado, callback) {
+
+    $scope.get_postulado_data = function(objects) {
+
+        var kids = [];
+        for (var i in objects) {
+            if (objects.hasOwnProperty(i)) {
+                var subchild = $scope.get_children_for_model(i, objects[i]);
+                var json = {"name" : i , 'level':1, "children": subchild};
+                kids.push(json);
+            }
+        }
+
+        return kids;
+    }
+
+    $scope.get_diagram_data = function(objects, postulado, all, callback) {
         var error = null;
         var children = []
         
         
         var root = {}
-        var total = 0;
-        for (var i in objects) {
-            total += objects[i].length;
+        if (all) {
+           for (var i in objects) {
+             if (objects.hasOwnProperty(i)) {
+                var postulado_info = objects[i];
+                var p_objects = postulado_info[1];
+                var p_info  = postulado_info[0];
+                var subchild = $scope.get_postulado_data(p_objects);
+                var json = {"name": p_info.nombres + " " + p_info.apellidos, "children": subchild};
+                children.push(json);
+             }
+           }  
+        } else {
+  
+          children = $scope.get_postulado_data(objects, children);
         }
 
-        for (var i in objects) {
-            if (objects.hasOwnProperty(i)) {
-                var subchild = $scope.get_children_for_model(i, objects[i]);
-                var json = {"name" : i , 'level':1, "children": subchild};
-                children.push(json);
-            }
-        }
         root = {
             //"name": postulado.nombres + " " + postulado.apellidos,
             "name": "",
@@ -502,8 +525,12 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
 
         return children;
     }
-
-    $scope.build_visualization(objetos, p);
+  
+    if ( $scope.root.informe_general != null && $scope.root.informe_general != false) {
+      $scope.build_visualization($scope.root.informe_general, null , true);
+    } else {
+      $scope.build_visualization($scope.root.objetos_informe, $scope.root.postulado_informe, false);
+    }
   
 });
 

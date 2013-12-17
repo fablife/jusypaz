@@ -178,7 +178,11 @@ exports.send_message = (req, res) ->
 exports.informe_postulado = (req, res) ->
   cedula = req.params.postuladoId
   data_objects = [Fosa, Bien, Menor, Delito, Proceso, RelacionesAutoridades, OperacionesConjuntas, Parapolitica]
-  _get_all_data(cedula,data_objects, res)
+  _get_all_postulado_data(cedula,data_objects, res)
+
+exports.informe = (req, res) ->
+  data_objects = [Fosa, Bien, Menor, Delito, Proceso, RelacionesAutoridades, OperacionesConjuntas, Parapolitica]
+  _get_all_data(data_objects, res)
 
 exports.save_user = (req,res) ->
     console.log ("save_user")
@@ -472,7 +476,9 @@ exports.save_bien = (req, res) ->
   id = req.body._id
   delete req.body._id
   obj = req.body
-  obj.fecha_entrega = convert_date(obj.fecha_entrega)
+  date = obj.fecha_entrega
+  if date
+    obj.fecha_entrega = convert_date(obj.fecha_entrega)
   p = {}
   try
     p = new Bien(obj)
@@ -934,10 +940,41 @@ avatar_upload = (req, res) ->
           )
     )
 
-_get_all_data = (cedula, data_objects, res) ->
+
+_get_all_data = (data_objects, res) ->
   console.log "_get_all_data for informes"
-  console.log cedula
   try
+    all = {} 
+    cnt = 0
+    Postulado.find({}, (err, postulados) ->
+      console.log postulados
+      if err?
+        handle_error(err, "Error accedendo a todos los datos de postulado para informe", res)
+      else
+        if postulados?
+          console.log("gefore foreeach")
+          postulados.forEach (p) ->
+            console.log("in foreeach")
+            _get_all_postulado_objects(p.cedula, data_objects, (objects) ->
+              all[p.cedula] = []
+              all[p.cedula].push(p)
+              all[p.cedula].push(objects)
+        
+              cnt += 1
+              if cnt is postulados.length
+                console.log("going to return all data!")
+                console.log(all)
+                res.send(all)
+            )
+        else
+          handle_error(new Error(), "No hay postulados encontrados",res)
+    )
+  catch e
+    handle_error(e, "Error al acceder a información de informes", res)
+
+
+
+_get_all_postulado_objects = (cedula, data_objects, callback) ->
     returns = {}
     cnt = 0
     data_objects.forEach (obj) ->
@@ -950,11 +987,20 @@ _get_all_data = (cedula, data_objects, res) ->
           name = obj.modelName
           console.log name
           returns[name] = objects
-          cnt += 1      
+          cnt += 1
           if cnt is data_objects.length
             console.log "All data retrieved"
             #console.log returns
-            res.send(returns)
+            #return returns
+            callback(returns)
         )
+
+_get_all_postulado_data = (cedula, data_objects, res) ->
+  console.log "_get_all_postulado_data for informes"
+  console.log cedula
+  try
+    _get_all_postulado_objects(cedula, data_objects, (objects) ->
+      res.send(objects)
+    )
   catch e
     handle_error(e, e.message, res )

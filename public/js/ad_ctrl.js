@@ -156,7 +156,16 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
     }
 
     $scope.choose_general = function() {
-        location.href = "#/informe_general";
+        $http.get("/admin/informe")
+            .success(function(objetos, status, headers, config) {
+                console.log("Query for general informe successful");
+                $scope.root.informe_general = objetos;
+                console.log(objetos);                
+                location.href = "#/informe_general";
+        })
+        .error(function(data, status, headers, config){
+            $scope.root.error = "No se pudo acceder a la información necesaria para el informe!";
+        });
     }
 
     $scope.choose_individual = function() {
