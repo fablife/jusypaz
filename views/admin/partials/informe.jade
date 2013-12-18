@@ -23,6 +23,14 @@ div.informes_portal
     
       div#diagram_wrapper(ng-controller="DiagramCtrl")
 
+        div.diagrame_legend
+          h3 Legenda del diagrama
+          table.object_header.right
+            tr.row(ng-repeat="(name, color) in root.color_map"  ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+              td {{ name }}
+              td(width="100")
+                div(style="background-color: {{ color}}")
+                  &nbsp;
     
       div.individual_scores(ng-repeat="obj in root.diagram_json.children")
         b 

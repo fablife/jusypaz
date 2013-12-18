@@ -9,26 +9,45 @@ div.informes_portal
       div#diagram_wrapper(ng-controller="DiagramCtrl")
 
     
-      div.individual_scores(ng-repeat="obj in root.diagram_json.children")
-        b 
-          {{ obj.name }}
-        table.object_table
-          thead
-            tr.row
-              th Tipo
-              th Cantidad            
-          tbody            
-            tr(ng-show="obj.children == null")
-              td.object_row_odd(colspan="4") No hay casos de este tipo!
+        div.diagrame_legend 
+          h3 Legenda del diagrama
+          table.object_header.left
+            tr.row(ng-repeat="(name, color) in root.color_postulado_map"  ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+              td {{ name }}
+              td(width="100")
+                div(style="background-color: {{ color}}")
+                  &nbsp;
+          br
+          table.object_header.right
+            tr.row(ng-repeat="(name, color) in root.color_map"  ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+              td {{ name }}
+              td(width="100")
+                div(style="background-color: {{ color}}")
+                  &nbsp;
 
-            tr.row(ng-repeat="child in obj.children"  ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
-              td
-                {{ child.name }}
-              td
-                {{ child.size }}
-            //-tr.row
-            //-  td.unread Total
-            //-  td.unread {{ obj.children.length }} //-length is all children, not sum of individual sizes...
+        br
+        br
+
+      div.individual_scores(ng-repeat="obj in root.diagram_json.children")
+        h3 {{ obj.name }}
+        div.individual_scores(ng-repeat="type in obj.children")
+          table.object_table
+            thead
+              tr.row
+                th Tipo
+                th Cantidad            
+            tbody            
+              tr(ng-show="type.children == null")
+                td.object_row_odd(colspan="4") No hay casos de este tipo!
+
+              tr.row(ng-repeat="child in type.children"  ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+                td
+                  {{ child.name }}
+                td
+                  {{ child.size }}
+              //-tr.row
+              //-  td.unread Total
+              //-  td.unread {{ obj.children.length }} //-length is all children, not sum of individual sizes...
 
           
             

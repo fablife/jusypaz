@@ -40,6 +40,10 @@ body {
     float: right;
 }
 
+.left {
+    float: left;
+}
+
 .center {
     text-align: center;
 }
@@ -885,4 +889,8 @@ tr.unread {
 td.hpad,
 th.hpad {
   padding: 0 8px;
+}
+
+#diagram_holder {
+  margin-top: -150px;
 }

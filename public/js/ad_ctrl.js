@@ -170,6 +170,7 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
 
     $scope.choose_individual = function() {
         $scope.informe_chosen = true;
+        $scope.root.informe_general = false;
     }
 
     $scope.informe_postulado = function(postulado) {

@@ -518,12 +518,38 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.fosas = data;      
       $scope.root.fosa = $scope.root.fosas[0];
       $scope.root.selectedFosaIndex = 0;
+      $scope.prepare_fosa_delitos_select();
       console.log($scope.root.fosas);
       console.log($scope.root.fosas.length);
     })
     .error(function(data, status, headers, config){
         $scope.error = "Error recibiendo información fosas de postulado."; 
     }); 
+  }
+
+  $scope.prepare_fosa_delitos_select = function() {
+    if ($scope.root.delitos) {
+        $scope.create_fosa_delitos_select($scope.root.delitos);
+    } else {
+        $http.get('/postulados/' + $scope.root.postulado_id + "/jyp_delitos")
+          .success(function(data, status, headers, config) {
+          $scope.create_fosa_delitos_select(data);
+        })
+        .error(function(data, status, headers, config){
+            console.log("Error recibiendo los delitos de postulado, para fosas."); 
+            $scope.delitos_postulado = [];
+        });
+      }
+  }
+
+  $scope.create_fosa_delitos_select = function(delitos) {
+    $scope.root.delitos_postulado = [];
+    for (d in delitos) {
+      var entry = {};
+      entry.nombre = delitos[d].titulo;
+      $scope.root.delitos_postulado.push(entry);
+    }
+
   }
 
   /*************************************************************************

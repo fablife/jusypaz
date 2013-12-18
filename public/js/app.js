@@ -165,6 +165,9 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
 
   $scope.build_visualization = function(objects, postulado, all) {
 
+        $scope.root.color_map = {};
+        $scope.root.color_postulado_map = {};
+
         var width = 500,
         height = 600,
         radius = Math.min(width, height) / 2;
@@ -204,7 +207,21 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
 
             var path = g.append("path")
                 .attr("d", arc)
-                .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
+                .style("fill", function(d) { 
+                    name = (d.children ? d : d.parent).name;
+                    col = color(name);
+                    if (name != "") {                      
+                      if (d.level == "postulado") {
+                        $scope.root.color_postulado_map[name] = col;
+                      } else {
+                        if (d.parent.level != "postulado") {
+                          $scope.root.color_map[name] = col;
+                        }
+                      }
+                    }
+                    //console.log("name: " + name +", col: " + col);
+                    return col;
+                })
                 .on("click", click);
 
             var text = g.append("text")
@@ -212,13 +229,15 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
                 .attr("dx", function(d) { if (d.level==1) {return "-100"} else { return "-20"}}) // margin
                 .attr("dy", ".35em") // vertical-align
                 //.text(function(d) { if (d.size || (d.children && (d.children.length > 0) ) )  return d.name; });
-                .text(function(d) { 
-                  if (hasChildren(d) || d.size > 0) {
-                    return d.name;
-                  } 
-                });
+                //.text(function(d) { 
+                //  if (hasChildren(d) || d.size > 0) {
+                //    return d.name;
+                //  } 
+                //});
+                ;
 
-            text.attr("transform", function(d) { return "rotate(" + computeTextRotation(d) + ")"; });
+            //text.attr("transform", function(d) { return "rotate(" + computeTextRotation(d) + ")"; });
+           
 
             function computeTextRotation(d) {
                 var angle = x(d.x + d.dx / 2) - Math.PI / 2;
@@ -312,7 +331,7 @@ app.controller("DiagramCtrl", function DiagramCtrl($scope, $http) {
                 var p_objects = postulado_info[1];
                 var p_info  = postulado_info[0];
                 var subchild = $scope.get_postulado_data(p_objects);
-                var json = {"name": p_info.nombres + " " + p_info.apellidos, "children": subchild};
+                var json = {"name": p_info.nombres + " " + p_info.apellidos, "level":"postulado", "children": subchild}; 
                 children.push(json);
              }
            }  
