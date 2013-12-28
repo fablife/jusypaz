@@ -88,6 +88,13 @@ div.info_wrapper
                div(input-inline-date="root.delito.fecha_ocurrencia" on-save="set_dirty()" ng-focus="edit()" tabindex="17")
 
       h2.info_subtitle Georeferenciación
+      file-upload.uploadContainer.inline(path="'delitos'" path_id="root.delito._id + '/map'" post_id="root.postulado_id")
+         div(ng-show="progressVisible")
+            div.percent {{uploadProgress}}%
+            div.progress-bar
+                div.uploaded(ng-style="{'width': uploadProgress+'%'}")
+
+      button.buttons(ng-click="view_docs('delitos',root.delito._id + 'XXmap')") Ver mapa
       table.tab_form_table
          tr
             td
@@ -124,7 +131,6 @@ div.info_wrapper
                label.small_form Otro lugar
                div(input-inline-edit="root.delito.otro_lugar" on-save="set_dirty()" ng-focus="edit()" tabindex="26")
 
-         button.buttons(ng-click="map()") Ver mapa
 
       h2.info_subtitle Autores participantes
       button.add_action_small(ng-click="add_participante()")
@@ -207,3 +213,15 @@ div.info_wrapper
             td
                label.small_form Victima enunciada por el postulado o por fiscalía
                div(input-inline-edit="v.datos_completos" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+
+   div.file_browser(ng-show="showFiles")
+      span.close_button.right
+         img(id="close_dialog_button" alt="Cerrar" title="Cerrar" ng-click="close_browser()" src="/img/close.png")
+      div.file_browser_content         
+         div.empty(ng-show="root.files.length < 1") 
+            h1 No hay archivos de mapas para este delito
+         div.files(ng-show="root.files.length > 0")
+            div.file(ng-repeat="file in root.files")
+               a(ng-href="/docs/{{root.postulado_id}}/delitos/{{root.delito._id}}XXmap/{{file}}")
+                  img(src="/img/docs_icon.png")
+                  p.doc_title {{file}}

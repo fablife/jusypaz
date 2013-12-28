@@ -821,6 +821,10 @@ docs_upload = (req, res) ->
               newPath = root_dir + id + "/" + files.uploadedFile[0].originalFilename
               if not fs.existsSync(root_dir)
                 fs.mkdirSync(root_dir)
+              if id.indexOf("/") > 0
+                subdir = id.substring(0,id.indexOf("/"))
+                if not fs.existsSync(root_dir + subdir )
+                  fs.mkdirSync(root_dir + subdir)
               if not fs.existsSync(root_dir + id)
                 fs.mkdirSync(root_dir + id)
               fs.writeFile(newPath, data, (err, delito) ->
@@ -850,48 +854,53 @@ video_upload = (req, res) ->
       if err?
         handle_error(err, "Error in form upload", res)
       else
-        root_dir = __dirname + "/media/postulados/"
-        full_dir = root_dir + p + "/delitos/"
-
-        p = req.params.postuladoId
-        id = fields.delitoId
-
-        fs.readFile(files.uploadedFile[0].path, (err, data) ->
-          try
-            newPath = full_dir + id + "/" + files.uploadedFile[0].originalFilename
-            if not fs.existsSync(root_dir)
-              fs.mkdirSync(root_dir)
-            if not fs.existsSync(root_dir + p)
-              fs.mkdirSync(root_dir + p)
-            if not fs.existsSync(full_dir)
-              fs.mkdirSync(full_dir)
-            if not fs.existsSync(full_dir + id)
-              fs.mkdirSync(full_dir + id)
-            fs.writeFile(newPath, data, (err, delito) ->
-              if err?
-               handle_error(err, "Error guardando video subido", res)
-              else
-                Delito.findById(id,(err, delito) ->
+        p        = req.params.postuladoId
+        Postulado.findOne({'cedula':p} ,(err, postulado) ->
+          if err?
+            handle_error(err, "Error subiendo video: ese postulado no existe", res)
+          else
+            root_dir = __dirname + "/media/postulados/"
+            full_dir = root_dir + p + "/delitos/"
+            id       = fields.delitoId
+            
+         
+            fs.readFile(files.uploadedFile[0].path, (err, data) ->
+              try
+                newPath = full_dir + id + "/" + files.uploadedFile[0].originalFilename
+                if not fs.existsSync(root_dir)
+                  fs.mkdirSync(root_dir)
+                if not fs.existsSync(root_dir + p)
+                  fs.mkdirSync(root_dir + p)
+                if not fs.existsSync(full_dir)
+                  fs.mkdirSync(full_dir)
+                if not fs.existsSync(full_dir + id)
+                  fs.mkdirSync(full_dir + id)
+                fs.writeFile(newPath, data, (err, delito) ->
                   if err?
-                    handle_error(err, "Video subido pero no se encontro delito asociado", res)
+                   handle_error(err, "Error guardando video subido", res)
                   else
-                    console.log delito
-                    if delito?
-                      delito.video_path = req.files.uploadedFile[0].originalFilename
-                      delito.save((err) ->
+                    Delito.findById(id,(err, delito) ->
                       if err?
-                        handle_error(err, "Video subido ok, delito encontrado, pero al salvarlo hubo error", res)
+                        handle_error(err, "Video subido pero no se encontro delito asociado", res)
                       else
-                        console.log ("Video subido con exito.")
-                        res.send(delito)
-                      )
-                    else
-                      handle_error(new Error("Delito es vacio"), "No se encontro el delito asociado a esa id", res)
-                )
+                        console.log delito
+                        if delito?
+                          delito.video_path = files.uploadedFile[0].originalFilename
+                          delito.save((err) ->
+                          if err?
+                            handle_error(err, "Video subido ok, delito encontrado, pero al salvarlo hubo error", res)
+                          else
+                            console.log ("Video subido con exito.")
+                            res.send(delito)
+                          )
+                        else
+                          handle_error(new Error("Delito es vacio"), "No se encontro el delito asociado a esa id", res)
+                    )
+                  )
+              catch e
+                handle_error(e, "Error guardando video", res)
               )
-          catch e
-            handle_error(e, "Error guardando video", res)
-          )
+        )
     )
 
 avatar_upload = (req, res) ->

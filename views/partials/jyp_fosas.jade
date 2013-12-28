@@ -95,6 +95,6 @@ div.info_wrapper
             h1 No hay archivos para esta fosa
          div.files(ng-show="root.files.length > 0")
             div.file(ng-repeat="file in root.files")
-               a(href="getLink(file)")
+               a(ng-href="/docs/{{root.postulado_id}}/fosas/{{root.fosa._id}}/{{file}}")
                   img(src="/img/docs_icon.png")
                   p.doc_title {{file}}

@@ -74,11 +74,10 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         })
         .error(function(data, status, headers, config){
           $scope.root.error = "No se pudo a la lista de documentos de " + area + "!";
+          $scope.root.files = [];
+          $scope.showFiles = true;
         });
 
-  }
-  $scope.getLink = function(file) {
-    return "/docs/" + $scope.root.postuladoId + "/fosas/" + file
   }
 
   $scope.close_browser = function() {

@@ -227,6 +227,7 @@ app.get('/postulados/:postuladoId/bienes', can_access, routes.bienes)
 app.get('/postulados/:postuladoId/menores', can_access, routes.menores)
 app.get('/postulados/:postuladoId/proces', can_access, routes.proces)
 
+app.get('/docs/:postuladoId/:type/:typeId/:file', can_access, media.get_doc)
 app.get('/postulados/:postuladoId/view_docs/:type/:typeId', can_access, media.view_docs)
 app.get('/videos/:cedulaId/:delitoId/:name', can_view_video, media.play)
 app.get('/img/:cedulaId/:name', can_view_imagen, media.img_view)
