@@ -247,6 +247,11 @@ exports.save_postulado = (req,res) ->
 exports.delete_user = (req,res) ->
   console.log "Delete user"
   id = req.params.userId
+  if id is String(req.user._id)
+    handle_error(new Error("No puedo eliminar el usuario actual! " + id), "No puedo eliminar el usuario actual!", res)
+    console.log "delete aborted"
+    return
+    
   Usuario.findById(id, (err, usuario) ->
     cedula = usuario.cedula
     if err?
