@@ -1,6 +1,25 @@
 fs            = require('fs')
 handle_error  = require("./utils").handle_error
 
+exports.get_doc = (req,res) ->
+  cedula = req.params.postuladoId
+  type = req.params.type
+  type_id = req.params.typeId
+  file = req.params.file
+
+  if type_id.indexOf("X") > 0 
+    type_id = type_id.replace("XX","/")
+  
+  path =  __dirname + "/media/postulados/" + cedula + "/" + type + "/" + type_id + "/" + file
+
+  fs.readFile(path, (err, data) ->
+    if err?
+      handle_error(err, "No se pudo leer el video", res)
+    else
+      res.send(data)
+  )
+
+
 exports.view_docs = (req, res) ->
     cedula  = req.params.postuladoId
     type    = req.params.type
@@ -9,6 +28,9 @@ exports.view_docs = (req, res) ->
     console.log cedula
     console.log type
     console.log type_id
+
+    if type_id.indexOf("X") > 0 
+      type_id = type_id.replace("XX","/")
 
     docs_path =  __dirname + "/media/postulados/" + cedula + "/" + type + "/" + type_id
 

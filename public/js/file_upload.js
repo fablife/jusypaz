@@ -159,11 +159,13 @@ function FileUploadCtrl(scope, timeout) {
 
     function uploadComplete(evt) {
         /* This event is raised when the server send back a response */
-        scope.root.delito = evt.target.response   
+        scope.root.delito = JSON.parse(evt.target.response);   
+        scope.root.progressVisible = false;
         alert("Video subido con exito")
     }
 
     function uploadFailed(evt) {
+        scope.root.progressVisible = false;
         alert("Hubo un error al subir el archivo.")
     }
 
@@ -186,7 +188,8 @@ function FileUploadCtrl(scope, timeout) {
 
     function uploadImgComplete(evt) {
         /* This event is raised when the server send back a response */
-        scope.root.postulado = evt.target.response        
+        //scope.root.postulado = evt.target.response;
+        scope.root.postulado = JSON.parse(evt.target.response);
         scope.root.subirImagen = false;
         alert("Imagen subida con exito")
     }
