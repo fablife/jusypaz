@@ -257,12 +257,20 @@ exports.delete_user = (req,res) ->
           handle_error(err, "No puede eliminar un usuario con postulado asociado. Si quiere hacerlo, primero elimine el postulado!", res)
           return
         else
-          usuario.remove((err) ->
+          Usuario.count({admin: true}, (err, count) ->
             if err?
-              handle_error(err, "Error eliminando Usuario con id " + id, res)
+              handle_error(err, 'No pude leer numero de administradores...demasiado arriesgado eliminar usuario y entonces no lo hago...', res)
             else
-              res.send("OK")
-              console.log "Usuario eliminado con éxito"
+              if count > 1
+                  usuario.remove((err) ->
+                    if err?
+                      handle_error(err, "Error eliminando Usuario con id " + id, res)
+                    else
+                      res.send("OK")
+                      console.log "Usuario eliminado con éxito"
+                  )
+              else
+                handle_error(new Error("No puedo eliminar este usuario, es el último administrador!"), "No puedo eliminar este usuario, es el último administrador!", res)
           )
       )
   )

@@ -281,8 +281,8 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
             if (idx > -1) {
                 $scope.usuarios.splice(idx, 1);
             }
-          }).error(function() {
-            $scope.root.error = "Error al eliminar el postulado."; 
+          }).error(function(data) {
+            $scope.root.error = "Error al eliminar el postulado:\n" + data; 
           });
         }
     }
