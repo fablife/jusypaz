@@ -1,11 +1,11 @@
 var app = angular.module('jusypazApp', [
+        'ui.mask',
         'ngAnimate',
         'adminControllers',
         'jusypazFilters',
         'adminServices',
         'ui.bootstrap',
         'ngRoute']);
-
 
 angular.module('jusypazFilters', []).
   filter('newline2br', function() {
@@ -152,6 +152,28 @@ app.config(['$routeProvider',
       });
 }]);
 
+
+app.controller("PingCtrl", function PingCtrl($scope, $http, $timeout) {
+  $scope.connection = true;
+
+  $scope.ping = function() {
+    $timeout(function() {
+      $http.get("/ping")
+        .success(function(data, s) {
+          if (s==204) {
+            $scope.connection = true;
+          }
+        })
+        .error(function(data, s) {
+            $scope.connection = false;
+        });
+        $scope.ping();
+      }, 5000);
+    }
+
+  $scope.ping();
+  
+});
 
 app.controller("ConsultaCtrl", function ConsultaCtrl($scope, $http) {
   $scope.consulta_cedula = function() {
@@ -573,6 +595,10 @@ app.controller("MenuCtrl", function MenuCtrl($scope, $http) {
     location.href = "#/adminUsers";
   }
 
+  $scope.admin_home = function() {
+    location.href = "#/";
+  }
+
   $scope.informes = function() {
     location.href = "#/informes";
   }
@@ -590,7 +616,7 @@ app.controller("MenuCtrl", function MenuCtrl($scope, $http) {
   }
 });
 
-app.controller("ConfigCtrl", function MenuCtrl($scope, $http) {
+app.controller("ConfigCtrl", function ConfigCtrl($scope, $http) {
 
   $scope.show_change = false;
   $scope.invalid_form = false;

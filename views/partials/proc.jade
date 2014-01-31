@@ -8,6 +8,7 @@ div.info
             div.hecho_lista_title
                Hay {{root.proces.length}} procesos para este postulado.
             div.hecho_titulo(ng-class="{selected: $index==root.selectedProcIndex, dirty: proc.dirty}" ng-click="get_proc($index)" ng-repeat="proc in root.proces") {{proc.titulo}}
+              div.delete_item(ng-click="delete_proces(proc)")
 
 
       div.dialog(ng-show="root.create_proc")    
@@ -20,23 +21,20 @@ div.info
          button.buttons(ng-click="cancela_crea_proc()") Cancelar
 
       div.datos_version(ng-show="root.proces.length")
-         h2.info_subtitle proc
+         h2.info_subtitle Proceso 
            div(input-inline-edit="root.proc.titulo" class="inline inline-heading" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="10")
          table.tab_form_table
             tr
                td
-                  label.small_form Relación
+                  label.small_form Fiscalía 
                   div(input-inline-select-pp="root.proc.tipo" on-save="set_proc_dirty()" opciones="root.tipos_proc" ng-focus="edit()" tabindex="15")
                td
-                  label.small_form Imputaciones
-                  div(input-inline-text="root.proc.imputaciones" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="21")
+                  label.small_form Juzgado 
+                  div(input-inline-text="root.proc.juzgado" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="21")
                td
-                  label.small_form Condenas
-                  div(input-inline-text="root.proc.condenas" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="22")            
+                  label.small_form Radicado 
+                  div(input-inline-text="root.proc.radicado" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="22")            
             tr   
                td
-                  label.small_form Absoluciones
-                  div(input-inline-edit="root.proc.absoluciones" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="23")
-               td
-                  label.small_form Investigaciones
-                  div(input-inline-edit="root.proc.investigaciones" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="23")
+                  label.small_form Estado 
+                  div(input-inline-text="root.proc.estado" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="23")

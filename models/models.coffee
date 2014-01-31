@@ -1,3 +1,6 @@
+###################################
+### MODELS FOR THE APPLICATION
+###################################
 mongoose  = require('mongoose')
 
 
@@ -46,7 +49,7 @@ VictimaSchema = new Schema({
     perfil:       { type: String },
     oficio:       { type: String },
     enunciada_por:{ type: String },
-    datos_completos: { type: String }
+    datos_completos: { type: String , default: "No especificado" }
 })
 
 DelitoSchema = new Schema({
@@ -78,6 +81,7 @@ DelitoSchema = new Schema({
   lat:            { type: Number },
   long:           { type: Number },
   participantes:  { type: Array },
+  num_victimas:   { type: Number, default: 0},
   victimas:       { type: Array }
   })
 
@@ -89,37 +93,38 @@ HojaSchema = new Schema({
    lugar_nacimiento: { type: String },
    frente_bec:      { type: String },
    num_desmovil:    { type: String },
-   licencia_cond:   { type: String },
-   pasaporte:       { type: String },
-   salud:           { type: String },
-   clinica:         { type: String },
+   #licencia_cond:   { type: String },
+   #pasaporte:       { type: String },
+   #salud:           { type: String },
+   #clinica:         { type: String },
    otros_nombres:   { type: String },
    estatura:        { type: String },
    peso:            { type: String },
    domicilio:       { type: String },
-   residencia:      { type: String },
+   #residencia:      { type: String },
    fijo:            { type: String },
    celular:         { type: String },
    profesion:       { type: String },
-   militar:         { type: String },
+   #militar:         { type: String },
    grado:           { type: String },
    conyugue:        { type: String },
    madre:           { type: String },
    padre:           { type: String },
    hijos:           { type: String },
    hermanos:        { type: String },
-   cuentas_ahorro:  { type: String },
-   cuentas_corriente: { type: String },
-   tarjetas_credito:  { type: String },
-   cdt:             { type: String },
-   obligaciones_entidades:  { type: String },
-   obligaciones_familiares: { type: String },
-   seguros_vida:    { type: String },
-   inmuebles:       { type: String },
-   muebles:         { type: String },
-   sociedades:      { type: String },
-   otros:           { type: String },
-   bienes_fondo:    { type: String }
+   #cuentas_ahorro:  { type: String },
+   #cuentas_corriente: { type: String },
+   #tarjetas_credito:  { type: String },
+   #cdt:             { type: String },
+   #obligaciones_entidades:  { type: String },
+   #obligaciones_familiares: { type: String },
+   #seguros_vida:    { type: String },
+   #inmuebles:       { type: String },
+   #muebles:         { type: String },
+   #sociedades:      { type: String },
+   #otros:           { type: String },
+   #bienes_fondo:    { type: String }
+   bienes_desc:    { type: String }
 })
 
 FosaSchema = new Schema({
@@ -164,7 +169,7 @@ MenorSchema = new Schema({
   nombres:          { type: String, default: "No especificado" },
   apellidos:        { type: String, default: "No especificado" },
   cedula:           { type: String, required: true },
-  cedula_menor:     { type: String, required: true },
+  cedula_menor:     { type: String, default: "No especificado" },
   alias:            { type: String, default: "No especificado" },
   fecha_ingreso:    { type: Date },
   edad_ingreso:     { type: String, default: "No especificado" },
@@ -183,10 +188,9 @@ ProcesoSchema = new Schema({
   tipo:             { type: String, default: "No especificado" },
   cedula:           { type: String, required: true},
   titulo:           { type: String, required: true}, 
-  imputaciones:     { type: String, default: "No especificado" },
-  condenas:         { type: String, default: "No especificado" },
-  absoluciones:     { type: String, default: "No especificado" },
-  investigaciones:  { type: String, default: "No especificado" }
+  juzgado:          { type: String, default: "No especificado" },
+  radicado:         { type: String, default: "No especificado" },
+  estado:           { type: String, default: "No especificado" },
 })
 
 ParapoliticaSchema = new Schema({
@@ -220,7 +224,7 @@ RelacionesAutoridadesSchema = new Schema({
   narracion:        { type: String, default: "No especificado" },
   rango:            { type: String, default: "No especificado" },
   dependencia:      { type: String, default: "No especificado" },
-  fecha:            { type: Date },
+  fecha:            { type: String, default: "No especificado" },
   pais:             { type: String, default: "Colombia" },
   departamento:     { type: String, default: "Antioquia" },
   municipio:        { type: String, default: "No especificado" },

@@ -1,6 +1,6 @@
 div(class="input_inline_edit_div") 
    if (is_admin)
-      input(class="inline_edit_input" type="text" on-tab="tab()" on-enter="save()" on-blur="blur()" on-esc="cancel()" ng-model="model" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()") 
+      input(class="inline_edit_input" type="text" ui-mask="{{'99/99/9999'}}" on-tab="tab()" on-enter="save()" on-blur="blur()" on-esc="cancel()" ng-model="model" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()") 
       span(ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false")
          span(ng-hide="editMode" ng-click="edit()" ) 
             div(class="inline_edit_text")

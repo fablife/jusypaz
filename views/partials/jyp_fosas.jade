@@ -7,6 +7,7 @@ div.info_wrapper
          div.hecho_lista_title
             Hay {{root.fosas.length}} fosas para este postulado.
          div.hecho_titulo(ng-class="{selected: $index==root.selectedFosaIndex, dirty: fosa.dirty}" ng-click="get_fosa($index)" ng-repeat="fosa in root.fosas") {{fosa.titulo}}
+            div.delete_item(ng-click="delete_fosa(fosa)")
 
 
    div.dialog.create_fosa(ng-show="root.create_fosa")    
@@ -54,10 +55,10 @@ div.info_wrapper
          tr
             td
                label.small_form Pais
-               div(input-inline-edit="root.fosa.pais" on-save="set_fosa_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="21")
+               div(input-inline-select="root.fosa.pais" opciones="root.paises" on-save="set_fosa_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="21")
             td
                label.small_form Departamento
-               div(input-inline-edit="root.fosa.departamento" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="22")
+               div(input-inline-select="root.fosa.departamento" opciones="root.fosa_depts" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="22")
             td
                label.small_form Municipio
                div(input-inline-edit="root.fosa.municipio" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="24")

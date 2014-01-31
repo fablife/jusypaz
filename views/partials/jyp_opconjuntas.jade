@@ -7,11 +7,12 @@ div.info_wrapper
          div.hecho_lista_title
             Hay {{root.op_conjuntas.length}} asuntos de Operaciones Conjuntas para este postulado.
          div.hecho_titulo(ng-class="{selected: $index==root.selectedOp_conjuntaIndex, dirty: op_conjunta.dirty}" ng-click="get_op_conjunta($index)" ng-repeat="op_conjunta in root.op_conjuntas") {{op_conjunta.titulo}}
+            div.delete_item(ng-click="delete_op_conjunta(op_conjunta)")
 
 
    div.dialog.create_op_conjunta(ng-show="root.create_op_conjunta")    
       h2.info_subtitle Agregar nuevo asunto de Operaciones Conjuntas
-      label.form Titulo de la Relacion Autoridades
+      label.form Nombre de la Operación Conjunta 
       br
       input.dialog_input(ng-model="root.new_op_conjunta_title" name="root.new_op_conjunta_title" required type="text")
       br

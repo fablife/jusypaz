@@ -6,7 +6,8 @@ div.info_wrapper
       div.hecho_lista(ng-show="root.delitos.length") 
          div.hecho_lista_title
             Hay {{root.delitos.length}} delitos para este postulado.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos") {{delito.titulo}}
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos") {{delito.titulo}} 
+            div.delete_item(ng-click="delete_delito(delito)")
 
 
    div.dialog.create_delito(ng-show="root.create_delito")    
@@ -72,20 +73,17 @@ div.info_wrapper
                div(input-inline-edit="root.delito.hora_mencion" on-save="set_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="12")
             td
                label.small_form Hecho enunciado con/sin responsabilidad
-               div(input-inline-edit="root.delito.responsabilidad" on-save="set_dirty()" ng-focus="edit()" tabindex="13")
+               div(input-inline-radio="root.delito.responsabilidad" on-save="set_dirty()" ng-focus="edit()" tabindex="13")
             td
                label.small_form Hecho confesado
-               div(input-inline-edit="root.delito.confesado" on-save="set_dirty()" ng-focus="edit()" tabindex="14")
+               div(input-inline-radio="root.delito.confesado" on-save="set_dirty()" ng-focus="edit()" tabindex="14")
          tr
             td
                label.small_form Narración del hecho
                div(input-inline-text="root.delito.narracion" on-save="set_dirty()" ng-focus="edit()" tabindex="15")
             td
-               label.small_form Clasificación del delito
-               div(input-inline-text="root.delito.clasificacion" on-save="set_dirty()" ng-focus="edit()" tabindex="16")
-            td
                label.small_form Fecha ocurrencia del hecho
-               div(input-inline-date="root.delito.fecha_ocurrencia" on-save="set_dirty()" ng-focus="edit()" tabindex="17")
+               div(input-inline-text="root.delito.fecha_ocurrencia" on-save="set_dirty()" ng-focus="edit()" tabindex="17")
 
       h2.info_subtitle Georeferenciación
       file-upload.uploadContainer.inline(path="'delitos'" path_id="root.delito._id + '/map'" post_id="root.postulado_id")
@@ -99,10 +97,10 @@ div.info_wrapper
          tr
             td
                label.small_form Pais
-               div(input-inline-edit="root.delito.pais" on-save="set_dirty()" ng-focus="edit()" tabindex="18")
+               div(input-inline-select="root.delito.pais" opciones="root.paises" on-save="set_dirty()" ng-focus="edit()" tabindex="18")
             td
                label.small_form Departamento
-               div(input-inline-edit="root.delito.dept" on-save="set_dirty()" ng-focus="edit()" tabindex="19")
+               div(input-inline-select="root.delito.dept" opciones="root.delito_depts" on-save="set_dirty()" ng-focus="edit()" tabindex="19")
             td
                label.small_form Municipio
                div(input-inline-edit="root.delito.municipio" on-save="set_dirty()" ng-focus="edit()" tabindex="20")
@@ -134,10 +132,11 @@ div.info_wrapper
 
       h2.info_subtitle Autores participantes
       button.add_action_small(ng-click="add_participante()")
-      table.tab_form_table.addition(ng-repeat="participante in root.delito.participantes")
+      table.tab_form_table.addition(ng-show="root.delito.participantes.length > 0" ng-repeat="participante in root.delito.participantes")
          tr
             td
                label.small_form Nombres
+               button.mleft10.bordered.action_button(ng-click="remove_participante(participante)") Eliminar este participante
                div(input-inline-edit="participante.nombres" on-save="set_dirty()" ng-focus="edit()" tabindex="31")
             td
                label.small_form Apellidos
@@ -190,12 +189,16 @@ div.info_wrapper
                   div(input-inline-edit="otro.participacion" on-save="set_dirty()" ng-focus="edit()" tabindex="104")
 
       h2.info_subtitle Victimas
-      div.victimas Numero de victimas: {{ root.delito.victimas.length }}
+      label.small_form Numbero de victimas 
+      input.quick_input(ng-model="root.delito.num_victimas" on-change="set_dirty()" tabindex="120")
+      br
+
       button.add_action_small(ng-click="add_victima()")
       table.tab_form_table.additions(ng-repeat="v in root.delito.victimas")
          tr
             td
                label.small_form Nombre de la victima
+               button.mleft10.bordered.action_button(ng-click="remove_victima(v)") Eliminar esta victima
                div(input-inline-edit="v.nombres" on-save="set_dirty()" ng-focus="edit()" tabindex="200")
             td
                label.small_form Apellidos de la victima
@@ -211,8 +214,8 @@ div.info_wrapper
                label.small_form Victima enunciada por el postulado o por fiscalía
                div(input-inline-edit="v.enunciada_por" on-save="set_dirty()" ng-focus="edit()" tabindex="205")
             td
-               label.small_form Victima enunciada por el postulado o por fiscalía
-               div(input-inline-edit="v.datos_completos" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+               label.small_form Datos completos 
+               div(input-inline-text="v.datos_completos" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
 
    div.file_browser(ng-show="showFiles")
       span.close_button.right

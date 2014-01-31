@@ -9,7 +9,9 @@
     , "passport":"*"
     , "coffee-script":"*"
     , "coffee-trace":"*"
+    , "connect":"*"
     , "connect-flash":"*"
+    , "connect-mongo":"*"
     , "mongoose":"*"
     , "multiparty":"*"
   }

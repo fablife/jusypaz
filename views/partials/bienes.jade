@@ -8,6 +8,7 @@ div.info
             div.hecho_lista_title
                Hay {{root.bienes.length}} bienes para este postulado.
             div.hecho_titulo(ng-class="{selected: $index==root.selectedBienIndex, dirty: bien.dirty}" ng-click="get_bien($index)" ng-repeat="bien in root.bienes") {{bien.titulo}}
+              div.delete_item(ng-click="delete_bien(bien)")
 
 
       div.dialog(ng-show="root.create_bien")    
@@ -41,5 +42,5 @@ div.info
                   label.small_form Avalúo acción social 
                   div(input-inline-edit="root.bien.avaluo_acc_social" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="22")            
                td
-                  label.small_form observaciones 
-                  div(input-inline-date="root.bien.observaciones" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")
+                  label.small_form Observaciones 
+                  div(input-inline-text="root.bien.observaciones" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")

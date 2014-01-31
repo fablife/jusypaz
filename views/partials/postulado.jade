@@ -1,9 +1,5 @@
 div(ng-controller="PostuladoCtrl") 
     h1.inline Postulado
-    if (is_admin)
-      div.actions.right
-        button.buttons.action_button(ng-click="save()") Salvar
-        //-button.buttons.action_button(ng-click="cancel()") Cancelar
     div.postulado_info
       div.postulado_img(ng-controller="FileUploadCtrl" ng-mouseenter="show_buttons()" ng-mouseleave="hide_buttons()" )
         button.upload_button(ng-show="root.show_buttons" ng-click="upload_pic()") Busca imagen
@@ -13,19 +9,24 @@ div(ng-controller="PostuladoCtrl")
         input(style="display: none" type="file" ng-model-instant id="fileToUpload" onchange="angular.element(this).scope().setFiles(this)")
         //-label.inline.small_text(ng-show="root.subirImagen" id="uploadFileName")
         
+      if (is_admin)
+        div.top_actions.right
+          button.buttons.action_button(ng-click="save()") Salvar
+          //-button.buttons.action_button(ng-click="cancel()") Cancelar
+
       div.info_general
         label Nombres
-        div(input-inline-edit="root.postulado.nombres" tabindex="1")
+        div(input-readonly="root.postulado.nombres" tabindex="1")
         label Apellidos
-        div(input-inline-edit="root.postulado.apellidos" tabindex="2")
+        div(input-readonly="root.postulado.apellidos" tabindex="2")
       div.info_general
         label Cédula
-        div(input-inline-edit="root.postulado.cedula" tabindex="3")
+        div(input-readonly="root.postulado.cedula" tabindex="3")
         label Fecha de nacimiento
-        div(input-inline-date="root.postulado.fecha_nacimiento" tabindex="4")
+        div(input-readonly-date="root.postulado.fecha_nacimiento" tabindex="4")
       div.info_general
         label Ciudad
-        div(input-inline-edit="root.postulado.ciudad" tabindex="5")
+        div(input-readonly="root.postulado.ciudad" tabindex="5")
 
     tabset.info_tabs
       tab.info_tab.active(heading="Hoja de Vida" select="hv()")

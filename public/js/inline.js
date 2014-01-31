@@ -41,7 +41,13 @@ app.directive('onTab', function() {
     });
   };
 });
-// Inline edit directive
+
+app.directive('inputReadonly', function($timeout) {
+    return get_inline_readonly('=inputReadonly', "text");
+});
+app.directive('inputReadonlyDate', function($timeout) {
+    return get_inline_readonly('=inputReadonlyDate', "date");
+});
 // Inline edit directive
 app.directive('tabFormInputInlineEdit', function($timeout) {
     return get_inline_edit_widget($timeout, "text", "=tabFormInputInlineEdit", 'partials/tab-form-input-inline-edit');
@@ -67,6 +73,10 @@ app.directive('inputInlineSelectMenorStatus', function($timeout) {
     return get_inline_select_widget($timeout, "select", '=inputInlineSelectMenorStatus', 'partials/input-inline-select-menor');
 });
 
+app.directive('inputInlineNumber', function($timeout) {
+    return get_inline_edit_widget($timeout, "number", '=inputInlineNumber', 'partials/input-inline-number');
+});
+
 app.directive('inputInlineEdit', function($timeout) {
     return get_inline_edit_widget($timeout, "text", '=inputInlineEdit', 'partials/input-inline-edit');
 });
@@ -86,6 +96,22 @@ app.directive('inputInlinePassword', function($timeout) {
 app.directive('inputInlineRadio', function($timeout) {
     return get_inline_edit_widget($timeout, "radio", '=inputInlineRadio', 'partials/input-inline-radio');
 });
+
+get_inline_readonly = function(model, type) { 
+  
+  var template = 'partials/input-readonly';
+
+  if (type == "date") {
+    template = 'partials/input-readonly-date'
+  }
+
+  return {
+    scope: {
+      model: model,
+    },
+    templateUrl: template
+   } 
+};
 
 get_inline_select_widget = function($timeout, type, model, template) { 
 
@@ -146,6 +172,19 @@ get_inline_edit_widget = function($timeout, type, model, template) {
 
       scope.edit = function() {
         scope.editMode = true;
+        if (type=="date" && !scope.formatted) {
+          date = "01/01/1970";
+          if (scope.model) {
+            date = new Date(scope.model);
+          } else {
+            date = new Date.now();
+          }
+          m = date.getMonth() + 1;
+          d = date.getDate();
+          y = date.getYear();
+          scope.model = "" + d + "/"+ m + "/" + y;
+          scope.formatted = true;
+        }
         previousValue = scope.model;
 
         $timeout(function() {
@@ -160,6 +199,7 @@ get_inline_edit_widget = function($timeout, type, model, template) {
         scope.editMode = false;
         if (previousValue != scope.model) {
           if (type=="date") {
+            console.log(scope.model);
             scope.check_date_format();
           }
           scope.handleSave({value: scope.model});
@@ -181,8 +221,14 @@ get_inline_edit_widget = function($timeout, type, model, template) {
         scope.editMode = false;
       };
       scope.check_date_format = function() {
-          if (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(scope.model)) {
+          var date = scope.model;
+          d = date.substring(0,2);
+          m = date.substring(2,4);
+          y = date.substring(4);
+          var new_model = "" + d + "/" + m + "/" +y;
+          if (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(new_model)) {
             scope.date_invalid = false;
+
           } else {
             scope.date_invalid = true;
           } 

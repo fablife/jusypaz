@@ -1,3 +1,6 @@
+########################################
+## ROUTES
+########################################
 Postulado   = require('./models/models').Postulado
 Usuario     = require('./models/models').User
 Hoja        = require("./models/models").Hoja
@@ -18,6 +21,9 @@ convert_date = require("./utils").convert_date
 
 fs = require('fs')
 multiparty = require('multiparty')
+
+exports.ping = (req, res) ->
+  res.send("OK", 204)
 
 exports.index = (req,res) ->
   res.render('index', {message: req.flash('loginerror')})
@@ -356,9 +362,45 @@ exports.jyp_delitos = (req, res) ->
   console.log "GET informacion de delitos justicia y paz"
   getDelitos(req, res)
 
+exports.del_delito = (req, res) ->
+  console.log "delete delito"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  Delito.findOne({'cedula':p, _id: d}, (err, delito) ->
+    if err?
+      handle_error(err, "Error eliminando delito: no encontrado", res)
+    else
+      if (delito)
+        delito.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando delito", res)
+          else
+            console.log "Delito con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 ########################################################
 ## PROCESOS
 ########################################################
+exports.del_proces = (req, res) ->
+  console.log "delete proces"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  Proceso.findOne({'cedula':p, _id: d}, (err, proc) ->
+    if err?
+      handle_error(err, "Error eliminando proceso: no encontrado", res)
+    else
+      if (proc)
+        proc.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando proceso", res)
+          else
+            console.log "Proceso con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 exports.create_proces = (req, res) ->
   console.log "create proces"
   console.log(req.body)
@@ -382,19 +424,20 @@ exports.save_proces = (req, res) ->
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(error, "Error accedendo a postulado para salvar proceso: Postulado no encontrado")
-    #fosa = req.body
-    #fosa.postulado_nombre = p.nombres + " " + p.apellidos
-    obj = req.body
-    #date = obj.fecha_ingreso
-    #obj.fecha_ingreso  = convert_date(date)
-    Proceso.update({'_id': id }, obj, (err) ->
-      if err?
-        handle_error(err, "Error salvando menor.", res)
-        return
-      res.send("proceso salvado ok")
-      console.log("proceso salvado con exito")
-    )
+      handle_error(err, "Error accedendo a postulado para salvar proceso: Postulado no encontrado", res)
+    else
+       #fosa = req.body
+       #fosa.postulado_nombre = p.nombres + " " + p.apellidos
+       obj = req.body
+       #date = obj.fecha_ingreso
+       #obj.fecha_ingreso  = convert_date(date)
+       Proceso.update({'_id': id }, obj, (err) ->
+         if err?
+           handle_error(err, "Error salvando menor.", res)
+           return
+         res.send("proceso salvado ok")
+         console.log("proceso salvado con exito")
+       )
   )
 
 exports.proces = (req, res) ->
@@ -402,6 +445,7 @@ exports.proces = (req, res) ->
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a procesos."), "Postulado con cedula " + p + " no encontrado." , res)  
+    return
   Proceso.find({'cedula':p}, (err, menores) ->
     if err?
       handle_error(err, "Error accedendo a procesos.", res)
@@ -414,12 +458,30 @@ exports.proces = (req, res) ->
 ########################################################
 ## MENORES
 ########################################################
+exports.del_menor = (req, res) ->
+  console.log "delete menor"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  Menor.findOne({'cedula':p, _id: d}, (err, m) ->
+    if err?
+      handle_error(err, "Error eliminando menor: no encontrado", res)
+    else
+      if (m)
+        m.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando menor", res)
+          else
+            console.log "Menor con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 exports.create_menor = (req, res) ->
   console.log "create menor" 
   console.log(req.body)
   p = req.params.postuladoId
   m = new Menor()
-  m.cedula_menor = req.body.cedula
+  m.nombres = req.body.nombres
   m.cedula = p
   m.save((err) ->
     if err?
@@ -438,6 +500,7 @@ exports.save_menor = (req, res) ->
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
       handle_error(error, "Error accedendo a postulado para salvar menor: Postulado no encontrado")
+      return
     #fosa = req.body
     #fosa.postulado_nombre = p.nombres + " " + p.apellidos
     obj = req.body
@@ -468,6 +531,24 @@ exports.menores = (req, res) ->
 ########################################################
 ## BIENES
 ########################################################
+exports.del_bien = (req, res) ->
+  console.log "delete bien"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  Bien.findOne({'cedula':p, _id: d}, (err, b) ->
+    if err?
+      handle_error(err, "Error eliminando bien: no encontrado", res)
+    else
+      if (b)
+        b.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando bien", res)
+          else
+            console.log "Bien con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 exports.create_bien = (req, res) ->
   console.log "create bien"
   console.log(req.body)
@@ -529,6 +610,24 @@ exports.bienes = (req, res) ->
 ########################################################
 ## OPERACIONES CONJUNTAS
 ########################################################
+exports.del_op_conjunta = (req, res) ->
+  console.log "delete op_conjunta"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  OperacionesConjuntas.findOne({'cedula':p, _id: d}, (err, op) ->
+    if err?
+      handle_error(err, "Error eliminando operación conjunta: no encontrado", res)
+    else
+      if (op)
+        op.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando operación conjunta", res)
+          else
+            console.log "Operación conjunta con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 exports.create_op_conjunta = (req, res) ->
   console.log "get empty op_conjunta"
   console.log(req.body)
@@ -580,6 +679,24 @@ exports.jyp_op_conjunta = (req, res) ->
 ########################################################
 ## RELACIONES AUTORIDADES
 ########################################################
+exports.del_relaut = (req, res) ->
+  console.log "delete relaut"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  RelacionesAutoridades.findOne({'cedula':p, _id: d}, (err, ra) ->
+    if err?
+      handle_error(err, "Error eliminando relación autoridad: no encontrado", res)
+    else
+      if (ra)
+        ra.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando relación autoridad", res)
+          else
+            console.log "Relación autoridad con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 exports.create_relaut = (req, res) ->
   console.log "get empty RELAUT"
   console.log(req.body)
@@ -631,6 +748,24 @@ exports.jyp_relaut = (req, res) ->
 ########################################################
 ## PP
 ########################################################
+exports.del_pp = (req, res) ->
+  console.log "delete parapolitica"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  Parapolitica.findOne({'cedula':p, _id: d}, (err, pp) ->
+    if err?
+      handle_error(err, "Error eliminando parapolitica: no encontrado", res)
+    else
+      if (pp)
+        pp.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando parapolitica", res)
+          else
+            console.log "Parapolitica con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 exports.create_pp = (req, res) ->
   console.log "get empty pp"
   console.log(req.body)
@@ -681,6 +816,24 @@ exports.jyp_pp = (req, res) ->
 ########################################################
 ## FOSAS
 ########################################################
+exports.del_fosa = (req, res) ->
+  console.log "delete fosa"
+  p = req.params.postuladoId
+  d = req.params.itemId
+  Fosa.findOne({'cedula':p, _id: d}, (err, f) ->
+    if err?
+      handle_error(err, "Error eliminando fosa: no encontrado", res)
+    else
+      if (f)
+        f.remove((err) ->
+          if err?
+            handle_error(err, "Error eliminando fosa", res)
+          else
+            console.log "Fosa con id " + d + " eliminado con éxito"
+            res.send("OK", 204)
+        )
+  )
+
 exports.create_fosa = (req, res) ->
   console.log "get empty fosa"
   console.log(req.body)

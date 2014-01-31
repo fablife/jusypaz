@@ -16,6 +16,7 @@ html(ng-app="jusypazApp" manifest="/cache.manifest" type="text/cache-manifest")
     script(src='/js/ad_ctrl.js')
     script(src='/js/postulado_ctrl.js')
     script(src='/js/inline.js')
+    script(src='/js/mask.js')
     script(src='/js/file_upload.js')
     script(src='/js/upload.js')
     script(src='/js/d3.v3.min.js')
@@ -24,10 +25,15 @@ html(ng-app="jusypazApp" manifest="/cache.manifest" type="text/cache-manifest")
 
   body
     div.navigation_header.centered
-      img.header_logo(width="40px", height="40px", src="/img/logo_small.png")
+      img.header_logo(src="/img/siar_small.png")
 
-      div.inline.cedula_input_div(ng-controller="ConsultaCtrl")
+      div.inline.cedula_input_div(ng-controller="ConsultaCtrl") 
+        p.inline.title_bar Buscar postulado:
         input.cedula_input(ng-model="cedula" required on-enter="consulta_cedula()")
+
+      div.inline.ping(ng-controller="PingCtrl")
+        div.inline.connection_ok(ng-show="connection")
+        div.inline.no_connection(ng-hide="connection")
       
       div.header_actions.inline(ng-controller="MenuCtrl")
         div.menu_wrapper.inline
@@ -35,6 +41,7 @@ html(ng-app="jusypazApp" manifest="/cache.manifest" type="text/cache-manifest")
               li.header_menu_item(ng-mouseleave="hide_menu()" ng-mouseover="animate_menu()")
                 img.inline(width="24" src="/img/conf.png")
                 ul.header_submenu(ng-show="show_submenu")
+                  li.header_submenu_item(ng-click="admin_home()") Menu principal 
                   li.header_submenu_item(ng-click="admin_postulados()")  Administración Postulados
                   li.header_submenu_item(ng-click="admin_users()") Administración Usuarios 
                   li.header_submenu_item(ng-click="informes()") Informes

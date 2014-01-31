@@ -1,3 +1,6 @@
+########################################
+### MAIN APP
+########################################
 require('coffee-script')
 require('coffee-trace')
 flash     = require('connect-flash')
@@ -8,6 +11,8 @@ config    = require('./config')
 urls      = require('./urls')
 routes    = require('./routes')
 media     = require('./media')
+
+MongoStore = require('connect-mongo')(express)
 User      = require('./models/models').User
 Postulado = require('./models/models').Postulado
 
@@ -126,7 +131,11 @@ app.configure( () ->
   #app.use(express.bodyParser())
   app.use(express.methodOverride())
   app.use(express.cookieParser('terces'))
-  app.use(express.session())
+  app.use(express.session({
+    secret:'siarsecret',
+    maxAge: new Date(Date.now() + 86400000), #1 day
+    store: new MongoStore( {db:mongoose.connections[0].db})
+  }))
   app.use(express.static(__dirname + '/public'))
   app.use(flash())
   app.use(passport.initialize())
@@ -197,6 +206,7 @@ app.post '/login', (req, res, next) ->
 
 app.all('*',ensureAuthenticated)
 
+app.get('/ping', routes.ping)
 app.get('/logout', routes.logout)
 app.get('/inicio', routes.inicio)
 app.get('/tablero', routes.tablero)
@@ -257,27 +267,35 @@ app.put('/admin/postulados/:postuladoId/hv',can_access,  routes.save_hv)
 
 app.put('/admin/postulados/:postuladoId/jyp_fosa/c',can_access,  routes.create_fosa)
 app.put('/admin/postulados/:postuladoId/jyp_fosa/u',can_access,  routes.save_fosa)
+app.del('/admin/postulados/:postuladoId/jyp_fosa/:itemId',can_access,  routes.del_fosa)
 
 app.put('/admin/postulados/:postuladoId/jyp_parapolitica/c',can_access,  routes.create_pp)
 app.put('/admin/postulados/:postuladoId/jyp_parapolitica/u',can_access,  routes.save_pp)
+app.del('/admin/postulados/:postuladoId/jyp_parapolitica/:itemId',can_access,  routes.del_pp)
 
 app.put('/admin/postulados/:postuladoId/jyp_relaut/c',can_access,  routes.create_relaut)
 app.put('/admin/postulados/:postuladoId/jyp_relaut/u',can_access,  routes.save_relaut)
+app.del('/admin/postulados/:postuladoId/jyp_relaut/:itemId',can_access,  routes.del_relaut)
 
 app.put('/admin/postulados/:postuladoId/jyp_op_conjunta/c',can_access,  routes.create_op_conjunta)
 app.put('/admin/postulados/:postuladoId/jyp_op_conjunta/u',can_access,  routes.save_op_conjunta)
+app.del('/admin/postulados/:postuladoId/jyp_op_conjunta/:itemId',can_access,  routes.del_op_conjunta)
 
 app.put('/admin/postulados/:postuladoId/jyp_delito/c',can_access,  routes.create_delito)
 app.put('/admin/postulados/:postuladoId/jyp_delito/u',can_access,  routes.save_delito)
+app.del('/admin/postulados/:postuladoId/jyp_delito/:itemId',can_access,  routes.del_delito)
 
 app.put('/admin/postulados/:postuladoId/bienes/c',can_access,  routes.create_bien)
 app.put('/admin/postulados/:postuladoId/bienes/u',can_access,  routes.save_bien)
+app.del('/admin/postulados/:postuladoId/bienes/:itemId',can_access,  routes.del_bien)
 
 app.put('/admin/postulados/:postuladoId/menores/c',can_access,  routes.create_menor)
 app.put('/admin/postulados/:postuladoId/menores/u',can_access,  routes.save_menor)
+app.del('/admin/postulados/:postuladoId/menores/:itemId',can_access,  routes.del_menor)
 
 app.put('/admin/postulados/:postuladoId/proces/c',can_access,  routes.create_proces)
 app.put('/admin/postulados/:postuladoId/proces/u',can_access,  routes.save_proces)
+app.del('/admin/postulados/:postuladoId/proces/:itemId',can_access,  routes.del_proces)
 
 app.get('/admin/postulados/postulados.json', ensureAdmin, routes.postulados)
 

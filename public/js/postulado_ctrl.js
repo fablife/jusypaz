@@ -1,6 +1,5 @@
 //app.controller("PostuladoCtrl", function PostuladoCtrl(PostuladoService, $scope, $routeParams, $http){
 app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $http){
-  $scope.root     = {};
   $scope.maintab  = {};
   $scope.subtab   = {};
   $scope.root.postulado_id    = $routeParams.postuladoId;
@@ -19,8 +18,30 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.root.tipos_proc = [{nombre: "Justicia y Paz"}, {nombre: "Justicia ordinaria"}];
   $scope.root.tipos_version = [{nombre: "Individual"}, {nombre: "Conjunta"}];
   $scope.root.grupos_armados = [{nombre: "Ejercito"}, {nombre: "Policia"}, {nombre: "Armada"}, {nombre: "Fuerza aérea"}, {nombre: "Autodefensa"}];
+  $scope.root.civiles = [{nombre: "Soltero"}, {nombre: "Casado"}, {nombre: "Unión Marital de Hecho"}];
+  $scope.root.paises = [{nombre: "Colombia"}, {nombre: "Panamá"}];
+  $scope.root.colombia_depts = [{nombre: "Amazonas"}, {nombre: "Antioquia"}, {nombre: "Arauca"}, {nombre: "Atlántico"}, {nombre: "Bolivar"}, {nombre: "Boyacá"}, {nombre: "Caldas"}, {nombre: "Caquetá"}, {nombre: "Casanare"}, {nombre: "Cauca"}, {nombre: "Cesar"}, {nombre: "Chocó"}, {nombre: "Córdoba"}, {nombre: "Cundinamarca"}, {nombre: "Guainía"}, {nombre: "Guaviare"}, {nombre: "Huila"}, {nombre: "La Guajira"}, {nombre: "Magdalena"}, {nombre: "Meta"}, {nombre: "Nariño"}, {nombre: "Norte de Santander"}, {nombre: "Putumayo"}, {nombre: "Quindío"}, {nombre: "Risaralda"}, {nombre: "San Andrés y Providencia"}, {nombre: "Santander"}, {nombre: "Sucre"}, {nombre: "Tolima"}, {nombre: "Valle del Cauca"}, {nombre: "Vaupés"}, {nombre: "Vichada"}];
+  $scope.root.panama_depts = [{nombre: "Panamá - Otros"}];
+  $scope.root.fosa_depts = $scope.root.colombia_depts;
+  $scope.root.delito_depts = $scope.root.colombia_depts;
 
-  console.log("postulado ctrl");
+  $scope.$watch('root.fosa.pais', function (newVal, oldVal, scope) {
+    if(newVal == "Panamá") { 
+      $scope.root.fosa_depts = $scope.root.panama_depts;
+      $scope.root.fosa.departamento = $scope.root.panama_depts[0].nombre;
+    } else if (newVal="Colombia") {
+      $scope.root.fosa_depts = $scope.root.colombia_depts;
+    }
+  });
+
+  $scope.$watch('root.delito.pais', function (newVal, oldVal, scope) {
+    if(newVal == "Panamá") { 
+      $scope.root.delito_depts = $scope.root.panama_depts;
+      $scope.root.delito.dept = $scope.root.panama_depts[0].nombre;
+    } else if (newVal="Colombia") {
+      $scope.root.delito_depts = $scope.root.colombia_depts;
+    }
+  });
   
   $scope.calc_age = function(dateString) {
     var birthday = +new Date(dateString);
@@ -67,7 +88,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.view_docs = function(area, id) {
     $http.get('/postulados/' + $scope.root.postulado_id + "/view_docs/" + area + "/" + id)
       .success(function(files, status, headers, config) {
-            console.log(files);
+            //console.log(files);
             $scope.showFiles = true;
             $scope.root.files = files;
             //$scope.root.postulado = postulado[0];            
@@ -86,7 +107,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
   $http.get('/postulados/' + $scope.root.postulado_id )
         .success(function(postulado, status, headers, config) {
-            console.log(postulado[0]);
+            //console.log(postulado[0]);
             $scope.root.postulado = postulado[0];            
         })
         .error(function(data, status, headers, config){
@@ -96,7 +117,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   if (!$scope.root.codigos) {
     $http.get('/codigopenal/')
             .success(function(codigos, status, headers, config) {
-            console.log(codigos);
+            //console.log(codigos);
             $scope.root.codigos = codigos;
         })
         .error(function(data, status, headers, config){
@@ -130,6 +151,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }    
   }
 
+
   /*************************************************************************
     DELITOS
   *************************************************************************/
@@ -144,6 +166,19 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     p.datos_completos = "No especificado";
 
     $scope.root.delito.victimas.push(p);
+  }
+
+  $scope.remove_victima = function(v) {
+      var idx = -1;
+      for (var i in $scope.root.delito.victimas) {
+         if ($scope.root.delito.victimas[i] === v) {
+             idx = i;
+             break;
+         }
+      }
+      if (idx > -1) {
+        $scope.root.delito.victimas.splice(idx, 1);
+      }
   }
 
   $scope.add_participante = function() {
@@ -165,6 +200,19 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     $scope.root.delito.participantes.push(p);
   }
 
+  $scope.remove_participante = function(p) {
+      var idx = -1;
+      for (var i in $scope.root.delito.participantes) {
+         if ($scope.root.delito.participantes[i] === p) {
+             idx = i;
+             break;
+         }
+      }
+      if (idx > -1) {
+        $scope.root.delito.participantes.splice(idx, 1);
+      }
+  }
+
   $scope.add_otro = function(participante) {
     p = {};
     p.nombres         = "No especificado";
@@ -182,12 +230,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_delito = function() {
     $scope.root.create_delito = false;
-    console.log($scope.root.newdelitotitle);
+    //console.log($scope.root.newdelitotitle);
     var json = '{ "titulo": "' + $scope.root.newdelitotitle + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_delito/c", json).
      success(function(data, status, headers, config) {
       $scope.root.delito = data;
-      console.log($scope.root.delito);
+      //console.log($scope.root.delito);
       $scope.root.newdelitotitle = "";
       $scope.root.delitos.push($scope.root.delito);
       $scope.root.selectedDelitoIndex = $scope.root.delitos.length -1;
@@ -199,7 +247,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_delito = function() {
     $scope.root.create_delito = false;
-    console.log($scope.root.newdelitotitle);
+    //console.log($scope.root.newdelitotitle);
     $scope.root.newdelitotitle = "";
   }  
   
@@ -218,13 +266,13 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información delito salvada con éxito"; 
             $scope.root.delito.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información del delito.");
+            //console.log("Error al salvar la información del delito.");
             $scope.root.error = "Error al salvar la información del delito."; 
         });
   }
 
   $scope.jyp_delitos = function() {
-    console.log ("jyp_delitos selected");
+    //console.log ("jyp_delitos selected");
     if ($scope.maintab.active == "hv") {
       return;
     }
@@ -236,8 +284,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         $scope.root.delitos = data;      
         $scope.root.delito = $scope.root.delitos[0];
         $scope.root.selectedDelitoIndex = 0;
-        console.log($scope.root.delitos);
-        console.log($scope.root.delitos.length);
+        //console.log($scope.root.delitos);
+        //console.log($scope.root.delitos.length);
       } else {
         $scope.root.delitos = [];
       }
@@ -247,6 +295,32 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     }); 
   }
 
+  $scope.delete_delito = function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/jyp_delito/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Delito borrado con éxito";
+              var idx = -1;
+              for (var i in $scope.root.delitos) {
+                 if ($scope.root.delitos[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.delitos.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
+  }
 /*************************************************************************
     OPERACIONES CONJUNTAS
   *************************************************************************/
@@ -257,12 +331,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_op_conjunta = function() {
     $scope.root.create_op_conjunta = false;
-    console.log($scope.root.new_op_conjunta_title);
+    //console.log($scope.root.new_op_conjunta_title);
     var json = '{ "titulo": "' + $scope.root.new_op_conjunta_title + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_op_conjunta/c", json).
      success(function(data, status, headers, config) {
       $scope.root.op_conjunta = data;
-      console.log($scope.root.op_conjunta);
+      //console.log($scope.root.op_conjunta);
       $scope.root.new_op_conjunta_title = "";
       $scope.root.op_conjuntas.push($scope.root.op_conjunta);
       $scope.root.selectedOp_conjuntaIndex = $scope.root.op_conjuntas.length -1;
@@ -274,7 +348,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_op_conjunta = function() {
     $scope.root.create_op_conjunta = false;
-    console.log($scope.root.new_op_conjunta_title);
+    //console.log($scope.root.new_op_conjunta_title);
     $scope.root.new_op_conjunta_title = "";
   }  
   
@@ -293,13 +367,13 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información operación conjunta salvada con éxito"; 
             $scope.root.op_conjunta.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información de la operación conjunta.");
+            //console.log("Error al salvar la información de la operación conjunta.");
             $scope.root.error = "Error al salvar la información de la operación conjunta."; 
         });
   }
 
   $scope.jyp_op_conjuntas = function() {
-    console.log ("jyp_op_conjuntas selected");
+    //console.log ("jyp_op_conjuntas selected");
     $scope.maintab.active = "jyp";
     $scope.subtab.active = "jyp_op_conjuntas";
     $http.get('/postulados/' + $scope.root.postulado_id + "/jyp_op_conjunta")
@@ -307,8 +381,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.op_conjuntas = data;      
       $scope.root.op_conjunta = $scope.root.op_conjuntas[0];
       $scope.root.selectedOp_conjuntaIndex = 0;
-      console.log($scope.root.op_conjuntas);
-      console.log($scope.root.op_conjuntas.length);
+      //console.log($scope.root.op_conjuntas);
+      //console.log($scope.root.op_conjuntas.length);
     })
     .error(function(data, status, headers, config){
         $scope.root.error = "Error recibiendo op_conjuntas de postulado."; 
@@ -316,6 +390,32 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   }
 
 
+  $scope.delete_op_conjunta= function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/jyp_op_conjunta/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Operación conjunta borrada con éxito";
+              var idx = -1;
+              for (var i in $scope.root.op_conjuntas) {
+                 if ($scope.root.op_conjuntas[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.op_conjuntas.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
+  }
 
 
 /*************************************************************************
@@ -328,12 +428,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_relaut = function() {
     $scope.root.create_relaut = false;
-    console.log($scope.root.new_relaut_title);
+    //console.log($scope.root.new_relaut_title);
     var json = '{ "titulo": "' + $scope.root.new_relaut_title + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_relaut/c", json).
      success(function(data, status, headers, config) {
       $scope.root.relaut = data;
-      console.log($scope.root.relaut);
+      //console.log($scope.root.relaut);
       $scope.root.new_relaut_title = "";
       $scope.root.relauts.push($scope.root.relaut);
       $scope.root.selectedRelautIndex = $scope.root.relauts.length -1;
@@ -345,7 +445,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_relaut = function() {
     $scope.root.create_relaut = false;
-    console.log($scope.root.new_relaut_title);
+    //console.log($scope.root.new_relaut_title);
     $scope.root.new_relaut_title = "";
   }  
   
@@ -364,13 +464,13 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información relación autoridades salvada con éxito"; 
             $scope.root.relaut.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información de la relaut.");
+            //console.log("Error al salvar la información de la relaut.");
             $scope.root.error = "Error al salvar la información de la relación autoridades."; 
         });
   }
 
   $scope.jyp_relauts = function() {
-    console.log ("jyp_relauts selected");
+    //console.log ("jyp_relauts selected");
     $scope.maintab.active = "jyp";
     $scope.subtab.active = "jyp_relauts";
     $http.get('/postulados/' + $scope.root.postulado_id + "/jyp_relaut")
@@ -378,14 +478,42 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.relauts = data;      
       $scope.root.relaut = $scope.root.relauts[0];
       $scope.root.selectedRelautIndex = 0;
-      console.log($scope.root.relauts);
-      console.log($scope.root.relauts.length);
+      //console.log($scope.root.relauts);
+      //console.log($scope.root.relauts.length);
     })
     .error(function(data, status, headers, config){
         $scope.root.error = "Error recibiendo información de relaciones autoridades de postulado."; 
     }); 
   }
 
+
+
+  $scope.delete_relaut = function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/jyp_relaut/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Relación Autoridades borrada con éxito";
+              var idx = -1;
+              for (var i in $scope.root.relauts) {
+                 if ($scope.root.relauts[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.relauts.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
+  }
 
 
 /*************************************************************************
@@ -398,12 +526,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_parapolitica = function() {
     $scope.root.create_parapolitica = false;
-    console.log($scope.root.new_parapolitica_title);
+    //console.log($scope.root.new_parapolitica_title);
     var json = '{ "titulo": "' + $scope.root.new_parapolitica_title + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_parapolitica/c", json).
      success(function(data, status, headers, config) {
       $scope.root.parapolitica = data;
-      console.log($scope.root.parapolitica);
+      //console.log($scope.root.parapolitica);
       $scope.root.new_parapolitica_title = "";
       $scope.root.parapoliticas.push($scope.root.parapolitica);
       $scope.root.selectedparapoliticaIndex = $scope.root.parapoliticas.length -1;
@@ -415,7 +543,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_parapolitica = function() {
     $scope.root.create_parapolitica = false;
-    console.log($scope.root.new_parapolitica_title);
+    //console.log($scope.root.new_parapolitica_title);
     $scope.root.new_parapolitica_title = "";
   }  
   
@@ -434,13 +562,13 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información parapolitica salvada con éxito"; 
             $scope.root.parapolitica.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información de la parapolitica.");
+            //console.log("Error al salvar la información de la parapolitica.");
             $scope.root.error = "Error al salvar la información de la parapolitica."; 
         });
   }
 
   $scope.jyp_parapoliticas = function() {
-    console.log ("jyp_parapoliticas selected");
+    //console.log ("jyp_parapoliticas selected");
     $scope.maintab.active = "jyp";
     $scope.subtab.active = "jyp_parapoliticas";
     $http.get('/postulados/' + $scope.root.postulado_id + "/jyp_parapolitica")
@@ -448,12 +576,39 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.parapoliticas = data;      
       $scope.root.parapolitica = $scope.root.parapoliticas[0];
       $scope.root.selectedParapoliticaIndex = 0;
-      console.log($scope.root.parapoliticas);
-      console.log($scope.root.parapoliticas.length);
+      //console.log($scope.root.parapoliticas);
+      //console.log($scope.root.parapoliticas.length);
     })
     .error(function(data, status, headers, config){
         $scope.root.error = "Error recibiendo parapoliticas de postulado."; 
     }); 
+  }
+
+  $scope.delete_pp = function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/jyp_parapolitica/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Parapolitica borrada con éxito";
+              var idx = -1;
+              for (var i in $scope.root.parapoliticas) {
+                 if ($scope.root.parapoliticas[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.parapoliticas.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
   }
 
 
@@ -467,12 +622,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_fosa = function() {
     $scope.root.create_fosa = false;
-    console.log($scope.root.newfosatitle);
+    //console.log($scope.root.newfosatitle);
     var json = '{ "titulo": "' + $scope.root.newfosatitle + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/jyp_fosa/c", json).
      success(function(data, status, headers, config) {
       $scope.root.fosa = data;
-      console.log($scope.root.fosa);
+      //console.log($scope.root.fosa);
       $scope.root.newfosatitle = "";
       $scope.root.fosas.push($scope.root.fosa);
       $scope.root.selectedFosaIndex = $scope.root.fosas.length -1;
@@ -484,7 +639,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_fosa = function() {
     $scope.root.create_fosa = false;
-    console.log($scope.root.newfosatitle);
+    //console.log($scope.root.newfosatitle);
     $scope.root.newfosatitle = "";
   }  
   
@@ -503,13 +658,13 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información fosa salvada con éxito"; 
             $scope.root.fosa.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información de la fosa.");
+            //console.log("Error al salvar la información de la fosa.");
             $scope.root.error = "Error al salvar la información de la fosa."; 
         });
   }
 
   $scope.jyp_fosas = function() {
-    console.log ("jyp_fosas selected");
+    //console.log ("jyp_fosas selected");
     $scope.maintab.active = "jyp";
     $scope.subtab.active = "jyp_fosas";
     $http.get('/postulados/' + $scope.root.postulado_id + "/jyp_fosas")
@@ -518,8 +673,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.fosa = $scope.root.fosas[0];
       $scope.root.selectedFosaIndex = 0;
       $scope.prepare_fosa_delitos_select();
-      console.log($scope.root.fosas);
-      console.log($scope.root.fosas.length);
+      //console.log($scope.root.fosas);
+      //console.log($scope.root.fosas.length);
     })
     .error(function(data, status, headers, config){
         $scope.error = "Error recibiendo información fosas de postulado."; 
@@ -535,7 +690,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
           $scope.create_fosa_delitos_select(data);
         })
         .error(function(data, status, headers, config){
-            console.log("Error recibiendo los delitos de postulado, para fosas."); 
+            //console.log("Error recibiendo los delitos de postulado, para fosas."); 
             $scope.delitos_postulado = [];
         });
       }
@@ -551,6 +706,34 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   }
 
+
+  $scope.delete_fosa = function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/jyp_fosa/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Fosa borrada con éxito";
+              var idx = -1;
+              for (var i in $scope.root.fosas) {
+                 if ($scope.root.fosas[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.fosas.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
+  }
+
   /*************************************************************************
     MENORES
   *************************************************************************/
@@ -561,12 +744,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_menor = function() {
     $scope.root.create_menor = false;
-    console.log($scope.root.new_menor_title);
-    var json = '{ "cedula": "' + $scope.root.new_menor_title + '"}';    
+    //console.log($scope.root.new_menor_title);
+    var json = '{ "nombres": "' + $scope.root.new_menor_title + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/menores/c", json).
      success(function(data, status, headers, config) {
       $scope.root.menor = data;
-      console.log($scope.root.menor);
+      //console.log($scope.root.menor);
       $scope.root.new_menor_title = "";
       $scope.root.menores.push($scope.root.menor);
       $scope.root.selectedMenorIndex = $scope.root.menores.length -1;
@@ -578,7 +761,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_menor = function() {
     $scope.root.create_menor = false;
-    console.log($scope.root.new_menor_title);
+    //console.log($scope.root.new_menor_title);
     $scope.root.new_menor_title = "";
   }  
   
@@ -597,25 +780,52 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información de menor salvada con éxito"; 
             $scope.root.menor.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información del menor.");
+            //console.log("Error al salvar la información del menor.");
             $scope.root.error = "Error al salvar la información del menor."; 
         });
   }
 
   $scope.menores = function() {
-    console.log ("menores selected");
+    //console.log ("menores selected");
     $scope.maintab.active = "menores";
     $http.get('/postulados/' + $scope.root.postulado_id + "/menores")
     .success(function(data, status, headers, config) {
       $scope.root.menores = data;      
       $scope.root.menor = $scope.root.menores[0];
       $scope.root.selectedMenorIndex = 0;
-      console.log($scope.root.menores);
-      console.log($scope.root.menores.length);
+      //console.log($scope.root.menores);
+      //console.log($scope.root.menores.length);
     })
     .error(function(data, status, headers, config){
         $scope.root.error = "Error recibiendo información de menores de postulado."; 
     }); 
+  }
+
+  $scope.delete_menor = function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/menores/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Menor borrado con éxito";
+              var idx = -1;
+              for (var i in $scope.root.menores) {
+                 if ($scope.root.menores[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.menores.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
   }
 
 
@@ -629,12 +839,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_proc = function() {
     $scope.root.create_proc = false;
-    console.log($scope.root.new_proc_title);
+    //console.log($scope.root.new_proc_title);
     var json = '{ "titulo": "' + $scope.root.new_proc_title + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/proces/c", json).
      success(function(data, status, headers, config) {
       $scope.root.proc = data;
-      console.log($scope.root.proc);
+      //console.log($scope.root.proc);
       $scope.root.new_proc_title = "";
       $scope.root.proces.push($scope.root.proc);
       $scope.root.selectedProcIndex = $scope.root.proces.length -1;
@@ -646,7 +856,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_proc = function() {
     $scope.root.create_proc = false;
-    console.log($scope.root.new_proc_title);
+    //console.log($scope.root.new_proc_title);
     $scope.root.new_proc_title = "";
   }  
   
@@ -665,7 +875,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información proceso salvada con éxito"; 
             $scope.root.proc.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información del proceso.");
+            //console.log("Error al salvar la información del proceso.");
             $scope.root.error = "Error al salvar la información del proceso."; 
         });
   }
@@ -677,14 +887,41 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.proces = data;
       $scope.root.proc = $scope.root.proces[0];
       $scope.root.selectedProcIndex = 0;
-      console.log($scope.root.proces);
-      console.log($scope.root.proces.length);
+      //console.log($scope.root.proces);
+      //console.log($scope.root.proces.length);
     })
     .error(function(data, status, headers, config){
       $scope.root.error = "Error al descargar información de procesos de postulado.!";
     });
   }
 
+
+  $scope.delete_proces = function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/proces/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Proceso borrado con éxito";
+              var idx = -1;
+              for (var i in $scope.root.proces) {
+                 if ($scope.root.proces[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.proces.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
+  }
 
  /*************************************************************************
     BIENES
@@ -696,12 +933,12 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.crea_bien = function() {
     $scope.root.create_bien = false;
-    console.log($scope.root.new_bien_title);
+    //console.log($scope.root.new_bien_title);
     var json = '{ "titulo": "' + $scope.root.new_bien_title + '"}';    
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/bienes/c", json).
      success(function(data, status, headers, config) {
       $scope.root.bien = data;
-      console.log($scope.root.bien);
+      //console.log($scope.root.bien);
       $scope.root.new_bien_title = "";
       $scope.root.bienes.push($scope.root.bien);
       $scope.root.selectedBienIndex = $scope.root.bienes.length -1;
@@ -713,7 +950,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
   $scope.cancela_crea_bien = function() {
     $scope.root.create_bien = false;
-    console.log($scope.root.new_bien_title);
+    //console.log($scope.root.new_bien_title);
     $scope.root.new_bien_title = "";
   }  
   
@@ -732,7 +969,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.notification = "Información del bien salvada con éxito"; 
             $scope.root.bien.dirty = false;
         }).error(function() {
-            console.log("Error al salvar la información del bien.");
+            //console.log("Error al salvar la información del bien.");
             $scope.root.error = "Error al salvar la información del bien."; 
         });
   }
@@ -744,8 +981,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.bienes = data;
       $scope.root.bien = $scope.root.bienes[0];
       $scope.root.selectedBienIndex = 0;
-      console.log($scope.root.bienes);
-      console.log($scope.root.bienes.length);
+      //console.log($scope.root.bienes);
+      //console.log($scope.root.bienes.length);
     })
     .error(function(data, status, headers, config){
       $scope.root.error = "Error al descargar información de bienes del postulado!";
@@ -753,12 +990,39 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   }
 
 
+  $scope.delete_bien= function(item) {
+    var ask = confirm("Está completamente seguro de querer eliminar este elemento?");
+
+    if (ask == true) {
+          $http.delete("/admin/postulados/" + $scope.root.postulado_id + "/bienes/" + item._id)
+          .success(function(data, stat, headers, conf) {
+            if (stat == 204) {
+              $scope.root.notification = "Bien borrado con éxito";
+              var idx = -1;
+              for (var i in $scope.root.bienes) {
+                 if ($scope.root.bienes[i]._id == item._id) {
+                     idx = i;
+                     break;
+                 }
+              }
+              if (idx > -1) {
+                 $scope.root.bienes.splice(idx, 1);
+              }
+            }
+          })
+          .error(function(data, s, head, conf) {
+            $scope.root.error = "Hubo error eliminando el elemento!";
+          });
+
+    } 
+  }
+
   /*************************************************************************
     HOJA DE VIDA
   *************************************************************************/
 
   $scope.hv = function() {
-    console.log ("hv selected");
+    //console.log ("hv selected");
     $scope.root.active = "hv";
     $http.get('/postulados/' + $scope.root.postulado_id + "/hv").success(function(data, status, headers, config) {
       $scope.root.hoja = data[0];
@@ -776,7 +1040,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
    if ($scope.root.hoja.cedula === "undefined" || $scope.root.hoja.cedula == null) {
      $scope.root.hoja.cedula = $scope.root.postulado_id;
     }
-    console.log($scope.root.hoja);
+    //console.log($scope.root.hoja);
     $http.put('/admin/postulados/' + $scope.root.postulado_id + "/hv", $scope.root.hoja).
            success(function() {
             $scope.root.notification = "Hoja de vida salvada con éxito"; 
@@ -787,7 +1051,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   }
 
   $scope.jyp = function() {
-    console.log("jyp selected");
+    //console.log("jyp selected");
     $scope.maintab.active = "jyp";
     $scope.jyp_delitos();
   }
@@ -802,36 +1066,37 @@ get_initial_hv_data = function() {
     lugar_nacimiento : "No especificado",
     frente_bec : "No especificado",
     num_desmovil : "No especificado",
-    licencia_cond : "No especificado",
-    pasaporte : "No especificado",
-    salud : "No especificado",
-    clinica : "No especificado",
+//    licencia_cond : "No especificado",
+//    pasaporte : "No especificado",
+//    salud : "No especificado",
+//    clinica : "No especificado",
     otros_nombres : "No especificado",
     estatura       : "No especificado",
     peso  : "No especificado",        
     domicilio : "No especificado",
-    residencia : "No especificado",
+//    residencia : "No especificado",
     fijo : "No especificado",
     celular : "No especificado",
     profesion : "No especificado",
-    militar : "No especificado",
+//    militar : "No especificado",
     grado : "No especificado",
     conyugue : "No especificado",
     madre : "No especificado",
     padre : "No especificado",
     hijos : "No especificado",
     hermanos : "No especificado",
-    cuentas_ahorro : "No especificado",
-    cuentas_corriente : "No especificado",
-    tarjetas_credito : "No especificado",
-    cdt : "No especificado",
-    obligaciones_entidades : "No especificado",
-    obligaciones_familiares : "No especificado",
-    seguros_vida : "No especificado",
-    inmuebles : "No especificado",
-    muebles : "No especificado",
-    sociedades : "No especificado",
-    otros : "No especificado",
-    bienes_fondo : "No especificado"
+    bienes_desc: "No especificado",
+//    cuentas_ahorro : "No especificado",
+//   cuentas_corriente : "No especificado",
+//    tarjetas_credito : "No especificado",
+//    cdt : "No especificado",
+//    obligaciones_entidades : "No especificado",
+//    obligaciones_familiares : "No especificado",
+//    seguros_vida : "No especificado",
+//    inmuebles : "No especificado",
+//    muebles : "No especificado",
+//    sociedades : "No especificado",
+//    otros : "No especificado",
+//    bienes_fondo : "No especificado"
   }
 }

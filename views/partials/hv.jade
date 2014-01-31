@@ -4,9 +4,9 @@ div.info
       tr
          td
             label.small_form Estado civil
-            div(input-inline-edit="root.hoja.estado_civil" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="11")
+            div(input-inline-select="root.hoja.estado_civil" opciones="root.civiles" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="11")
          td
-            label.small_form Alias al momento de la desmovilización
+            label.small_form Alias utilizado en la organización 
             div(input-inline-edit="root.hoja.alias" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="12")
          td
             label.small_form Lugar de expedición cédula
@@ -26,48 +26,28 @@ div.info
             label.small_form Numero de certificación de desmovilización 
             div(input-inline-edit="root.hoja.num_desmovil" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="21")
          td
-            label.small_form Numero de licencia de conducción
-            div(input-inline-edit="root.hoja.licencia_cond" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="22")
-         td
-            label.small_form Numero de pasaporte
-            div(input-inline-edit="root.hoja.pasaporte" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="23")
-      tr
-         td
-            label.small_form Salud - EPS - SISBEN
-            div(input-inline-text="root.hoja.salud" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="24")
-         td
-            label.small_form Historia clínica
-            div(input-inline-text="root.hoja.clinica" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="25")
-         td
             label.small_form Otros nombres y apellidos adoptados
             div(input-inline-text="root.hoja.otros_nombres" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="26")
-      tr
          td
             label.small_form Estatura
             div(input-inline-edit="root.hoja.estatura" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="31")
+      tr
          td
             label.small_form Peso
             div(input-inline-edit="root.hoja.peso" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="32")
          td
             label.small_form Domicilio
             div(input-inline-edit="root.hoja.domicilio" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="33")
-      tr
-         td
-            label.small_form Residencia
-            div(input-inline-edit="root.hoja.residencia" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="34")
          td
             label.small_form Teléfono fijo
             div(input-inline-edit="root.hoja.fijo" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="35")
+      tr
          td
             label.small_form Teléfono celular
             div(input-inline-edit="root.hoja.celular" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="36")
-      tr
          td
             label.small_form Profesión - Ocupación
             div(input-inline-edit="root.hoja.profesion" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="41")
-         td
-            label.small_form Servicio Militar
-            div(input-inline-edit="root.hoja.militar" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="42")
          td
             label.small_form Grado de instrucción - Nivél academico
             div(input-inline-edit="root.hoja.grado" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="43")
@@ -87,54 +67,15 @@ div.info
       tr
          td
             label.small_form Hijos
-            div(input-inline-edit="root.hoja.hijos" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="47")
+            div(input-inline-text="root.hoja.hijos" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="47")
          td
             label.small_form Hermanos
-            div(input-inline-edit="root.hoja.hermanos" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="48")
+            div(input-inline-text="root.hoja.hermanos" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="48")
 
-   h2.info_subtitle Información financiera 
-   table.tab_form_table
-      tr
-         td
-            label.small_form Cuentas de ahorro
-            div(input-inline-text="root.hoja.cuentas_ahorro" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="61")
-         td
-            label.small_form Cuentas corrientes
-            div(input-inline-text="root.hoja.cuentas_corriente" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="62")
-         td
-            label.small_form Tarjetas de crédito
-            div(input-inline-text="root.hoja.tarjetas_credito" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="63")
-      tr
-         td
-            label.small_form CDT
-            div(input-inline-text="root.hoja.cdt" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="64")
-         td
-            label.small_form Obligaciones financieras con entidades financieras
-            div(input-inline-text="root.hoja.obligaciones_entidades" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="65")
-         td
-            label.small_form Obligaciones financieras con particulares / otras entidades
-            div(input-inline-text="root.hoja.obligaciones_familiares" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="66")
-      tr
-         td
-            label.small_form Seguros de vida
-            div(input-inline-text="root.hoja.seguros_vida" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="67")
 
    h2.info_subtitle Bienes 
    table.tab_form_table
       tr
          td
-            label.small_form Inmuebles
-            div(input-inline-text="root.hoja.inmuebles" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="71")
-         td
-            label.small_form Muebles
-            div(input-inline-text="root.hoja.muebles" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="72")
-         td
-            label.small_form Sociedades y otros 
-            div(input-inline-text="root.hoja.sociedades" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="73")
-      tr
-         td
-            label.small_form Otros
-            div(input-inline-text="root.hoja.otros" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="74")
-         td
-            label.small_form Bienes que ofrece al fondo nacional de reparación
-            div(input-inline-text="root.hoja.bienes_fondo" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="75")
+            label.small_form Descripción 
+            div(input-inline-text="root.hoja.bienes_desc" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="75")

@@ -1,0 +1,13 @@
+div(class="input_inline_edit_div")
+   if is_admin
+     form(name="local_form")
+      input(class="inline_edit_input" name="number" type="text" on-tab="tab()" on-enter="save()" ng-pattern="/^[0-9]+$/" on-blur="blur()" on-esc="cancel()" ng-model="model" ng-show="editMode" tabindex="{{tabindex}}" ng-focus="edit()") 
+      span(ng-mouseenter="showEdit = true" ng-mouseleave="showEdit = false")
+         span(ng-hide="editMode" ng-click="edit()" ) 
+            div(class="inline_edit_text")
+               span.error(ng-show="local_form.number.$error.pattern") Solo números!
+               {{model}}
+   else
+      div(class="inline_edit_text")
+         {{model}}      
+     
