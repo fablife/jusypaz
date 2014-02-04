@@ -24,6 +24,26 @@ body {
   color: #010101;
 }
 
+.myview_wrapper {
+  width: 800px;
+  margin: 0px auto;
+}
+
+.form_wrapper {
+  margin: 0px auto;
+  width: 700px;
+}
+
+.align_right {
+  text-align: right;
+}
+
+.title_separator {
+  margin-top: 4px;
+  margin-bottom: 10px;
+  border-top: 1px solid #003b6f;
+}
+
 .centered {
     text-align: center;
 }
@@ -360,7 +380,6 @@ li.info_tab:hover {
   font-size: 20px;
   line-height: 140%;
   padding-top: 0px !important;
-  padding: 15px;
   box-sizing: border-box;
   -webkit-animation-duration: 0.5s;
   -o-animation-duration: 0.5s;
@@ -378,6 +397,17 @@ li.info_tab:hover {
   margin-left: 20px;
   width: 250px;
   float: left;
+}
+
+.myview_info_general {
+  margin-left: 20px;
+  width: 200px;
+  float: left;
+}
+
+.icon {
+  cursor: pointer;
+  margin-left: 25px;
 }
 
 .postulado_img {
@@ -519,7 +549,6 @@ input[type=file] {
 
 .tab_form_table {
   width: 100%;
-  border-top: 1px solid #003b6f;
   padding: 10px;
   border-collapse: collapse;
   margin-bottom: 5px;
@@ -854,8 +883,8 @@ li.acciones_link {
 }
 
 .page_wrapper {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left: 50px;
+  margin-right: 40px;
 }
 
 .action {

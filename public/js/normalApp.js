@@ -7,7 +7,7 @@ app.config(['$routeProvider',
   function($routeProvider) {
     $routeProvider.
       when('/index', {
-        templateUrl: 'partials/postulado'
+        templateUrl: 'partials/myview'
       }).
       when('/config', {
         templateUrl: 'partials/config'

@@ -1,0 +1,122 @@
+div.info
+   img.icon.right(ng-click="doPrint()" src="/img/print.png")
+   h2.info_subtitle(ng-class="{dirty: root.hoja.dirty}") Información personal del desmovilizado 
+   hr.title_separator
+   div.form_wrapper
+      table.tab_form_table
+         tr
+            td.align_right
+               label.small_form Estado civil
+            td
+               div.myview_form_value {{root.hoja.estado_civil}} 
+         tr
+            td.align_right
+               label.small_form Alias utilizado en la organización 
+            td
+               div.myview_form_value {{root.hoja.alias}}
+         tr
+            td.align_right
+               label.small_form Lugar de expedición cédula
+            td
+               div.myview_form_value {{root.hoja.lugar_cedula}}
+         tr
+            td.align_right
+               label.small_form Lugar de nacimiento
+            td
+               div.myview_form_value {{root.hoja.lugar_nacimiento}}
+         tr
+            td.align_right
+               label.small_form Edad
+            td
+               div.myview_form_value {{calc_age(root.postulado.fecha_nacimiento)}}
+         tr
+            td.align_right
+               label.small_form Frente del BEC con el cual se desmovilizó
+            td
+               div.myview_form_value {{root.hoja.frente_bec}}
+         tr
+            td.align_right
+               label.small_form Numero de certificación de desmovilización 
+            td
+               div.myview_form_value {{root.hoja.num_desmovil}}
+         tr
+            td.align_right
+               label.small_form Otros nombres y apellidos adoptados
+            td
+               div.myview_form_value {{root.hoja.otros_nombres}}
+         tr
+            td.align_right
+               label.small_form Estatura
+            td
+               div.myview_form_value {{root.hoja.estatura}}
+         tr
+            td.align_right
+               label.small_form Peso
+            td
+               div.myview_form_value {{root.hoja.peso}}
+         tr
+            td.align_right
+               label.small_form Domicilio
+            td
+               div.myview_form_value {{root.hoja.domicilio}}
+         tr
+            td.align_right
+               label.small_form Teléfono fijo
+            td
+               div.myview_form_value {{root.hoja.fijo}}
+         tr
+            td.align_right
+               label.small_form Teléfono celular
+            td
+               div.myview_form_value {{root.hoja.celular}}
+         tr
+            td.align_right
+               label.small_form Profesión - Ocupación
+            td
+               div.myview_form_value {{root.hoja.profesion}}
+         tr
+            td.align_right
+               label.small_form Grado de instrucción - Nivél academico
+            td
+               div.myview_form_value {{root.hoja.grado}}
+
+   h2.info_subtitle Datos familiares 
+   hr.title_separator
+   div.form_wrapper
+      table.tab_form_table
+         tr
+            td.align_right
+               label.small_form Conyugue o compañera/o permanente
+            td
+               div.myview_form_value {{root.hoja.conyugue}}
+         tr
+            td.align_right
+               label.small_form Nombre de la madre
+            td
+               div.myview_form_value {{root.hoja.madre}}
+         tr
+            td.align_right
+               label.small_form Nombre del padre
+            td
+               div.myview_form_value {{root.hoja.padre}}
+         tr
+            td.align_right
+               label.small_form Hijos
+            td
+               div.myview_form_value {{root.hoja.hijos}}
+         tr
+            td.align_right
+               label.small_form Hermanos
+            td
+               div.myview_form_value {{root.hoja.hermanos}}
+
+
+   h2.info_subtitle Bienes 
+   hr.title_separator
+   div.form_wrapper
+      table.tab_form_table
+         tr
+            td.align_right
+               label.small_form Descripción 
+            td
+               div.myview_form_value {{root.hoja.bienes_desc}}

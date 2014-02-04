@@ -1,6 +1,5 @@
 //app.controller("PostuladoCtrl", function PostuladoCtrl(PostuladoService, $scope, $routeParams, $http){
 app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $http){
-  $scope.root     = {};
   $scope.maintab  = {};
   $scope.subtab   = {};
   $scope.root.postulado_id    = $routeParams.postuladoId;
@@ -20,9 +19,20 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
             $scope.root.postulado = postulado[0];            
         })
         .error(function(data, status, headers, config){
+          console.log("Error al acceder a info de hv");
         
         });
-  
+
+  $scope.calc_age = function(dateString) {
+    var birthday = +new Date(dateString);
+    return ~~((Date.now() - birthday) / (31557600000));
+  }
+
+
+  $scope.doPrint = function() {
+    window.print();
+  }
+
   /*************************************************************************
     DELITOS
   *************************************************************************/
