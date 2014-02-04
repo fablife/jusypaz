@@ -1,0 +1,264 @@
+div.info_wrapper
+   div.navegacion_hechos
+      div.empty(ng-hide="root.delitos.length") No hay delitos para usted.
+      div.hecho_lista(ng-show="root.delitos.length") 
+         div.hecho_lista_title
+            Hay {{root.delitos.length}} delitos para usted.
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos") {{delito.titulo}} 
+
+
+   div.datos_version(ng-show="root.delitos.length")
+      img.icon.right(ng-click="doPrint()" src="/img/print.png")
+      h2.info_subtitle Datos versión
+        div.inline.inline-heading {{root.delito.titulo}}
+      hr.title_separator
+      div.form_wrapper
+        table.tab_form_table
+         tr
+            td.align_right
+               label.small_form Delito
+            td
+              div.myview_form_value {{root.delito.codigo_penal}}
+         tr
+            td.align_right
+               label.small_form Tipo de versión
+            td
+               div.myview_form_value {{root.delito.tipo_version}}
+         tr
+            td.align_right
+               label.small_form Fecha de la versión
+            td
+               div.myview_form_value {{root.delito.fecha_version}}
+         tr
+            td.align_right
+               label.small_form Fiscalía
+            td
+               div.myview_form_value {{root.delito.fiscalia}}
+         tr
+            td.align_right
+               label.small_form Sitio de reclusión
+            td
+               div.myview_form_value {{root.delito.sitio_reclusion}}
+         tr
+            td.align_right
+               label.small_form Bloque de postulación
+            td
+               div.myview_form_value {{root.delito.bloque_post}}
+
+      h2.info_subtitle.inline Datos de la acción
+      hr.title_separator
+      div.form_wrapper
+       div.inline.datos_acciones(ng-controller="FileUploadCtrl")
+         button.buttons.mleft10(ng-show='root.delito.video_path' ng-click="ver_video()") Ver video
+        
+         div#overlay(ng-show="root.play_video")
+         div.video_wrapper
+            div#video_container(ng-show="root.play_video")
+               br
+               button.btn(ng-click="cerrar()") Cerrar
+            
+
+      table.tab_form_table
+         tr
+            td.align_right
+               label.small_form Hora en mención del hecho
+            td
+               div.myview_form_value {{root.delito.hora_mencion}}
+         tr
+            td.align_right
+               label.small_form Hecho enunciado con/sin responsabilidad
+            td
+               div.myview_form_value {{root.delito.responsabilidad}}
+         tr
+            td.align_right
+               label.small_form Hecho confesado
+            td
+               div.myview_form_value {{root.delito.confesado}}
+         tr
+            td.align_right
+               label.small_form Narración del hecho
+            td
+               div.myview_form_value {{root.delito.narracion}}
+         tr
+            td.align_right
+               label.small_form Fecha ocurrencia del hecho
+            td
+               div.myview_form_value {{root.delito.fecha_ocurrencia | date:'dd/MM/yyyy' }}
+
+      h2.info_subtitle Georeferenciación
+      button.buttons(ng-click="view_docs('delitos',root.delito._id + 'XXmap')") Ver mapa
+      table.tab_form_table
+         tr
+            td.align_right
+               label.small_form Pais
+            td
+               div.myview_form_value {{root.delito.pais}}
+         tr
+            td.align_right
+               label.small_form Departamento
+            td
+               div.myview_form_value {{root.delito.dept}}
+         tr
+            td.align_right
+               label.small_form Municipio
+            td
+               div.myview_form_value {{root.delito.municipio}}
+         tr
+            td.align_right
+               label.small_form Dirección
+            td
+               div.myview_form_value {{root.delito.direccion}}
+         tr
+            td.align_right
+               label.small_form Barrio
+            td
+               div.myview_form_value {{root.delito.barrio}}
+         tr
+            td.align_right
+               label.small_form Corregimiento
+            td
+               div.myview_form_value {{root.delito.corregimiento}}
+         tr  
+            td.align_right
+               label.small_form Vereda
+            td
+               div.myview_form_value {{root.delito.vereda}}
+         tr
+            td.align_right
+               label.small_form Finca
+            td
+               div.myview_form_value {{root.delito.finca}}
+         tr
+            td.align_right
+               label.small_form Via
+            td
+               div.myview_form_value {{root.delito.via}}
+         tr            
+            td.align_right
+               label.small_form Otro lugar
+            td
+               div.myview_form_value {{root.delito.otro_lugar}}
+
+
+      h2.info_subtitle Autores participantes
+      table.tab_form_table.addition(ng-show="root.delito.participantes.length > 0" ng-repeat="participante in root.delito.participantes")
+         tr
+            td.align_right
+               label.small_form Nombres
+            td
+               div.myview_form_value {{participante.nombres}}
+         tr
+            td.align_right
+               label.small_form Apellidos
+            td
+               div.myview_form_value {{participante.apellidos}}
+         tr
+            td.align_right
+               label.small_form Alias
+            td
+               div.myview_form_value {{participante.alias}}
+         tr
+            td.align_right
+               label.small_form Grupo armado pertenencia
+            td
+               div.myview_form_value {{participante.pertenencia}}
+         tr
+            td.align_right
+               label.small_form Hecho confesado en versión libre del coparticipe
+            td
+               div.myview_form_value {{participante.confesado}}
+         tr
+            td.align_right
+               label.small_form Hora en mención del hecho
+            td
+               div.myview_form_value {{participante.hora_mencion}}
+         tr
+            td.align_right 
+               label.small_form Datos sobre pertenencia grupo armado
+            td
+               div.myview_form_value {{participante.participacion_datos}}
+         tr(ng-show="participante.pertenencia == 'Autodefensa'")
+            td.align_right
+               label.small_form Autodefensa Bloque
+            td
+               div.myview_form_value {{participante.autodefensa_bloque}}
+         tr
+            td.align_right 
+               label.small_form Autodefensa Frente
+            td
+               div.myview_form_value {{participante.autodefensa_frente}}
+         tr
+            td.align_right 
+               label.small_form Autodefensa Comandante
+            td
+               div.myview_form_value {{participante.autodefensa_comandante}}
+         tr(ng-show="participante.pertenencia == 'Autodefensa'")
+            td.align_right
+               label.small_form Autodefensa Linea de mando
+            td
+               div.myview_form_value {{participante.autodefensa_mando}}
+         tr
+            td.align_right
+               label.small_form Otros implicados en el hecho
+            td
+               div.participante(ng-repeat="otro in participante.otros_implicados")
+                  label.small_form Nombres
+                  {{otro.nombres}}
+                  label.small_form Apellidos
+                  {{otro.apellidos}}
+                  label.small_form Alias
+                  {{otro.alias}}
+                  label.small_form Pertenencia
+                  {{otro.pertenencia}}
+                  label.small_form Participación
+                  {{otro.participacion}}
+
+      h2.info_subtitle Victimas
+      label.small_form Numbero de victimas 
+      {{root.delito.num_victimas}}
+      br
+
+      table.tab_form_table.additions(ng-repeat="v in root.delito.victimas")
+         tr
+            td.align_right
+               label.small_form Nombre de la victima
+            td
+               {{v.nombres}}
+         tr
+            td.align_right
+               label.small_form Apellidos de la victima
+            td
+               {{v.apellidos}}
+         tr
+            td.align_right
+               label.small_form Oficio de la victima
+            td
+               {{v.oficio}}
+         tr
+            td.align_right
+               label.small_form Perfil de la victima
+            td
+               {{v.perfil}}
+         tr
+            td.align_right
+               label.small_form Victima enunciada por el postulado o por fiscalía
+            td
+               {{v.enunciada_por}}
+         tr
+            td.align_right
+               label.small_form Datos completos 
+            td
+               {{v.datos_completos}}
+
+   
+ //-  div.file_browser(ng-show="showFiles")
+ //-     span.close_button.right
+ //-        img(id="close_dialog_button" alt="Cerrar" title="Cerrar" ng-click="close_browser()" src="/img/close.png")
+ //-     div.file_browser_content         
+ //-        div.empty(ng-show="root.files.length < 1") 
+ //-           h1 No hay archivos de mapas para este delito
+ //-        div.files(ng-show="root.files.length > 0")
+ //-           div.file(ng-repeat="file in root.files")
+ //-             a(ng-href="/docs/{{root.postulado_id}}/delitos/{{root.delito._id}}XXmap/{{file}}")
+ //-                 img(src="/img/docs_icon.png")
+ //-                p.doc_title {{file}}

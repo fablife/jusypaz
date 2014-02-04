@@ -227,6 +227,7 @@ get_inline_edit_widget = function($timeout, type, model, template) {
           y = date.substring(4);
           var new_model = "" + d + "/" + m + "/" +y;
           if (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(new_model)) {
+            scope.model = new_model;
             scope.date_invalid = false;
 
           } else {

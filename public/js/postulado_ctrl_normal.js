@@ -10,7 +10,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.maintab.active = "hv";
   $scope.subtab.active = "jyp_delitos";
   
-  console.log("postulado ctrl");
+  //console.log("postulado ctrl");
 
     //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
   $http.get('/minfo/')
@@ -64,7 +64,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       }
     })
     .error(function(data, status, headers, config){
-        $scope.error = "Error recibiendo los delitos de postulado."; 
+        $scope.root.error = "Error recibiendo los delitos de postulado."; 
     }); 
   }
 

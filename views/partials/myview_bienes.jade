@@ -1,0 +1,46 @@
+div.info
+   div.info_wrapper
+      div.navegacion_hechos
+         if (is_admin)
+            button.add_action.right(ng-click="add_bien()")
+         div.empty(ng-hide="root.bienes.length") No hay bienes para este postulado.
+         div.hecho_lista(ng-show="root.bienes.length") 
+            div.hecho_lista_title
+               Hay {{root.bienes.length}} bienes para este postulado.
+            div.hecho_titulo(ng-class="{selected: $index==root.selectedBienIndex, dirty: bien.dirty}" ng-click="get_bien($index)" ng-repeat="bien in root.bienes") {{bien.titulo}}
+              div.delete_item(ng-click="delete_bien(bien)")
+
+
+      div.dialog(ng-show="root.create_bien")    
+         h2.info_subtitle Agregar nuevo bien
+         label.form Titulo del bien
+         br
+         input.dialog_input(ng-model="root.new_bien_title" name="root.new_bien_title" required type="text")
+         br
+         button.buttons(ng-click="crea_bien()" ng-disabled="invalid_form") Crear bien
+         button.buttons(ng-click="cancela_crea_bien()") Cancelar
+
+      div.datos_version(ng-show="root.bienes.length")
+         h2.info_subtitle Bien
+           div(input-inline-edit="root.bien.titulo" class="inline inline-heading" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="10")
+         table.tab_form_table
+            tr
+               td
+                  label.small_form Descripción 
+                  div(input-inline-edit="root.bien.descripcion" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="21")
+               td
+                  label.small_form Valor 
+                  div(input-inline-edit="root.bien.valor" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="22")            
+               td
+                  label.small_form Fecha entrega 
+                  div(input-inline-date="root.bien.fecha_entrega" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")
+            tr
+               td
+                  label.small_form Recibido acción social 
+                  div(input-inline-radio="root.bien.rec_acc_social" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="21")
+               td
+                  label.small_form Avalúo acción social 
+                  div(input-inline-edit="root.bien.avaluo_acc_social" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="22")            
+               td
+                  label.small_form Observaciones 
+                  div(input-inline-text="root.bien.observaciones" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")

@@ -1,0 +1,12 @@
+div.info
+   tabset.info_tabs
+      tab.info_tab.active(heading="Delitos confesados" select="jyp_delitos()")
+        div.tab_content(ng-include="'/partials/myview_delitos'")
+      tab.info_tab(heading="Fosas" select="jyp_fosas()")
+         div.tab_content(ng-include="'/partials/myview_fosas'")
+      tab.info_tab(heading="Operaciones Conjuntas" select="jyp_op_conjuntas()")
+         div.tab_content(ng-include="'/partials/myview_opconjuntas'")
+      tab.info_tab(heading="Relaciones Autoridades" select="jyp_relauts()")
+         div.tab_content(ng-include="'/partials/myview_relaut'")
+      tab.info_tab(heading="Parapolítica" select="jyp_parapoliticas()")
+         div.tab_content(ng-include="'/partials/myview_parapolitica'")  

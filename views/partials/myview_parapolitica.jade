@@ -1,0 +1,76 @@
+div.info_wrapper
+   div.navegacion_hechos
+      if (is_admin)
+         button.add_action.right(ng-click="add_parapolitica()")
+      div.empty(ng-hide="root.parapoliticas.length") No hay asunto de parapoliticas para este postulado.
+      div.hecho_lista(ng-show="root.parapoliticas.length") 
+         div.hecho_lista_title
+            Hay {{root.parapoliticas.length}} asuntos de parapoliticas para este postulado.
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedParapoliticaIndex, dirty: parapolitica.dirty}" ng-click="get_parapolitica($index)" ng-repeat="parapolitica in root.parapoliticas") {{parapolitica.titulo}}
+            div.delete_item(ng-click="delete_pp(parapolitica)")
+
+
+   div.dialog.create_parapolitica(ng-show="root.create_parapolitica")    
+      h2.info_subtitle Agregar nuevo asunto de parapolitica
+      label.form Titulo de la relación 
+      br
+      input.dialog_input(ng-model="root.new_parapolitica_title" name="root.new_parapolitica_title" required type="text")
+      br
+      button.buttons(ng-click="crea_parapolitica()" ng-disabled="invalid_form") Crear
+      button.buttons(ng-click="cancela_crea_parapolitica()") Cancelar
+
+   div.datos_version(ng-show="root.parapoliticas.length")
+      h2.info_subtitle Datos versión
+        div(input-inline-edit="root.parapolitica.titulo" class="inline inline-heading" on-save="set_pp_dirty()" ng-focus="edit()" tabindex="5")
+      table.tab_form_table
+         tr
+            td
+               label.small_form Relación
+               div(input-inline-select-pp="root.parapolitica.tipo" on-save="set_pp_dirty()" opciones="root.tipos_pp" ng-focus="edit()" tabindex="10")
+            td
+               label.small_form Nombres implicado
+               div(input-inline-edit="root.parapolitica.nombres_implicado" on-save="set_pp_dirty()" ng-focus="edit()" tabindex="11")
+            td
+               label.small_form Apellidos implicado
+               div(input-inline-edit="root.parapolitica.apellidos_implicado" on-save="set_pp_dirty()" ng-focus="edit()" tabindex="12")
+         tr
+            td
+               label.small_form Compulsa de copias
+               div(input-inline-edit="root.parapolitica.compulsa_copias" on-save="set_pp_dirty()" ng-focus="edit()" tabindex="21")
+            td
+               label.small_form Condenas
+               div(input-inline-edit="root.parapolitica.condenas" on-save="set_pp_dirty()" ng-focus="edit()" tabindex="22")
+            td
+               label.small_form Absolución
+               div(input-inline-edit="root.parapolitica.absolucion" on-save="set_pp_dirty()" ng-focus="edit()" tabindex="23")
+         tr
+            td
+               label.small_form Narración de los hechos
+               div(input-inline-edit="root.parapolitica.narracion" on-save="set_pp_dirty()" ng-focus="edit()" tabindex="31")
+
+      h2.info_subtitle.inline Georeferenciación     
+      table.tab_form_table
+         tr
+            td
+               label.small_form Pais
+               div(input-inline-edit="root.parapolitica.pais" on-save="set_parapolitica_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="41")
+            td
+               label.small_form Departamento
+               div(input-inline-edit="root.parapolitica.departamento" on-save="set_parapolitica_dirty()" ng-focus="edit()" tabindex="42")
+            td
+               label.small_form Municipio
+               div(input-inline-edit="root.parapolitica.municipio" on-save="set_parapolitica_dirty()" ng-focus="edit()" tabindex="43")
+         tr
+            td
+               label.small_form Corregimiento
+               div(input-inline-edit="root.parapolitica.corregimiento" on-save="set_parapolitica_dirty()" ng-focus="edit()" tabindex="51")
+            td
+               label.small_form Vereda
+               div(input-inline-edit="root.parapolitica.vereda" on-save="set_parapolitica_dirty()" ng-focus="edit()" tabindex="52")
+         tr
+            td
+               label.small_form Latitud
+               div(input-inline-edit="root.parapolitica.lat" on-save="set_parapolitica_dirty()" ng-focus="edit()" tabindex="61")
+            td               
+               label.small_form Longitud
+               div(input-inline-edit="root.parapolitica.long" on-save="set_parapolitica_dirty()" ng-focus="edit()" tabindex="62") 

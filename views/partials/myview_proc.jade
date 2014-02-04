@@ -1,0 +1,40 @@
+div.info
+   div.info_wrapper
+      div.navegacion_hechos
+         if (is_admin)
+            button.add_action.right(ng-click="add_proc()")
+         div.empty(ng-hide="root.proces.length") No hay procesos para este postulado.
+         div.hecho_lista(ng-show="root.proces.length") 
+            div.hecho_lista_title
+               Hay {{root.proces.length}} procesos para este postulado.
+            div.hecho_titulo(ng-class="{selected: $index==root.selectedProcIndex, dirty: proc.dirty}" ng-click="get_proc($index)" ng-repeat="proc in root.proces") {{proc.titulo}}
+              div.delete_item(ng-click="delete_proces(proc)")
+
+
+      div.dialog(ng-show="root.create_proc")    
+         h2.info_subtitle Agregar nuevo proceso
+         label.form Titulo del proceso
+         br
+         input.dialog_input(ng-model="root.new_proc_title" name="root.new_proc_title" required type="text")
+         br
+         button.buttons(ng-click="crea_proc()" ng-disabled="invalid_form") Crear proceso
+         button.buttons(ng-click="cancela_crea_proc()") Cancelar
+
+      div.datos_version(ng-show="root.proces.length")
+         h2.info_subtitle Proceso 
+           div(input-inline-edit="root.proc.titulo" class="inline inline-heading" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="10")
+         table.tab_form_table
+            tr
+               td
+                  label.small_form Fiscalía 
+                  div(input-inline-select-pp="root.proc.tipo" on-save="set_proc_dirty()" opciones="root.tipos_proc" ng-focus="edit()" tabindex="15")
+               td
+                  label.small_form Juzgado 
+                  div(input-inline-text="root.proc.juzgado" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="21")
+               td
+                  label.small_form Radicado 
+                  div(input-inline-text="root.proc.radicado" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="22")            
+            tr   
+               td
+                  label.small_form Estado 
+                  div(input-inline-text="root.proc.estado" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="23")

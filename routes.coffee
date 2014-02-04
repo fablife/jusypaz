@@ -356,7 +356,7 @@ exports.create_delito = (req, res) ->
 
 exports.save_delito = (req, res) ->
   console.log "Salvar delito"
-  save_delito(req, res)
+  _save_delito(req, res)
 
 exports.jyp_delitos = (req, res) ->
   console.log "GET informacion de delitos justicia y paz"
@@ -936,11 +936,17 @@ getDelitos = (req, res) ->
     console.log("Hechos de postulado retornados")
     )
 
-save_delito = (req, res) ->
+_save_delito = (req, res) ->
   console.log("_save_delito: " + req.body.titulo)
+  console.log(req.body)
   id = req.body._id
   delete req.body._id
-  Delito.update({'_id': id }, req.body, (err) ->
+  obj = new Delito(req.body)
+  obj.fecha_version = convert_date(req.body.fecha_version)
+  upsert_data = obj.toObject()
+  delete upsert_data._id
+  
+  Delito.update({'_id': id }, upsert_data, (err) ->
     if err?
       handle_error(err, "Error salvando delito.", res)
       return

@@ -1,0 +1,62 @@
+div.info_wrapper
+   div.navegacion_hechos
+      if (is_admin)
+         button.add_action.right(ng-click="add_op_conjunta()")
+      div.empty(ng-hide="root.op_conjuntas.length") No hay asunto de Operaciones Conjuntas para este postulado.
+      div.hecho_lista(ng-show="root.op_conjuntas.length") 
+         div.hecho_lista_title
+            Hay {{root.op_conjuntas.length}} asuntos de Operaciones Conjuntas para este postulado.
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedOp_conjuntaIndex, dirty: op_conjunta.dirty}" ng-click="get_op_conjunta($index)" ng-repeat="op_conjunta in root.op_conjuntas") {{op_conjunta.titulo}}
+            div.delete_item(ng-click="delete_op_conjunta(op_conjunta)")
+
+
+   div.dialog.create_op_conjunta(ng-show="root.create_op_conjunta")    
+      h2.info_subtitle Agregar nuevo asunto de Operaciones Conjuntas
+      label.form Nombre de la Operación Conjunta 
+      br
+      input.dialog_input(ng-model="root.new_op_conjunta_title" name="root.new_op_conjunta_title" required type="text")
+      br
+      button.buttons(ng-click="crea_op_conjunta()" ng-disabled="invalid_form") Crear
+      button.buttons(ng-click="cancela_crea_op_conjunta()") Cancelar
+
+   div.datos_version(ng-show="root.op_conjuntas.length")
+      h2.info_subtitle Datos
+        div(input-inline-edit="root.op_conjunta.titulo" class="inline inline-heading" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="5")
+      table.tab_form_table
+         tr
+            td
+               label.small_form Relación
+               div(input-inline-select-pp="root.op_conjunta.tipo" on-save="set_op_conjunta_dirty()" opciones="root.tipos_op_conjunta" ng-focus="edit()" tabindex="15")
+            td
+               label.small_form Nombres implicado
+               div(input-inline-edit="root.op_conjunta.nombres_implicado" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="16")
+            td
+               label.small_form Apellidos implicado
+               div(input-inline-edit="root.op_conjunta.apellidos_implicado" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="17")
+   
+      //-h2.info_subtitle.inline Georeferenciación     
+      //-table.tab_form_table
+      //-   tr
+      //-      td
+      //-         label.small_form Pais
+      //-         div(input-inline-edit="root.op_conjunta.pais" on-save="set_op_conjunta_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="41")
+      //-      td
+      //-         label.small_form Departamento
+      //-         div(input-inline-edit="root.op_conjunta.departamento" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="42")
+      //-      td
+      //-         label.small_form Municipio
+      //-         div(input-inline-edit="root.op_conjunta.municipio" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="43")
+      //-   tr
+      //-      td
+      //-         label.small_form Corregimiento
+      //-         div(input-inline-edit="root.op_conjunta.corregimiento" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="51")
+      //-      td
+      //-         label.small_form Vereda
+      //-         div(input-inline-edit="root.op_conjunta.vereda" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="52")
+      //-   tr
+      //-      td
+      //-         label.small_form Latitud
+      //-         div(input-inline-edit="root.op_conjunta.lat" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="61")
+      //-      td               
+      //-         label.small_form Longitud
+      //-        div(input-inline-edit="root.op_conjunta.long" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="62") 
