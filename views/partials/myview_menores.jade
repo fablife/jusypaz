@@ -12,6 +12,15 @@ div.info
          h2.info_subtitle Menor
            div.inline.inline-heading {{root.menor.nombres}} {{root.menor.apellidos}}
          hr.title_separator
+         img.icon.right(ng-show="root.menor.mensaje" ng-click="message()" src="/img/message_exists.png")
+         img.icon.right(ng-hide="root.menor.mensaje" ng-click="message()" src="/img/message.png")
+         div.message(ng-show="show_message")
+             div.message_dialog.right
+               strong Deja una observación acerca de esta ficha
+               textarea.message_content(ng-model="root.menor.mensaje" ng-change="set_message_dirty()")
+               button.list_button(ng-click="save_message('menor')") Envia observación
+               button.list_button.mleft10(ng-click="close_message()") Cerrar 
+               button.list_button.mleft10(ng-show="root.menor.mensaje && !message_dirty" ng-click="del_message('menor')") Borrar 
          div.form_wrapper
            table.tab_form_table
             tr

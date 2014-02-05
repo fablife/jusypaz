@@ -1,0 +1,21 @@
+div.info
+   div.info_wrapper
+    div.datos_version
+      img.icon.right(ng-click="doPrint()" src="/img/print.png")
+      h2.info_subtitle Estadisticas 
+      table.statistics.object_table
+        thead
+          tr.row
+            th Delito
+            th Total
+            th Porcentaje
+        tbody
+          tr.row(ng-repeat="d in root.delitos" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
+            td
+              {{ d.codigo_penal}}
+            td
+              {{ get_total(d.codigo_penal) }}
+            td
+              {{ get_percentage(d.codigo_penal) }}
+      
+    div#diagram_wrapper

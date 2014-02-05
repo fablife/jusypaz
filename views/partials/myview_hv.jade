@@ -2,6 +2,15 @@ div.info.datos_version
    img.icon.right(ng-click="doPrint()" src="/img/print.png")
    h2.info_subtitle(ng-class="{dirty: root.hoja.dirty}") Información personal del desmovilizado 
    hr.title_separator
+   img.icon.right(ng-show="root.hoja.mensaje" ng-click="message()" src="/img/message_exists.png")
+   img.icon.right(ng-hide="root.hoja.mensaje" ng-click="message()" src="/img/message.png")
+   div.message(ng-show="show_message")
+      div.message_dialog.right
+        strong Deja una observación acerca de esta ficha
+        textarea.message_content(ng-model="root.hoja.mensaje" ng-change="set_message_dirty()")
+        button.list_button(ng-click="save_message('hv')") Envia observación
+        button.list_button.mleft10(ng-click="close_message()") Cerrar 
+        button.list_button.mleft10(ng-show="root.hoja.mensaje && !message_dirty" ng-click="del_message('hv')") Borrar 
    div.form_wrapper
       table.tab_form_table
          tr

@@ -34,6 +34,11 @@ div.info_wrapper
                label.small_form Apellidos implicado
                div(input-inline-edit="root.op_conjunta.apellidos_implicado" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="17")
    
+      h2.info_subtitle Observaciones del postulado 
+      p(ng-hide="not_empty(root.op_conjunta.mensaje)") No hay observaciones del postulado
+      div(ng-show="root.op_conjunta.mensaje")
+        div(input-inline-text="root.op_conjunta.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+
       //-h2.info_subtitle.inline Georeferenciación     
       //-table.tab_form_table
       //-   tr

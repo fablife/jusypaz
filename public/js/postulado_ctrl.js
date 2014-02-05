@@ -18,7 +18,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.root.tipos_proc = [{nombre: "Justicia y Paz"}, {nombre: "Justicia ordinaria"}];
   $scope.root.tipos_version = [{nombre: "Individual"}, {nombre: "Conjunta"}];
   $scope.root.grupos_armados = [{nombre: "Ejercito"}, {nombre: "Policia"}, {nombre: "Armada"}, {nombre: "Fuerza aérea"}, {nombre: "Autodefensa"}];
-  $scope.root.civiles = [{nombre: "Soltero"}, {nombre: "Casado"}, {nombre: "Unión Marital de Hecho"}];
+  $scope.root.civiles = [{nombre: "Soltero"}, {nombre: "Casado"}, {nombre: "Unión Libre"}, {nombre: "Separado"}, {nombre: "Viudo"}];
   $scope.root.paises = [{nombre: "Colombia"}, {nombre: "Panamá"}];
   $scope.root.colombia_depts = [{nombre: "Amazonas"}, {nombre: "Antioquia"}, {nombre: "Arauca"}, {nombre: "Atlántico"}, {nombre: "Bolivar"}, {nombre: "Boyacá"}, {nombre: "Caldas"}, {nombre: "Caquetá"}, {nombre: "Casanare"}, {nombre: "Cauca"}, {nombre: "Cesar"}, {nombre: "Chocó"}, {nombre: "Córdoba"}, {nombre: "Cundinamarca"}, {nombre: "Guainía"}, {nombre: "Guaviare"}, {nombre: "Huila"}, {nombre: "La Guajira"}, {nombre: "Magdalena"}, {nombre: "Meta"}, {nombre: "Nariño"}, {nombre: "Norte de Santander"}, {nombre: "Putumayo"}, {nombre: "Quindío"}, {nombre: "Risaralda"}, {nombre: "San Andrés y Providencia"}, {nombre: "Santander"}, {nombre: "Sucre"}, {nombre: "Tolima"}, {nombre: "Valle del Cauca"}, {nombre: "Vaupés"}, {nombre: "Vichada"}];
   $scope.root.panama_depts = [{nombre: "Panamá - Otros"}];
@@ -33,6 +33,10 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.fosa_depts = $scope.root.colombia_depts;
     }
   });
+
+  $scope.not_empty = function(str) {
+    return ((str != null) && (str.length > 0));
+  }
 
   $scope.$watch('root.delito.pais', function (newVal, oldVal, scope) {
     if(newVal == "Panamá") { 

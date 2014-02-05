@@ -12,6 +12,15 @@ div.info
         h2.info_subtitle Bien
            div.inline.inline-heading {{root.bien.titulo}}
         hr.title_separator
+        img.icon.right(ng-show="root.bien.mensaje" ng-click="message()" src="/img/message_exists.png")
+        img.icon.right(ng-hide="root.bien.mensaje" ng-click="message()" src="/img/message.png")
+        div.message(ng-show="show_message")
+            div.message_dialog.right
+              strong Deja una observación acerca de esta ficha
+              textarea.message_content(ng-model="root.bien.mensaje" ng-change="set_message_dirty()")
+              button.list_button(ng-click="save_message('bien')") Envia observación
+              button.list_button.mleft10(ng-click="close_message()") Cerrar 
+              button.list_button.mleft10(ng-show="root.bien.mensaje && !message_dirty" ng-click="del_message('bien')") Borrar 
         div.form_wrapper
           table.tab_form_table
             tr

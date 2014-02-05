@@ -84,3 +84,8 @@ div.info_wrapper
             td               
                label.small_form Longitud
                div(input-inline-edit="root.relaut.long" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="62") 
+
+      h2.info_subtitle Observaciones del postulado 
+      p(ng-hide="not_empty(root.relaut.mensaje)") No hay observaciones del postulado
+      div(ng-show="root.relaut.mensaje")
+        div(input-inline-text="root.relaut.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 

@@ -12,6 +12,15 @@ div.info_wrapper
       h2.info_subtitle Datos versión
         div.inline.inline-heading {{root.delito.titulo}}
       hr.title_separator
+      img.icon.right(ng-show="root.delito.mensaje" ng-click="message()" src="/img/message_exists.png")
+      img.icon.right(ng-hide="root.delito.mensaje" ng-click="message()" src="/img/message.png")
+      div.message(ng-show="show_message")
+          div.message_dialog.right
+            strong Deja una observación acerca de esta ficha
+            textarea.message_content(ng-model="root.delito.mensaje" ng-change="set_message_dirty()")
+            button.list_button(ng-click="save_message('delito')") Envia observación
+            button.list_button.mleft10(ng-click="close_message()") Cerrar 
+            button.list_button.mleft10(ng-show="root.delito.mensaje && !message_dirty" ng-click="del_message('delito')") Borrar 
       div.form_wrapper
         table.tab_form_table
          tr

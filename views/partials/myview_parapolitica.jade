@@ -11,6 +11,15 @@ div.info_wrapper
       h2.info_subtitle Datos  
         div.inline.inline-heading {{ root.parapolitica.titulo }}
       hr.title_separator
+      img.icon.right(ng-show="root.parapolitica.mensaje" ng-click="message()" src="/img/message_exists.png")
+      img.icon.right(ng-hide="root.parapolitica.mensaje" ng-click="message()" src="/img/message.png")
+      div.message(ng-show="show_message")
+          div.message_dialog.right
+            strong Deja una observación acerca de esta ficha
+            textarea.message_content(ng-model="root.parapolitica.mensaje" ng-change="set_message_dirty()")
+            button.list_button(ng-click="save_message('pp')") Envia observación
+            button.list_button.mleft10(ng-click="close_message()") Cerrar 
+            button.list_button.mleft10(ng-show="root.parapolitica.mensaje && !message_dirty" ng-click="del_message('pp')") Borrar 
       div.form_wrapper
        table.tab_form_table
          tr

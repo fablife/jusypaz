@@ -74,3 +74,9 @@ div.info_wrapper
             td               
                label.small_form Longitud
                div(input-inline-edit="root.parapolitica.long" on-save="set_parapolitica_dirty()" ng-focus="edit()" tabindex="62") 
+
+      h2.info_subtitle Observaciones del postulado 
+      p(ng-hide="not_empty(root.parapolitica.mensaje)") No hay observaciones del postulado
+      div(ng-show="root.parapolitica.mensaje")
+        div(input-inline-text="root.parapolitica.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+

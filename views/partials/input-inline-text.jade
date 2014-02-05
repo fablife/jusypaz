@@ -5,9 +5,9 @@ div(class="input_inline_edit_div")
          span(ng-hide="editMode" ng-click="edit()" ) 
             div(class="inline_edit_longtext")
                {{model}}
-            div.textwrapper(ng-show="showText"  ng-mouseleave="showText = false")
-               pre
-                  {{model}}
+            //-div.textwrapper(ng-show="showText"  ng-mouseleave="showText = false")
+            //-   pre
+            //-      {{model}}
    else
       div(class="inline_edit_longtext" ng-mouseover="showText = true")         
          {{model}}

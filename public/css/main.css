@@ -24,6 +24,10 @@ body {
   color: #010101;
 }
 
+.clear {
+  clear: both;
+}
+
 .myview_wrapper {
   width: 1024px;
   margin: 0px auto;
@@ -168,6 +172,25 @@ input.dialog_input {
     border-radius: 8px;
     background-color: #5EBAD9;
     box-shadow: 5px 5px 2px #010101;
+}
+
+.message_dialog {
+    margin: 0 auto;
+    width: 300px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #5EBAD9;
+    box-shadow: 5px 5px 2px #010101;
+    margin-top: 50px;
+    position: absolute;
+    right: 0;
+}
+
+.message_content {
+  line-height: 14px;
+  width: 280px;
+  height: 100px;
+  margin-bottom: 10px;
 }
 
 .file_browser {
@@ -968,4 +991,30 @@ th.hpad {
   vertical-align: middle;
   margin-left: 10px;
   margin-top: 5px;
+}
+.message {
+  position: relative;
+}
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis {
+  font: 10px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
 }

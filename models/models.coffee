@@ -77,6 +77,7 @@ DelitoSchema = new Schema({
   finca:          { type: String, default: "No especificado" },
   via:            { type: String, default: "No especificado" },
   otro_lugar:     { type: String, default: "No especificado" },
+  mensaje:        { type: String},
   video_path:     { type: String },
   lat:            { type: Number },
   long:           { type: Number },
@@ -112,6 +113,7 @@ HojaSchema = new Schema({
    padre:           { type: String },
    hijos:           { type: String },
    hermanos:        { type: String },
+   mensaje:        { type: String},
    #cuentas_ahorro:  { type: String },
    #cuentas_corriente: { type: String },
    #tarjetas_credito:  { type: String },
@@ -144,6 +146,7 @@ FosaSchema = new Schema({
   lat:              { type: Number, default: 0 },
   long:             { type: Number, default: 0 },
   id_victima:       { type: String, default: "No especificado" },
+  mensaje:          { type: String},
   entregada_familia:{ type: Boolean, default: false }
 })
 
@@ -160,6 +163,7 @@ BienSchema = new Schema({
   observaciones:    { type: String, default: "No especificado" },
   documentos:       { type: String, default: "No especificado" },
   fotos:            { type: String, default: "No especificado" },
+  mensaje:          { type: String},
   lat:              { type: Number, default: 0 },
   long:             { type: Number, default: 0 },
 })
@@ -181,6 +185,7 @@ MenorSchema = new Schema({
   acudiente:        { type: String, default: "No especificado" },
   direccion:        { type: String, default: "No especificado" },
   telefono:         { type: String, default: "No especificado" },
+  mensaje:          { type: String},
   incapacidades:    { type: String, default: "No especificado" }
 })
 
@@ -191,6 +196,7 @@ ProcesoSchema = new Schema({
   juzgado:          { type: String, default: "No especificado" },
   radicado:         { type: String, default: "No especificado" },
   estado:           { type: String, default: "No especificado" },
+  mensaje:          { type: String}
 })
 
 ParapoliticaSchema = new Schema({
@@ -210,6 +216,7 @@ ParapoliticaSchema = new Schema({
   vereda:           { type: String, default: "No especificado" },
   lat:              { type: Number, default: 0 },
   long:             { type: Number, default: 0 },
+  mensaje:          { type: String}
 })
 
 RelacionesAutoridadesSchema = new Schema({
@@ -232,6 +239,7 @@ RelacionesAutoridadesSchema = new Schema({
   vereda:           { type: String, default: "No especificado" },
   lat:              { type: Number, default: 0 },
   long:             { type: Number, default: 0 },
+  mensaje:          { type: String}
 })
 
 OperacionesConjuntasSchema = new Schema({
@@ -240,6 +248,7 @@ OperacionesConjuntasSchema = new Schema({
   nombres_implicado:    { type: String, default: "No especificado" },
   apellidos_implicado:  { type: String, default: "No especificado" },
   titulo:           { type: String, required: true},
+  mensaje:          { type: String}
 })
  
 MessageSchema = new Schema({

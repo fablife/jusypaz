@@ -350,6 +350,25 @@ exports.save_hv = (req, res) ->
   console.log "Salvar hoja de vida"
   saveHv(req, res)
 
+exports.msg_hv = (req, res) ->
+  h = req.body
+  Hoja.findOne({cedula: req.user.cedula}, (err, hoja) ->
+    if err?
+      handle_error(err, "Hoja de vida para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      hoja.mensaje = h.mensaje
+      hoja.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para hoja de vida", res)
+        else
+          res.send(hoja)
+      )
+  )
+########################################################
+## DELITOS 
+########################################################
 exports.create_delito = (req, res) ->
   console.log "get empty delito"
   crea_delito(req, res)
@@ -380,6 +399,23 @@ exports.del_delito = (req, res) ->
         )
   )
 
+exports.msg_delito = (req, res) ->
+  h = req.body
+  id = req.params.delitoId
+  Delito.findById(id, (err, delito) ->
+    if err?
+      handle_error(err, "Delito para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      delito.mensaje = h.mensaje
+      delito.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para delito", res)
+        else
+          res.send(delito)
+      )
+  )
 ########################################################
 ## PROCESOS
 ########################################################
@@ -454,6 +490,23 @@ exports.proces = (req, res) ->
     )
 
 
+exports.msg_proceso= (req, res) ->
+  h = req.body
+  id = req.params.procesoId
+  Proceso.findById(id, (err, proc) ->
+    if err?
+      handle_error(err, "Proceso para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      proc.mensaje = h.mensaje
+      proc.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para proceso", res)
+        else
+          res.send(proc)
+      )
+  )
 
 ########################################################
 ## MENORES
@@ -528,6 +581,23 @@ exports.menores = (req, res) ->
     console.log("menores de postulado retornadas")
     )
 
+exports.msg_menor = (req, res) ->
+  h = req.body
+  id = req.params.menorId
+  Menor.findById(id, (err, menor) ->
+    if err?
+      handle_error(err, "Menor para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      menor.mensaje = h.mensaje
+      menor.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para menor", res)
+        else
+          res.send(menor)
+      )
+  )
 ########################################################
 ## BIENES
 ########################################################
@@ -607,6 +677,24 @@ exports.bienes = (req, res) ->
       console.log("Bienes de postulado retornadas")
     )
 
+exports.msg_bien= (req, res) ->
+  h = req.body
+  id = req.params.bienId
+  Bien.findById(id, (err, bien) ->
+    if err?
+      handle_error(err, "Bien para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      bien.mensaje = h.mensaje
+      bien.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para bien", res)
+        else
+          res.send(bien)
+      )
+  )
+
 ########################################################
 ## OPERACIONES CONJUNTAS
 ########################################################
@@ -675,6 +763,24 @@ exports.jyp_op_conjunta = (req, res) ->
       res.send(pps)
       console.log("RelacionesAutoridades de postulado retornadas")
     )
+
+exports.msg_opcon= (req, res) ->
+  h = req.body
+  id = req.params.opconId
+  OperacionesConjuntas.findById(id, (err, opcon) ->
+    if err?
+      handle_error(err, "Operacion Conjunta para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      opcon.mensaje = h.mensaje
+      opcon.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para OperacionConjunta", res)
+        else
+          res.send(opcon)
+      )
+  )
 
 ########################################################
 ## RELACIONES AUTORIDADES
@@ -745,6 +851,24 @@ exports.jyp_relaut = (req, res) ->
 
 
 
+exports.msg_relaut= (req, res) ->
+  h = req.body
+  id = req.params.relautId
+  RelacionesAutoridades.findById(id, (err, relaut) ->
+    if err?
+      handle_error(err, "Relacion Autoridad para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      relaut.mensaje = h.mensaje
+      relaut.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para Relacion Autoridad", res)
+        else
+          res.send(relaut)
+      )
+  )
+
 ########################################################
 ## PP
 ########################################################
@@ -813,6 +937,24 @@ exports.jyp_pp = (req, res) ->
     )
 
 
+exports.msg_pp= (req, res) ->
+  h = req.body
+  id = req.params.ppId
+  Parapolitica.findById(id, (err, pp) ->
+    if err?
+      handle_error(err, "Parapolitica para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      pp.mensaje = h.mensaje
+      pp.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para Parapolitica ", res)
+        else
+          res.send(pp)
+      )
+  )
+
 ########################################################
 ## FOSAS
 ########################################################
@@ -880,6 +1022,27 @@ exports.jyp_fosas = (req, res) ->
     console.log("Fosas de postulado retornadas")
     )
 
+exports.msg_fosa= (req, res) ->
+  h = req.body
+  id = req.params.fosaId
+  Fosa.findById(id, (err, fosa) ->
+    if err?
+      handle_error(err, "Fosa para salvar observacion no encontrada", res)
+    #else if h._id not hoja._id
+    #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
+    else
+      fosa.mensaje = h.mensaje
+      fosa.save((err) ->
+        if err?
+          handle_error(err, "Error salvando mensaje para Fosa", res)
+        else
+          res.send(fosa)
+      )
+
+    )
+########################################################
+## 
+########################################################
 exports.codigos = (req, res) ->
   console.log "GET codigos"
   CodigoPenal.find({}, (err, codigos) ->

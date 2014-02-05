@@ -44,3 +44,9 @@ div.info
                td
                   label.small_form Observaciones 
                   div(input-inline-text="root.bien.observaciones" on-save="set_bien_dirty()" ng-focus="edit()" tabindex="23")
+
+         h2.info_subtitle Observaciones del postulado 
+         p(ng-hide="not_empty(root.bien.mensaje)") No hay observaciones del postulado
+         div(ng-show="not_empty(root.bien.mensaje)") 
+           div(input-inline-text="root.bien.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+

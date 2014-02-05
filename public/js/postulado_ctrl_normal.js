@@ -4,15 +4,142 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.subtab   = {};
   $scope.root.postulado_id    = $routeParams.postuladoId;
 
-  $scope.root.create_delito   = false;
-  $scope.root.newdelitotitle  = "";
-
   $scope.maintab.active = "hv";
   $scope.subtab.active = "jyp_delitos";
   
+  $scope.show_message = false;
+  $scope.message_dirty = false;
+  
+  $scope.root.delitos_by_codigo_penal = {};
   //console.log("postulado ctrl");
+  //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
 
-    //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
+  /*
+  * STATS
+  */
+  $scope.stats = function() {
+    if (typeof $scope.root.delitos == "undefined") {
+      $http.get('/minfo/jyp_delitos')
+      .success(function(data, status, headers, config) {
+        if (data.length > 0) {
+          $scope.root.delitos = data;      
+          $scope.root.delito = $scope.root.delitos[0];
+          $scope.root.selectedDelitoIndex = 0;
+          console.log($scope.root.delitos);
+          console.log($scope.root.delitos.length);
+          $scope.calc_stats();
+        } else {
+          $scope.root.delitos = [];
+        }
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de delitos. Comuníquese con la administración."; 
+      }); 
+    } else {
+      $scope.calc_stats();
+    }
+  }
+
+  $scope.calc_stats = function() {
+
+    for (var i=0; i< $scope.root.delitos.length; i++) {
+      var d = $scope.root.delitos[i];
+      if (!$scope.root.delitos_by_codigo_penal[d.codigo_penal]) {
+        $scope.root.delitos_by_codigo_penal[d.codigo_penal] = [];
+      }
+      $scope.root.delitos_by_codigo_penal[d.codigo_penal].push(d);
+    }
+    $scope.get_chart();
+  }
+
+  $scope.get_total = function(codigo) {
+    return $scope.root.delitos_by_codigo_penal[codigo].length; 
+  }
+
+  $scope.get_percentage = function(codigo) {
+    if ($scope.root.delitos.length > 0) {
+      return Math.round( ($scope.root.delitos_by_codigo_penal[codigo].length * 100) / $scope.root.delitos.length  * 100 ) / 100;
+    }
+  }
+  
+  $scope.get_chart = function() {
+   
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+      width = 960 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+ 
+    var x = d3.scale.ordinal()
+      .rangeRoundBands([0, width], .1);
+ 
+    var y = d3.scale.linear()
+      .range([height, 0]);
+ 
+    var xAxis = d3.svg.axis()
+      .scale(x)
+      .orient("bottom");
+ 
+    var yAxis = d3.svg.axis()
+      .scale(y)
+      .orient("left")
+      .ticks(1, "");
+ 
+    var svg = d3.select("#diagram_wrapper").append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+ 
+    $scope.get_diagram_data( function(data) {
+      x.domain(data.map(function(d) { return d.codigo; }));
+      y.domain([0, d3.max(data, function(d) { return d.amount; })]);
+ 
+      svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+ 
+      svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+      .append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("y", 6)
+        .attr("dy", ".71em")
+        .style("text-anchor", "end")
+        .text("Cantidad");
+ 
+     svg.selectAll(".bar")
+        .data(data)
+      .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.codigo); })
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) { return y(d.amount); })
+        .attr("height", function(d) { return height - y(d.amount); });
+ 
+    });
+
+    /*
+    function type(d) {
+      d.frequency = +d.frequency;
+      return d;
+    }
+    */
+  }
+
+  $scope.get_diagram_data = function(callback) {
+    var arr = [];
+    for (var c in $scope.root.delitos_by_codigo_penal) {
+      var json = {}
+      json.codigo = c;
+      json.amount = $scope.root.delitos_by_codigo_penal[c].length;
+      arr.push(json);
+    }
+    callback(arr);
+  }
+ /*
+  * END STATS
+  */
   $http.get('/minfo/')
         .success(function(postulado, status, headers, config) {
             console.log(postulado[0]);
@@ -33,6 +160,115 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     window.print();
   }
 
+  $scope.message = function() {
+    $scope.show_message = true;
+  }
+
+  $scope.set_message_dirty = function() {
+    $scope.message_dirty = true;
+  }
+
+  $scope.close_message = function() {
+    if ($scope.message_dirty) {
+      $scope.root.hoja.mensaje = null;
+    }
+    $scope.show_message = false;
+ }
+  $scope.del_message = function(type) {
+    var yes = confirm("Está seguro de querer borrar la observación?");
+     
+    if (yes == true) {
+      var data_object = null;
+      var url = null;
+    
+      switch(type) {
+        case "hv":   data_object = $scope.root.hoja;
+                      url = "/minfo/hv/msg";
+                      break;
+        case "bien": data_object = $scope.root.bien;
+                      url = "/minfo/bienes/" + $scope.root.bien._id + "/msg";
+                      break;
+        case "proc": data_object = $scope.root.proc;
+                      url = "/minfo/procesos/" + $scope.root.proc._id + "/msg";
+                      break;
+        case "menor": data_object = $scope.root.menor;
+                      url = "/minfo/menores/" + $scope.root.menor._id + "/msg";
+                      break;
+        case "delito": data_object = $scope.root.delito;
+                      url = "/minfo/delitos/" + $scope.root.delito._id + "/msg";
+                      break;
+        case "fosa": data_object = $scope.root.fosa;
+                      url = "/minfo/fosas/" + $scope.root.fosa._id + "/msg";
+                      break;
+        case "opcon": data_object = $scope.root.op_conjunta;
+                      url = "/minfo/opcon/" + $scope.root.op_conjunta._id + "/msg";
+                      break;
+        case "pp": data_object = $scope.root.parapolitica;
+                      url = "/minfo/pp/" + $scope.root.parapolitica._id + "/msg";
+                      break;
+        case "relaut": data_object = $scope.root.relaut;
+                      url = "/minfo/relaut/" + $scope.root.relaut._id + "/msg";
+                      break;
+      }
+
+      data_object.mensaje = null;
+      $http.put(url, data_object)
+        .success(function(data, state) {
+          $scope.root.notification = "Observación salvada con éxito";
+          data_object = data;
+        })
+        .error(function(data, state) {
+          $scope.root.error = "La observación no se pudo mandar. Contáctese con la administración";
+        });
+      $scope.show_message = false;
+    }
+    $scope.message_dirty = false;
+  }
+
+  $scope.save_message = function(type) {
+      var data_object = null;
+      var url = null;
+    
+      switch(type) {
+        case "hv":   data_object = $scope.root.hoja;
+                      url = "/minfo/hv/msg";
+                      break;
+        case "bien": data_object = $scope.root.bien;
+                      url = "/minfo/bienes/" + $scope.root.bien._id + "/msg";
+                      break;
+        case "proc": data_object = $scope.root.proc;
+                      url = "/minfo/procesos/" + $scope.root.proc._id + "/msg";
+                      break;
+        case "menor": data_object = $scope.root.menor;
+                      url = "/minfo/menores/" + $scope.root.menor._id + "/msg";
+                      break;
+        case "delito": data_object = $scope.root.delito;
+                      url = "/minfo/delitos/" + $scope.root.delito._id + "/msg";
+                      break;
+        case "fosa": data_object = $scope.root.fosa;
+                      url = "/minfo/fosas/" + $scope.root.fosa._id + "/msg";
+                      break;
+        case "opcon": data_object = $scope.root.op_conjunta;
+                      url = "/minfo/opcon/" + $scope.root.op_conjunta._id + "/msg";
+                      break;
+        case "pp": data_object = $scope.root.parapolitica;
+                      url = "/minfo/pp/" + $scope.root.parapolitica._id + "/msg";
+                      break;
+        case "relaut": data_object = $scope.root.relaut;
+                      url = "/minfo/relaut/" + $scope.root.relaut._id + "/msg";
+                      break;
+      }
+    $http.put(url, data_object)
+      .success(function(data, state) {
+        $scope.root.notification = "Observación salvada con éxito";
+        data_object = data;
+      })
+      .error(function(data, state) {
+        $scope.root.error = "La observación no se pudo mandar. Contáctese con la administración";
+      });
+    $scope.show_message = false;
+    $scope.message_dirty = false;
+  }
   /*************************************************************************
     DELITOS
   *************************************************************************/

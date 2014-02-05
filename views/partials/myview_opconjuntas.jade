@@ -13,6 +13,15 @@ div.info_wrapper
       h2.info_subtitle Datos
         div.inline.inline-heading {{root.op_conjunta.titulo}}
       hr.title_separator
+      img.icon.right(ng-show="root.op_conjunta.mensaje" ng-click="message()" src="/img/message_exists.png")
+      img.icon.right(ng-hide="root.op_conjunta.mensaje" ng-click="message()" src="/img/message.png")
+      div.message(ng-show="show_message")
+          div.message_dialog.right
+            strong Deja una observación acerca de esta ficha
+            textarea.message_content(ng-model="root.op_conjunta.mensaje" ng-change="set_message_dirty()")
+            button.list_button(ng-click="save_message('opcon')") Envia observación
+            button.list_button.mleft10(ng-click="close_message()") Cerrar 
+            button.list_button.mleft10(ng-show="root.op_conjunta.mensaje && !message_dirty" ng-click="del_message('opcon')") Borrar 
       div.form_wrapper
        table.tab_form_table
          tr

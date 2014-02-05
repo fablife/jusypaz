@@ -38,3 +38,9 @@ div.info
                td
                   label.small_form Estado 
                   div(input-inline-text="root.proc.estado" on-save="set_proc_dirty()" ng-focus="edit()" tabindex="23")
+
+         h2.info_subtitle Observaciones del postulado 
+         p(ng-hide="not_empty(root.proc.mensaje)") No hay observaciones del postulado
+         div(ng-show="root.proc.mensaje")
+          div(input-inline-text="root.proc.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+
