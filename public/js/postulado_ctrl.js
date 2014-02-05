@@ -107,7 +107,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
   $http.get('/postulados/' + $scope.root.postulado_id )
         .success(function(postulado, status, headers, config) {
-            //console.log(postulado[0]);
+            console.log(postulado[0]);
             $scope.root.postulado = postulado[0];            
         })
         .error(function(data, status, headers, config){

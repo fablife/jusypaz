@@ -68,12 +68,12 @@ div.info_wrapper
             td.align_right
                label.small_form Hecho enunciado con/sin responsabilidad
             td
-               div.myview_form_value {{root.delito.responsabilidad}}
+               div.myview_form_value {{root.delito.responsabilidad | spanishBool }}
          tr
             td.align_right
                label.small_form Hecho confesado
             td
-               div.myview_form_value {{root.delito.confesado}}
+               div.myview_form_value {{root.delito.confesado | spanishBool }}
          tr
             td.align_right
                label.small_form Narración del hecho
@@ -140,115 +140,117 @@ div.info_wrapper
                div.myview_form_value {{root.delito.otro_lugar}}
 
 
-      h2.info_subtitle Autores participantes
-      table.tab_form_table.addition(ng-show="root.delito.participantes.length > 0" ng-repeat="participante in root.delito.participantes")
-         tr
-            td.align_right
-               label.small_form Nombres
-            td
-               div.myview_form_value {{participante.nombres}}
-         tr
-            td.align_right
-               label.small_form Apellidos
-            td
-               div.myview_form_value {{participante.apellidos}}
-         tr
-            td.align_right
-               label.small_form Alias
-            td
-               div.myview_form_value {{participante.alias}}
-         tr
-            td.align_right
-               label.small_form Grupo armado pertenencia
-            td
-               div.myview_form_value {{participante.pertenencia}}
-         tr
-            td.align_right
-               label.small_form Hecho confesado en versión libre del coparticipe
-            td
-               div.myview_form_value {{participante.confesado}}
-         tr
-            td.align_right
-               label.small_form Hora en mención del hecho
-            td
-               div.myview_form_value {{participante.hora_mencion}}
-         tr
-            td.align_right 
-               label.small_form Datos sobre pertenencia grupo armado
-            td
-               div.myview_form_value {{participante.participacion_datos}}
-         tr(ng-show="participante.pertenencia == 'Autodefensa'")
-            td.align_right
-               label.small_form Autodefensa Bloque
-            td
-               div.myview_form_value {{participante.autodefensa_bloque}}
-         tr
-            td.align_right 
-               label.small_form Autodefensa Frente
-            td
-               div.myview_form_value {{participante.autodefensa_frente}}
-         tr
-            td.align_right 
-               label.small_form Autodefensa Comandante
-            td
-               div.myview_form_value {{participante.autodefensa_comandante}}
-         tr(ng-show="participante.pertenencia == 'Autodefensa'")
-            td.align_right
-               label.small_form Autodefensa Linea de mando
-            td
-               div.myview_form_value {{participante.autodefensa_mando}}
-         tr
-            td.align_right
-               label.small_form Otros implicados en el hecho
-            td
-               div.participante(ng-repeat="otro in participante.otros_implicados")
-                  label.small_form Nombres
-                  {{otro.nombres}}
-                  label.small_form Apellidos
-                  {{otro.apellidos}}
-                  label.small_form Alias
-                  {{otro.alias}}
-                  label.small_form Pertenencia
-                  {{otro.pertenencia}}
-                  label.small_form Participación
-                  {{otro.participacion}}
+      div.participantes(ng-show="root.delito.participantes.length > 0")
+        h2.info_subtitle Autores participantes
+        table.tab_form_table.addition(ng-show="root.delito.participantes.length > 0" ng-repeat="participante in root.delito.participantes")
+           tr
+              td.align_right
+                 label.small_form Nombres
+              td
+                 div.myview_form_value {{participante.nombres}}
+           tr
+              td.align_right
+                 label.small_form Apellidos
+              td
+                 div.myview_form_value {{participante.apellidos}}
+           tr
+              td.align_right
+                 label.small_form Alias
+              td
+                 div.myview_form_value {{participante.alias}}
+           tr
+              td.align_right
+                 label.small_form Grupo armado pertenencia
+              td
+                 div.myview_form_value {{participante.pertenencia}}
+           tr
+              td.align_right
+                 label.small_form Hecho confesado en versión libre del coparticipe
+              td
+                 div.myview_form_value {{participante.confesado}}
+           tr
+              td.align_right
+                 label.small_form Hora en mención del hecho
+              td
+                 div.myview_form_value {{participante.hora_mencion}}
+           tr
+              td.align_right 
+                 label.small_form Datos sobre pertenencia grupo armado
+              td
+                 div.myview_form_value {{participante.participacion_datos}}
+           tr(ng-show="participante.pertenencia == 'Autodefensa'")
+              td.align_right
+                 label.small_form Autodefensa Bloque
+              td
+                 div.myview_form_value {{participante.autodefensa_bloque}}
+           tr
+              td.align_right 
+                 label.small_form Autodefensa Frente
+              td
+                 div.myview_form_value {{participante.autodefensa_frente}}
+           tr
+              td.align_right 
+                 label.small_form Autodefensa Comandante
+              td
+                 div.myview_form_value {{participante.autodefensa_comandante}}
+           tr(ng-show="participante.pertenencia == 'Autodefensa'")
+              td.align_right
+                 label.small_form Autodefensa Linea de mando
+              td
+                 div.myview_form_value {{participante.autodefensa_mando}}
+           tr
+              td.align_right
+                 label.small_form Otros implicados en el hecho
+              td
+                 div.participante(ng-repeat="otro in participante.otros_implicados")
+                    label.small_form Nombres
+                    {{otro.nombres}}
+                    label.small_form Apellidos
+                    {{otro.apellidos}}
+                    label.small_form Alias
+                    {{otro.alias}}
+                    label.small_form Pertenencia
+                    {{otro.pertenencia}}
+                    label.small_form Participación
+                    {{otro.participacion}}
 
-      h2.info_subtitle Victimas
-      label.small_form Numbero de victimas 
-      {{root.delito.num_victimas}}
-      br
-
-      table.tab_form_table.additions(ng-repeat="v in root.delito.victimas")
-         tr
-            td.align_right
-               label.small_form Nombre de la victima
-            td
-               {{v.nombres}}
-         tr
-            td.align_right
-               label.small_form Apellidos de la victima
-            td
-               {{v.apellidos}}
-         tr
-            td.align_right
-               label.small_form Oficio de la victima
-            td
-               {{v.oficio}}
-         tr
-            td.align_right
-               label.small_form Perfil de la victima
-            td
-               {{v.perfil}}
-         tr
-            td.align_right
-               label.small_form Victima enunciada por el postulado o por fiscalía
-            td
-               {{v.enunciada_por}}
-         tr
-            td.align_right
-               label.small_form Datos completos 
-            td
-               {{v.datos_completos}}
+      div.victimas(ng-show="root.delito.num_victimas.length > 0")
+        h2.info_subtitle Victimas
+        label.small_form Numbero de victimas 
+        {{root.delito.num_victimas}}
+        br
+       
+        table.tab_form_table.additions(ng-repeat="v in root.delito.victimas")
+           tr
+              td.align_right
+                 label.small_form Nombre de la victima
+              td
+                 {{v.nombres}}
+           tr
+              td.align_right
+                 label.small_form Apellidos de la victima
+              td
+                 {{v.apellidos}}
+           tr
+              td.align_right
+                 label.small_form Oficio de la victima
+              td
+                 {{v.oficio}}
+           tr
+              td.align_right
+                 label.small_form Perfil de la victima
+              td
+                 {{v.perfil}}
+           tr
+              td.align_right
+                 label.small_form Victima enunciada por el postulado o por fiscalía
+              td
+                 {{v.enunciada_por}}
+           tr
+              td.align_right
+                 label.small_form Datos completos 
+              td
+                 {{v.datos_completos}}
 
    
  //-  div.file_browser(ng-show="showFiles")

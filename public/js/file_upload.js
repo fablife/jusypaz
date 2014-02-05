@@ -55,11 +55,16 @@ function FileUploadCtrl(scope, timeout) {
     scope.$apply(function(scope) {
       console.log('files:', element.files);
       // Turn the FileList object into an Array
+        if (element.files.length == 0) {
+          scope.root.subirImagen = false;
+          return;
+        }
         scope.files = []
         for (var i = 0; i < element.files.length; i++) {
           scope.files.push(element.files[i])
         }
-      scope.root.progressVisible = false
+      scope.root.subirImagen = true;
+      scope.root.progressVisible = true; 
       });
       //var label  = document.getElementById("uploadFileName"); 
       //label.innerHTML = document.getElementById("fileToUpload").value;
@@ -84,7 +89,6 @@ function FileUploadCtrl(scope, timeout) {
     }
 
     scope.upload_pic = function() {      
-      scope.root.subirImagen = true;
       scope.upload("fileToUpload");
     }
 

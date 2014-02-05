@@ -1,7 +1,22 @@
 var app = angular.module('jusypazNormalApp', [
+        'spanishFilters',
         'ngAnimate',
         'ui.bootstrap',
         'ngRoute']);
+
+
+angular.module('spanishFilters', []).
+  filter('spanishBool', function() {
+    return function(val) {
+      if (val) {
+        return "Si";
+      }
+      else {
+        return "No";
+      }
+    }
+  }
+);
 
 app.config(['$routeProvider',
   function($routeProvider) {
