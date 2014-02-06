@@ -79,6 +79,15 @@ div.info
          td
             label.small_form Descripción 
             div(input-inline-text="root.hoja.bienes_desc" on-save="set_hv_dirty()" ng-focus="edit()" tabindex="75")
+   
+   h2.info_subtitle Remisiones 
+   a(ng-show="root.hoja.remisiones", href="{{root.hoja.remisiones}}") Bajar archivo remisiones
+   p(ng-hide="root.hoja.remisiones") No hay archivo de remisiones.
+   file-upload.uploadContainer.inline(path="'hv'" path_id="'remis'" complete_function="set_remision(url)" post_id="root.postulado_id")
+         div(ng-show="progressVisible")
+            div.percent {{uploadProgress}}%
+            div.progress-bar
+                div.uploaded(ng-style="{'width': uploadProgress+'%'}")
 
    h2.info_subtitle Observaciones del postulado 
    p(ng-hide="not_empty(root.hoja.mensaje)") No hay observaciones del postulado

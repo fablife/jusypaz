@@ -1025,6 +1025,22 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     HOJA DE VIDA
   *************************************************************************/
 
+  $scope.set_remision = function(url) {
+    console.log(url);
+    $scope.root.hoja.remisiones = '/docs/' + $scope.root.postulado_id + '/hv/remis/' + url;
+     
+   if (typeof $scope.root.hoja.cedula == "undefined" || $scope.root.hoja.cedula == null) {
+     $scope.root.hoja.cedula = $scope.root.postulado_id;
+    }
+    //console.log($scope.root.hoja);
+    $http.put('/admin/postulados/' + $scope.root.postulado_id + "/hv", $scope.root.hoja).
+           success(function(data) {
+            console.log("Successfully updated remisiones on hoja after upload");
+        }).error(function() {
+            console.log("Error updating remisiones on hoja after upload");
+        });
+  }
+
   $scope.hv = function() {
     //console.log ("hv selected");
     $scope.root.active = "hv";

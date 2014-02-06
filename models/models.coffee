@@ -100,6 +100,7 @@ HojaSchema = new Schema({
    #clinica:         { type: String },
    otros_nombres:   { type: String },
    estatura:        { type: String },
+   remisiones:      { type: String },
    peso:            { type: String },
    domicilio:       { type: String },
    #residencia:      { type: String },

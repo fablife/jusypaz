@@ -129,3 +129,7 @@ div.info.datos_version
                label.small_form Descripción 
             td
                div.myview_form_value {{root.hoja.bienes_desc}}
+
+   h2.info_subtitle Remisiones 
+   a(ng-show="root.hoja.remisiones", href="{{root.hoja.remisiones}}") Bajar archivo remisiones
+   p(ng-hide="root.hoja.remisiones") No hay archivo de remisiones.

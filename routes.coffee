@@ -1167,7 +1167,7 @@ docs_upload = (req, res) ->
                   handle_error(err, "Error guardando archivo subido", res)
                 else
                   console.log("Archivo subido con éxito.")
-                  res.send("Archivo subido con éxito")
+                  res.send(files.uploadedFile[0].originalFilename)
                 )
             catch e
               handle_error(e, "Error guardando archivo", res)

@@ -5,7 +5,8 @@ app.directive('fileUpload', function() {
       scope: {
          path: "=path",
          path_id: "=pathId",
-         post: "=postId"
+         post: "=postId",
+         complete_function: "&completeFunction"
       },
       template: '<div class="uploadContainer"><input type="file" id="file_upload" class="custom-uploader-input"/><button class="buttons mleft10" ng-click="browse()" ng-show="notReady">Busca archivo</button><button class="buttons" ng-click="upload()" ng-disabled="notReady">Subir</button></div>',
       controller: function($scope, UploadService) {
@@ -26,6 +27,7 @@ app.directive('fileUpload', function() {
           //$scope.root.notification = "Archivo subido con éxito.";
           alert("Archivo subido con éxito");
           console.log("upload successfully completed");
+          $scope.complete_function({url: event.target.response});
         });
 
         uploadService.onUploadFailed(function(event) {

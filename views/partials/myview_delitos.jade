@@ -95,6 +95,7 @@ div.info_wrapper
                div.myview_form_value {{root.delito.fecha_ocurrencia | date:'dd/MM/yyyy' }}
 
       h2.info_subtitle Georeferenciación
+      hr.title_separator
       button.buttons(ng-click="view_docs('delitos',root.delito._id + 'XXmap')") Ver mapa
       table.tab_form_table
          tr
@@ -151,6 +152,7 @@ div.info_wrapper
 
       div.participantes(ng-show="root.delito.participantes.length > 0")
         h2.info_subtitle Autores participantes
+        hr.title_separator
         table.tab_form_table.addition(ng-show="root.delito.participantes.length > 0" ng-repeat="participante in root.delito.participantes")
            tr
               td.align_right
@@ -225,6 +227,7 @@ div.info_wrapper
 
       div.victimas(ng-show="root.delito.num_victimas.length > 0")
         h2.info_subtitle Victimas
+        hr.title_separator
         label.small_form Numbero de victimas 
         {{root.delito.num_victimas}}
         br
