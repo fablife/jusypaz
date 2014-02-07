@@ -11,6 +11,7 @@ config    = require('./config')
 urls      = require('./urls')
 routes    = require('./routes')
 media     = require('./media')
+pdf       = require('./pdf')
 
 MongoStore = require('connect-mongo')(express)
 User      = require('./models/models').User
@@ -222,6 +223,7 @@ app.get('/minfo/jyp_op_conjunta', is_mine, routes.jyp_op_conjunta)
 app.get('/minfo/bienes', is_mine, routes.bienes)
 app.get('/minfo/menores', is_mine, routes.menores)
 app.get('/minfo/proces', is_mine, routes.proces)
+app.get('/minfo/pdf', is_mine, pdf.get_pdf)
 app.post('/minfo/pwd', routes.pwd)
 app.post('/send_message', routes.send_message)
 

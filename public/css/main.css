@@ -428,6 +428,13 @@ li.info_tab:hover {
   float: left;
 }
 
+.pdf_download {
+  margin-left: 20px;
+  width: 110px;
+  text-align: right;
+  float: left;
+}
+
 .icon {
   cursor: pointer;
   margin-left: 25px;

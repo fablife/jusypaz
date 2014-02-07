@@ -9,10 +9,114 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   
   $scope.show_message = false;
   $scope.message_dirty = false;
+  $scope.async_returns = [];
   
   $scope.root.delitos_by_codigo_penal = {};
   //console.log("postulado ctrl");
   //$scope.postulado = PostuladoService.postulado_info($scope.postulado_id );
+
+  $scope.load_pdf_view = function() {
+    var all_downloaded = true;
+    if (typeof $scope.root.delitos == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/jyp_delitos')
+      .success(function(data, status, headers, config) {
+          $scope.root.delitos = data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de delitos. Comuníquese con la administración."; 
+      }); 
+    }
+    if (typeof $scope.root.fosas == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/jyp_fosas')
+      .success(function(data, status, headers, config) {
+          $scope.root.fosas = data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de fosas. Comuníquese con la administración."; 
+      }); 
+    }
+    if (typeof $scope.root.op_conjuntas == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/jyp_op_conjunta')
+      .success(function(data, status, headers, config) {
+          $scope.root.op_conjuntas = data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de operaciones conjuntas. Comuníquese con la administración."; 
+      }); 
+    }
+    if (typeof $scope.root.parapoliticas == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/jyp_parapolitica')
+      .success(function(data, status, headers, config) {
+          $scope.root.parapoliticas= data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de parapoliticas. Comuníquese con la administración."; 
+      }); 
+    }
+    if (typeof $scope.root.relauts == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/jyp_relaut')
+      .success(function(data, status, headers, config) {
+          $scope.root.relauts = data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de relaciones autoridades. Comuníquese con la administración."; 
+      }); 
+    }
+    if (typeof $scope.root.menores == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/menores')
+      .success(function(data, status, headers, config) {
+          $scope.root.menores = data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de menores. Comuníquese con la administración."; 
+      }); 
+    }
+    if (typeof $scope.root.bienes == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/bienes')
+      .success(function(data, status, headers, config) {
+          $scope.root.bienes = data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de bienes. Comuníquese con la administración."; 
+      }); 
+    }
+    if (typeof $scope.root.proces == "undefined") {
+      all_downloaded = false;
+      $http.get('/minfo/proces')
+      .success(function(data, status, headers, config) {
+          $scope.root.proces = data;      
+          $scope.check_download_complete();
+      })
+      .error(function(data, status, headers, config){
+          $scope.root.error = "No se pudo bajar la lista de procesos. Comuníquese con la administración."; 
+      }); 
+    }
+
+    if (all_downloaded) {
+      window.location.href = "/inicio#/pdf_view";
+    }
+  }
+
+  $scope.check_download_complete = function() {
+    $scope.async_returns.push(1);
+    if ($scope.async_returns.length == 8) { 
+      window.location.href = "/inicio#/pdf_view";
+    }
+  }
 
   /*
   * STATS

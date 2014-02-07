@@ -30,6 +30,9 @@ app.config(['$routeProvider',
       when('/message', {
         templateUrl: 'partials/message'
       }).
+      when('/pdf_view', {
+        templateUrl: 'partials/pdf_view'
+      }).
       otherwise({
         redirectTo: '/index'
       });

@@ -1318,7 +1318,7 @@ _get_all_data = (data_objects, res) ->
 
 
 
-_get_all_postulado_objects = (cedula, data_objects, callback) ->
+exports._get_all_postulado_objects = (cedula, data_objects, callback) ->
     returns = {}
     cnt = 0
     data_objects.forEach (obj) ->

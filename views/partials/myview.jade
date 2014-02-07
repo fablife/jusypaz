@@ -19,6 +19,11 @@ div.myview_wrapper
       div.myview_info_general
         label Ciudad
         div.myview_form_value {{root.postulado.ciudad}}
+      div.pdf_download
+        a(href="/minfo/pdf")
+         img(src="/img/pdf.png")
+         //-img(src="/img/pdf.png" ng-click="load_pdf_view()") 
+        
 
     tabset.info_tabs
       tab.info_tab.active(heading="Hoja de Vida" select="hv()")

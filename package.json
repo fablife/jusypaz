@@ -1,6 +1,6 @@
 {
-    "name": "jusypaz"
-  , "version": "0.0.1"
+    "name": "SIAR"
+  , "version": "0.8.0"
   , "private": true
   , "dependencies": {
       "express": "*"
@@ -13,6 +13,7 @@
     , "connect-flash":"*"
     , "connect-mongo":"*"
     , "mongoose":"*"
+    , "phantom":"*"
     , "multiparty":"*"
   }
 }
