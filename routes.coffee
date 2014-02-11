@@ -1164,6 +1164,8 @@ docs_upload = (req, res) ->
         console.log(files)
         p         = req.params.postuladoId
         path      = fields.path
+        p_root_dir=  __dirname + "/media/postulados/"
+        p_dir     =  __dirname + "/media/postulados/" + p + "/"
         root_dir  =  __dirname + "/media/postulados/" + p + "/" + path + "/"
         id        = fields.path_id
         console.log("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " +id)
@@ -1172,6 +1174,12 @@ docs_upload = (req, res) ->
           fs.readFile(files.uploadedFile[0].path, (err, data) ->
             try
               newPath = root_dir + id + "/" + files.uploadedFile[0].originalFilename
+              if not fs.existsSync(p_root_dir)
+                fs.mkdirSync(p_root_dir)
+              if not fs.existsSync(p_dir)
+                fs.mkdirSync(p_dir)
+              if not fs.existsSync(root_dir)
+                fs.mkdirSync(root_dir)
               if not fs.existsSync(root_dir)
                 fs.mkdirSync(root_dir)
               if id.indexOf("/") > 0
