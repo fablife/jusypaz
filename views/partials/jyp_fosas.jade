@@ -41,7 +41,7 @@ div.info_wrapper
                div(input-inline-select="root.fosa.delito" opciones="root.delitos_postulado" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="7")
             td
                label.small_form Hora en mención
-               div(input-inline-edit="root.fosa.hora_mencion" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="8")
+               div(input-inline-time="root.fosa.hora_mencion" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="8")
          tr
             td
                label.small_form Nombre victima
