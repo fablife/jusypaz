@@ -46,13 +46,13 @@ div.info_wrapper
          tr
             td
                label.small_form Narración de los hechos
-               div(input-inline-edit="root.relaut.narracion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="31")
+               div(input-inline-text="root.relaut.narracion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="31")
             td
                label.small_form Rango
-               div(input-inline-edit="root.relaut.narracion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="32")
+               div(input-inline-edit="root.relaut.rango" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="32")
             td
                label.small_form Dependencia
-               div(input-inline-edit="root.relaut.narracion" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="34")
+               div(input-inline-edit="root.relaut.dependencia" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="34")
          tr
             td
                label.small_form Fecha
@@ -63,10 +63,10 @@ div.info_wrapper
          tr
             td
                label.small_form Pais
-               div(input-inline-edit="root.relaut.pais" on-save="set_relaut_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="41")
+               div(input-inline-select="root.relaut.pais" opciones="root.paises" on-save="set_relaut_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="41")
             td
                label.small_form Departamento
-               div(input-inline-edit="root.relaut.departamento" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="42")
+               div(input-inline-select="root.relaut.departamento" opciones="root.relaut_depts" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="42")
             td
                label.small_form Municipio
                div(input-inline-edit="root.relaut.municipio" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="43")
@@ -77,13 +77,6 @@ div.info_wrapper
             td
                label.small_form Vereda
                div(input-inline-edit="root.relaut.vereda" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="52")
-         tr
-            td
-               label.small_form Latitud
-               div(input-inline-edit="root.relaut.lat" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="61")
-            td               
-               label.small_form Longitud
-               div(input-inline-edit="root.relaut.long" on-save="set_relaut_dirty()" ng-focus="edit()" tabindex="62") 
 
       h2.info_subtitle Observaciones del postulado 
       p(ng-hide="not_empty(root.relaut.mensaje)") No hay observaciones del postulado

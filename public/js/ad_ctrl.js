@@ -89,6 +89,30 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
         $scope.show_add_codigo_dialog = true;
     }
 
+    $scope.delete_codigo = function(codigo) {
+        var yes = confirm("Está seguro de querer eliminar este codigo?");
+
+        if (yes == true) {         
+          $http.delete("/admin/codigopenal/" + codigo._id).
+            success(function() {
+            $scope.root.notification = "Codigo penal eliminado con éxito.";
+            var idx = -1;
+            for (var i in $scope.root.codigos) {
+                if ($scope.root.codigos[i]._id == codigo._id) {
+                    idx = i;
+                    break;
+                }
+            }
+            if (idx > -1) {
+                $scope.root.codigos.splice(idx, 1);
+            }
+          }).error(function() {
+            $scope.root.error = "Error al eliminar el codigo."; 
+          });
+        }
+
+    }
+
     $scope.cancel_codigo = function() {
         $scope.show_add_codigo_dialog = false;
     }

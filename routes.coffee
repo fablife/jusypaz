@@ -58,7 +58,7 @@ exports.new_codigo = (req, res) ->
           handle_error(err, "Error salvando el nuevo codigo penal.", res)
         else
           console.log "Nuevo código salvado con éxito"
-          res.send("OK")
+          res.send(cp)
       )
     else 
       handle_error(new Error(), "Informacion enviada invalida.", res)
@@ -286,14 +286,32 @@ exports.delete_user = (req,res) ->
       )
   )
 
+exports.delete_codigo = (req, res) ->
+  console.log "Delete codigo"
+  id = req.params.codigoId
+  
+  CodigoPenal.findById(id, (err, codigo) ->
+    if err?
+      handle_error(err, "Error eliminado codigo penal: CodigoPenal con esa id no existe. Id: " + id)
+    else
+      codigo.remove((err) ->
+      if err?
+        handle_error(err, "Error eliminando codigo con id " + id, res)
+      else
+        res.send("OK")
+        console.log("CodigoPenal eliminado con éxito.")
+      )
+  )
+    
+
 exports.delete_postulado = (req,res) ->
   console.log "Delete postulado"
   id = req.params.postuladoId
   Postulado.findById(id, (err, postulado) ->
-    cedula = postulado.cedula
     if err?
       handle_error(err, "Error eliminado postulado: Postulado con esa id no existe. Id: " + id)
     else
+      cedula = postulado.cedula
       postulado.remove((err) ->
       if err?
         handle_error(err, "Error eliminando postulado con id " + id, res)

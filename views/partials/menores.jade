@@ -52,7 +52,7 @@ div.info
                   div(input-inline-edit="root.menor.edad_desmovilizado" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="41")
                td
                   label.small_form Frente
-                  div(input-inline-date="root.menor.frente" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="42")    
+                  div(input-inline-edit="root.menor.frente" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="42")    
                td
                   label.small_form Comandante inmediato
                   div(input-inline-edit="root.menor.comandante" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="43")
@@ -62,7 +62,7 @@ div.info
                   div(input-inline-edit="root.menor.labor" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="51")
                td
                   label.small_form Nivél académico
-                  div(input-inline-date="root.menor.nivel_academico" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="52")            
+                  div(input-inline-edit="root.menor.nivel_academico" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="52")            
                td
                   label.small_form Nombre del acudiente
                   div(input-inline-edit="root.menor.acudiente" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="53")
@@ -72,10 +72,10 @@ div.info
                   div(input-inline-edit="root.menor.direccion" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="61")
                td
                   label.small_form Telefono
-                  div(input-inline-date="root.menor.telefono" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="62")            
+                  div(input-inline-edit="root.menor.telefono" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="62")            
                td
                   label.small_form Incapacidades
-                  div(input-inline-edit="root.menor.incapacidades" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="63")
+                  div(input-inline-text="root.menor.incapacidades" on-save="set_menor_dirty()" ng-focus="edit()" tabindex="63")
 
          h2.info_subtitle Observaciones del postulado 
          p(ng-hide="not_empty(root.menor.mensaje)") No hay observaciones del postulado

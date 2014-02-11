@@ -215,8 +215,8 @@ ParapoliticaSchema = new Schema({
   municipio:        { type: String, default: "No especificado" },
   corregimiento:    { type: String, default: "No especificado" },
   vereda:           { type: String, default: "No especificado" },
-  lat:              { type: Number, default: 0 },
-  long:             { type: Number, default: 0 },
+#  lat:              { type: Number, default: 0 },
+#  long:             { type: Number, default: 0 },
   mensaje:          { type: String}
 })
 
@@ -238,8 +238,8 @@ RelacionesAutoridadesSchema = new Schema({
   municipio:        { type: String, default: "No especificado" },
   corregimiento:    { type: String, default: "No especificado" },
   vereda:           { type: String, default: "No especificado" },
-  lat:              { type: Number, default: 0 },
-  long:             { type: Number, default: 0 },
+#  lat:              { type: Number, default: 0 },
+#  long:             { type: Number, default: 0 },
   mensaje:          { type: String}
 })
 
@@ -249,6 +249,7 @@ OperacionesConjuntasSchema = new Schema({
   nombres_implicado:    { type: String, default: "No especificado" },
   apellidos_implicado:  { type: String, default: "No especificado" },
   titulo:           { type: String, required: true},
+  narracion:        { type: String, default: "No especificado" },
   mensaje:          { type: String}
 })
  

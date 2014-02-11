@@ -19,9 +19,13 @@ div.data_container
                 thead
                     tr.row
                       th Codigo Penal                      
+                      th
                 tbody
                     tr.row(ng-repeat="codigo in root.codigos" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
                       td
                         {{ codigo.nombre }}
+                      td
+                        button.action(ng-click="delete_codigo(codigo)") 
+                          img(src="/img/delete.png") Eliminar
 
         

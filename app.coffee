@@ -261,6 +261,7 @@ app.post('/admin/messages/:msgId', ensureAdmin, routes.msg_read)
 app.delete('/admin/messages/:msgId', ensureAdmin, routes.msg_delete)
 
 app.post('/admin/codigopenal/new', ensureAdmin, routes.new_codigo)
+app.delete('/admin/codigopenal/:codigoId', ensureAdmin, routes.delete_codigo)
 
 app.put('/admin/save_user', ensureAdmin, routes.save_user)
 app.put('/admin/save_postulado', ensureAdmin, routes.save_postulado)
