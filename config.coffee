@@ -9,3 +9,9 @@ exports.creds = {
 exports.app = {
     port: 3333,
 }
+
+exports.backup = {
+  dir: "/home/siar/backup",
+  source_files: "/home/siar/jusypaz/media"
+}
+  

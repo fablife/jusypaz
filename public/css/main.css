@@ -558,7 +558,7 @@ input[type=file] {
 }
 
 .top_actions {
-  margin-right: 600px;
+  margin-right: 200px;
 }
 
 .cancel_button {
@@ -883,7 +883,6 @@ li.acciones_link {
 }
 
 .inline_edit_longtext {
-  width: 452px;
   height: 34px;
   overflow-y: hidden;
 }
