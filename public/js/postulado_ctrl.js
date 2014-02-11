@@ -21,6 +21,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.root.civiles = [{nombre: "Soltero"}, {nombre: "Casado"}, {nombre: "Unión Libre"}, {nombre: "Separado"}, {nombre: "Viudo"}];
   $scope.root.paises = [{nombre: "Colombia"}, {nombre: "Panamá"}];
   $scope.root.colombia_depts = [{nombre: "Amazonas"}, {nombre: "Antioquia"}, {nombre: "Arauca"}, {nombre: "Atlántico"}, {nombre: "Bolivar"}, {nombre: "Boyacá"}, {nombre: "Caldas"}, {nombre: "Caquetá"}, {nombre: "Casanare"}, {nombre: "Cauca"}, {nombre: "Cesar"}, {nombre: "Chocó"}, {nombre: "Córdoba"}, {nombre: "Cundinamarca"}, {nombre: "Guainía"}, {nombre: "Guaviare"}, {nombre: "Huila"}, {nombre: "La Guajira"}, {nombre: "Magdalena"}, {nombre: "Meta"}, {nombre: "Nariño"}, {nombre: "Norte de Santander"}, {nombre: "Putumayo"}, {nombre: "Quindío"}, {nombre: "Risaralda"}, {nombre: "San Andrés y Providencia"}, {nombre: "Santander"}, {nombre: "Sucre"}, {nombre: "Tolima"}, {nombre: "Valle del Cauca"}, {nombre: "Vaupés"}, {nombre: "Vichada"}];
+
   $scope.root.panama_depts = [{nombre: "Panamá - Otros"}];
   $scope.root.fosa_depts = $scope.root.colombia_depts;
   $scope.root.delito_depts = $scope.root.colombia_depts;
@@ -31,51 +32,10 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     return ((str != null) && (str.length > 0));
   }
 
-  $scope.$watch('root.fosa.pais', function (newVal, oldVal, scope) {
-    if(newVal == "Panamá") { 
-      $scope.root.fosa_depts = $scope.root.panama_depts;
-      $scope.root.fosa.departamento = $scope.root.panama_depts[0].nombre;
-    } else if (newVal="Colombia") {
-      $scope.root.fosa_depts = $scope.root.colombia_depts;
-      $scope.root.fosa.departamento = $scope.root.colombia_depts[0].nombre;
-    }
-  });
-
-  $scope.$watch('root.parapolitica.pais', function (newVal, oldVal, scope) {
-    if(newVal == "Panamá") { 
-      $scope.root.pp_depts = $scope.root.panama_depts;
-      $scope.root.parapolitica.departamento = $scope.root.panama_depts[0].nombre;
-    } else if (newVal="Colombia") {
-      $scope.root.pp_depts = $scope.root.colombia_depts;
-      $scope.root.parapolitica.departamento = $scope.root.colombia_depts[0].nombre;
-    }
-  });
-
-  $scope.$watch('root.delito.pais', function (newVal, oldVal, scope) {
-    if(newVal == "Panamá") { 
-      $scope.root.delito_depts = $scope.root.panama_depts;
-      $scope.root.delito.dept  = $scope.root.panama_depts[0].nombre;
-    } else if (newVal="Colombia") {
-      $scope.root.delito_depts = $scope.root.colombia_depts;
-      $scope.root.delito.dept  = $scope.root.colombia_depts[0].nombre;
-    }
-  });
-  
-  $scope.$watch('root.relaut.pais', function (newVal, oldVal, scope) {
-    if(newVal == "Panamá") { 
-      $scope.root.relaut_depts = $scope.root.panama_depts;
-      $scope.root.relaut.departamento = $scope.root.panama_depts[0].nombre;
-    } else if (newVal="Colombia") {
-      $scope.root.relaut_depts = $scope.root.colombia_depts;
-      $scope.root.relaut.departamento = $scope.root.colombia_depts[0].nombre;
-    }
-  });
-
   $scope.calc_age = function(dateString) {
     var birthday = +new Date(dateString);
     return ~~((Date.now() - birthday) / (31557600000));
   }
-
 
   $scope.set_dirty = function(model) { 
     $scope.root.delito.dirty = true;
@@ -312,6 +272,15 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         $scope.root.delitos = data;      
         $scope.root.delito = $scope.root.delitos[0];
         $scope.root.selectedDelitoIndex = 0;
+        $scope.$watch('root.delito.pais', function (newVal, oldVal, scope) {
+          if(newVal == "Panamá") { 
+            $scope.root.delito_depts = $scope.root.panama_depts;
+            $scope.root.delito.dept  = $scope.root.panama_depts[0].nombre;
+          } else if (newVal="Colombia") {
+            $scope.root.delito_depts = $scope.root.colombia_depts;
+            $scope.root.delito.dept  = $scope.root.colombia_depts[0].nombre;
+          }
+        });
         //console.log($scope.root.delitos);
         //console.log($scope.root.delitos.length);
       } else {
@@ -506,6 +475,15 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.relauts = data;      
       $scope.root.relaut = $scope.root.relauts[0];
       $scope.root.selectedRelautIndex = 0;
+      $scope.$watch('root.relaut.pais', function (newVal, oldVal, scope) {
+        if(newVal == "Panamá") { 
+          $scope.root.relaut_depts = $scope.root.panama_depts;
+          $scope.root.relaut.departamento = $scope.root.panama_depts[0].nombre;
+        } else if (newVal="Colombia") {
+          $scope.root.relaut_depts = $scope.root.colombia_depts;
+          $scope.root.relaut.departamento = $scope.root.colombia_depts[0].nombre;
+        }
+      });
       //console.log($scope.root.relauts);
       //console.log($scope.root.relauts.length);
     })
@@ -604,6 +582,15 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.parapoliticas = data;      
       $scope.root.parapolitica = $scope.root.parapoliticas[0];
       $scope.root.selectedParapoliticaIndex = 0;
+      $scope.$watch('root.parapolitica.pais', function (newVal, oldVal, scope) {
+        if(newVal == "Panamá") { 
+          $scope.root.pp_depts = $scope.root.panama_depts;
+          $scope.root.parapolitica.departamento = $scope.root.panama_depts[0].nombre;
+        } else if (newVal="Colombia") {
+          $scope.root.pp_depts = $scope.root.colombia_depts;
+          $scope.root.parapolitica.departamento = $scope.root.colombia_depts[0].nombre;
+        }
+      });
       //console.log($scope.root.parapoliticas);
       //console.log($scope.root.parapoliticas.length);
     })
@@ -701,6 +688,16 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       $scope.root.fosa = $scope.root.fosas[0];
       $scope.root.selectedFosaIndex = 0;
       $scope.prepare_fosa_delitos_select();
+
+      $scope.$watch('root.fosa.pais', function (newVal, oldVal, scope) {
+        if(newVal == "Panamá") { 
+          $scope.root.fosa_depts = $scope.root.panama_depts;
+          $scope.root.fosa.departamento = $scope.root.panama_depts[0].nombre;
+        } else if (newVal="Colombia") {
+          $scope.root.fosa_depts = $scope.root.colombia_depts;
+          $scope.root.fosa.departamento = $scope.root.colombia_depts[0].nombre;
+        }
+  });
       //console.log($scope.root.fosas);
       //console.log($scope.root.fosas.length);
     })

@@ -64,7 +64,6 @@ function FileUploadCtrl(scope, timeout) {
           scope.files.push(element.files[i])
         }
       scope.root.subirImagen = true;
-      scope.root.progressVisible = true; 
       });
       //var label  = document.getElementById("uploadFileName"); 
       //label.innerHTML = document.getElementById("fileToUpload").value;
@@ -118,7 +117,11 @@ function FileUploadCtrl(scope, timeout) {
         source.src  = "/videos/" + scope.root.delito.cedula + "/" + scope.root.delito._id + "/" + scope.root.delito.video_path;
         if (scope.root.delito.hora_mencion) {
           scope.video.addEventListener('loadedmetadata', function() {            
-            this.currentTime = scope.root.delito.hora_mencion;
+            var stringtime = scope.root.delito.hora_mencion;
+            var h = stringtime.substring(0,2);
+            var m = stringtime.substring(3,5);
+            var s = stringtime.substring(6);
+            this.currentTime = parseInt(h)*3600 + parseInt(m)*60 + parseInt(s);
           }, false);          
         }
         source.type = "video/mp4";
@@ -135,6 +138,7 @@ function FileUploadCtrl(scope, timeout) {
     }
 
     scope.uploadFile = function() {
+        scope.root.progressVisible = true; 
         var fd = new FormData()
         for (var i in scope.files) {
             fd.append("uploadedFile", scope.files[i])
@@ -165,6 +169,7 @@ function FileUploadCtrl(scope, timeout) {
         /* This event is raised when the server send back a response */
         scope.root.delito = JSON.parse(evt.target.response);   
         scope.root.progressVisible = false;
+        scope.root.subirVideo = false;
         alert("Video subido con exito")
     }
 

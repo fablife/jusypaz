@@ -70,7 +70,7 @@ div.info_wrapper
          tr
             td
                label.small_form Hora en mención del hecho
-               div(input-inline-edit="root.delito.hora_mencion" on-save="set_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="12")
+               div(input-inline-time="root.delito.hora_mencion" on-save="set_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="12")
             td
                label.small_form Hecho enunciado con/sin responsabilidad
                div(input-inline-radio="root.delito.responsabilidad" on-save="set_dirty()" ng-focus="edit()" tabindex="13")

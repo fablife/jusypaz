@@ -81,6 +81,10 @@ app.directive('inputInlineEdit', function($timeout) {
     return get_inline_edit_widget($timeout, "text", '=inputInlineEdit', 'partials/input-inline-edit');
 });
 
+app.directive('inputInlineTime', function($timeout) {
+    return get_inline_edit_widget($timeout, "time", '=inputInlineTime', 'partials/input-inline-time');
+});
+
 app.directive('inputInlineText', function($timeout) {
     return get_inline_edit_widget($timeout, "textarea", '=inputInlineText', 'partials/input-inline-text');
 });
@@ -201,6 +205,8 @@ get_inline_edit_widget = function($timeout, type, model, template) {
           if (type=="date") {
             console.log(scope.model);
             scope.check_date_format();
+          } else if (type == "time") {
+            scope.check_time_format();
           }
           scope.handleSave({value: scope.model});
         }
@@ -209,7 +215,9 @@ get_inline_edit_widget = function($timeout, type, model, template) {
         scope.editMode = false;
         if (type=="date") {
             scope.check_date_format();
-          }
+        } else if (type == "time") {
+          scope.check_time_format();
+        }
         scope.handleSave({value: scope.model});
       };
       scope.cancel = function() {
@@ -220,6 +228,20 @@ get_inline_edit_widget = function($timeout, type, model, template) {
       scope.blur = function() {
         scope.editMode = false;
       };
+      scope.check_time_format = function() {
+        var time = scope.model;
+        var h = time.substring(0,2);
+        var m = time.substring(2,4);
+        var s = time.substring(4);
+        if (parseInt(h) > 59 || parseInt(m) > 59 || parseInt(s) > 59) {
+          scope.time_invalid = true;
+        } else {
+          scope.time_invalid = false;
+        }
+        var new_model = "" + h + ":" + m + ":" + s
+//        var seconds = parseInt(h)*3600 + parseInt(m)*60 + parseInt(s)
+        scope.model = new_model;
+      }
       scope.check_date_format = function() {
           var date = scope.model;
           d = date.substring(0,2);
