@@ -3,10 +3,11 @@ div.info_wrapper
       if (is_admin)
          button.add_action.right(ng-click="add_delito()")
       div.empty(ng-hide="root.delitos.length") No hay delitos para este postulado.
+      input(type="text" name="delito_search" ng-model="root.delitos.search")
       div.hecho_lista(ng-show="root.delitos.length") 
          div.hecho_lista_title
             Hay {{root.delitos.length}} delitos para este postulado.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos") {{delito.titulo}} 
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos | filter:root.delitos.search") {{delito.titulo}} 
             div.delete_item(ng-click="delete_delito(delito)")
 
 

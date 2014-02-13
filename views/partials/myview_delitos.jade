@@ -1,10 +1,11 @@
 div.info_wrapper
    div.navegacion_hechos
       div.empty(ng-hide="root.delitos.length") No hay delitos para usted.
+      input(type="text" ng-model="root.delitos.search")
       div.hecho_lista(ng-show="root.delitos.length") 
          div.hecho_lista_title
             Hay {{root.delitos.length}} delitos para usted.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos") {{delito.titulo}} 
+         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos | filter:root.delitos.search") {{delito.titulo}} 
 
 
    div.datos_version(ng-show="root.delitos.length")
