@@ -5,7 +5,8 @@ div.info
          div.hecho_lista(ng-show="root.proces.length") 
             div.hecho_lista_title
                Hay {{root.proces.length}} procesos para usted.
-            div.hecho_titulo(ng-class="{selected: $index==root.selectedProcIndex, dirty: proc.dirty}" ng-click="get_proc($index)" ng-repeat="proc in root.proces") {{proc.titulo}}
+            input.item_filter(type="text" placeholder="Buscar procesos" name="proc_search" ng-model="root.proces.search")
+            div.hecho_titulo(ng-class="{selected: proc==root.proc, dirty: proc.dirty}" ng-click="get_proc(proc)" ng-repeat="proc in root.proces | filter:root.proces.search") {{proc.titulo}}
 
       div.datos_version(ng-show="root.proces.length")
         img.icon.right(ng-click="doPrint()" src="/img/print.png")

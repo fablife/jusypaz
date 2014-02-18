@@ -6,7 +6,8 @@ div.info_wrapper
       div.hecho_lista(ng-show="root.op_conjuntas.length") 
          div.hecho_lista_title
             Hay {{root.op_conjuntas.length}} asuntos de Operaciones Conjuntas para este postulado.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedOp_conjuntaIndex, dirty: op_conjunta.dirty}" ng-click="get_op_conjunta($index)" ng-repeat="op_conjunta in root.op_conjuntas") {{op_conjunta.titulo}}
+         input.item_filter(type="text" placeholder="Buscar operación" name="op_search" ng-model="root.op_conjuntas.search")
+         div.hecho_titulo(ng-class="{selected: op_conjunta==root.op_conjunta, dirty: op_conjunta.dirty}" ng-click="get_op_conjunta(op_conjunta)" ng-repeat="op_conjunta in root.op_conjuntas | filter:root.op_conjuntas.search") {{op_conjunta.titulo}}
             div.delete_item(ng-click="delete_op_conjunta(op_conjunta)")
 
 
@@ -42,30 +43,3 @@ div.info_wrapper
       p(ng-hide="not_empty(root.op_conjunta.mensaje)") No hay observaciones del postulado
       div(ng-show="root.op_conjunta.mensaje")
         div(input-inline-text="root.op_conjunta.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
-
-      //-h2.info_subtitle.inline Georeferenciación     
-      //-table.tab_form_table
-      //-   tr
-      //-      td
-      //-         label.small_form Pais
-      //-         div(input-inline-edit="root.op_conjunta.pais" on-save="set_op_conjunta_dirty()" ng-focus="edit()" ng-focus="edit()" tabindex="41")
-      //-      td
-      //-         label.small_form Departamento
-      //-         div(input-inline-edit="root.op_conjunta.departamento" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="42")
-      //-      td
-      //-         label.small_form Municipio
-      //-         div(input-inline-edit="root.op_conjunta.municipio" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="43")
-      //-   tr
-      //-      td
-      //-         label.small_form Corregimiento
-      //-         div(input-inline-edit="root.op_conjunta.corregimiento" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="51")
-      //-      td
-      //-         label.small_form Vereda
-      //-         div(input-inline-edit="root.op_conjunta.vereda" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="52")
-      //-   tr
-      //-      td
-      //-         label.small_form Latitud
-      //-         div(input-inline-edit="root.op_conjunta.lat" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="61")
-      //-      td               
-      //-         label.small_form Longitud
-      //-        div(input-inline-edit="root.op_conjunta.long" on-save="set_op_conjunta_dirty()" ng-focus="edit()" tabindex="62") 

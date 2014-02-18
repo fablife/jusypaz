@@ -1167,27 +1167,36 @@ docs_upload = (req, res) ->
         p_root_dir=  __dirname + "/media/postulados/"
         p_dir     =  __dirname + "/media/postulados/" + p + "/"
         root_dir  =  __dirname + "/media/postulados/" + p + "/" + path + "/"
-        id        = fields.path_id
-        console.log("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " +id)
+        id        = fields.path_id[0]
+        console.log("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " + id)
 
         try 
           fs.readFile(files.uploadedFile[0].path, (err, data) ->
             try
               newPath = root_dir + id + "/" + files.uploadedFile[0].originalFilename
               if not fs.existsSync(p_root_dir)
-                fs.mkdirSync(p_root_dir)
+                console.log ("creating p_root_dir: " + p_root_dir)
+                fs.mkdirSync(p_root_dir) 
               if not fs.existsSync(p_dir)
+                console.log ("creating p_dir: " + p_dir)
                 fs.mkdirSync(p_dir)
               if not fs.existsSync(root_dir)
+                console.log ("creating root_dir: " + root_dir)
                 fs.mkdirSync(root_dir)
-              if not fs.existsSync(root_dir)
-                fs.mkdirSync(root_dir)
-              if id.indexOf("/") > 0
-                subdir = id.substring(0,id.indexOf("/"))
-                if not fs.existsSync(root_dir + subdir )
-                  fs.mkdirSync(root_dir + subdir)
+              if id.indexOf("/") > 0                
+                subdir = id.substring(0, id.indexOf("/"))
+                console.log ("subdir: " + subdir)
+                base_dir = root_dir + subdir
+                if not fs.existsSync(base_dir )
+                  console.log ("creating base_dir with root_dir: " + root_dir + " - subdir: " + subdir)
+                  fs.mkdirSync(base_dir)
+              else
+                console.log "indexOf was: " + id.indexOf("/")
               if not fs.existsSync(root_dir + id)
+                console.log ("creating root_dir + id: " + root_dir + id)
                 fs.mkdirSync(root_dir + id)
+
+              
               fs.writeFile(newPath, data, (err, delito) ->
                 if err?
                   handle_error(err, "Error guardando archivo subido", res)

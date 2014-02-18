@@ -5,7 +5,8 @@ div.info
          div.hecho_lista(ng-show="root.bienes.length") 
             div.hecho_lista_title
                Hay {{root.bienes.length}} bienes para usted.
-            div.hecho_titulo(ng-class="{selected: $index==root.selectedBienIndex, dirty: bien.dirty}" ng-click="get_bien($index)" ng-repeat="bien in root.bienes") {{bien.titulo}}
+            input.item_filter(type="text" placeholder="Buscar bienes" name="bien_search" ng-model="root.bienes.search")
+            div.hecho_titulo(ng-class="{selected: bien==root.bien, dirty: bien.dirty}" ng-click="get_bien(bien)" ng-repeat="bien in root.bienes | filter:root.bienes.search") {{bien.titulo}}
 
       div.datos_version(ng-show="root.bienes.length")
         img.icon.right(ng-click="doPrint()" src="/img/print.png")

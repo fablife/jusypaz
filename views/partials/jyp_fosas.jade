@@ -6,7 +6,8 @@ div.info_wrapper
       div.hecho_lista(ng-show="root.fosas.length") 
          div.hecho_lista_title
             Hay {{root.fosas.length}} fosas para este postulado.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedFosaIndex, dirty: fosa.dirty}" ng-click="get_fosa($index)" ng-repeat="fosa in root.fosas") {{fosa.titulo}}
+         input.item_filter(type="text" placeholder="Buscar fosas" name="fosa_search" ng-model="root.fosas.search")
+         div.hecho_titulo(ng-class="{selected: fosa==root.fosa, dirty: fosa.dirty}" ng-click="get_fosa(fosa)" ng-repeat="fosa in root.fosas | filter:root.fosas.search") {{fosa.titulo}}
             div.delete_item(ng-click="delete_fosa(fosa)")
 
 

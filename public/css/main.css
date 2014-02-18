@@ -162,6 +162,12 @@ input.dialog_input {
     width: 100%;
 }
 
+.item_filter {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 5px;
+  border: 1px solid #003b6f;
+}
 
 /*  App */
 /* ================================================== */

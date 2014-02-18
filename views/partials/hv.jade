@@ -83,7 +83,7 @@ div.info
    h2.info_subtitle Remisiones 
    a(ng-show="root.hoja.remisiones", href="{{root.hoja.remisiones}}") Bajar archivo remisiones
    p(ng-hide="root.hoja.remisiones") No hay archivo de remisiones.
-   file-upload.uploadContainer.inline(path="'hv'" path_id="'remis'" complete_function="set_remision(url)" post_id="root.postulado_id")
+   file-upload.uploadContainer.inline(path="'hv'" file_id="'remis'" path_id="'remis'" complete_function="set_remision(url)" post_id="root.postulado_id")
          div(ng-show="progressVisible")
             div.percent {{uploadProgress}}%
             div.progress-bar

@@ -7,7 +7,8 @@ div.info
          div.hecho_lista(ng-show="root.menores.length") 
             div.hecho_lista_title
                Hay {{root.menores.length}} menores para este postulado.
-            div.hecho_titulo(ng-class="{selected: $index==root.selectedMenorIndex, dirty: menor.dirty}" ng-click="get_menor($index)" ng-repeat="menor in root.menores") 
+            input.item_filter(type="text" placeholder="Buscar menores" name="menor_search" ng-model="root.menores.search")
+            div.hecho_titulo(ng-class="{selected: menor==root.menor, dirty: menor.dirty}" ng-click="get_menor(menor)" ng-repeat="menor in root.menores | filter:root.menores.search") 
                div.delete_item(ng-click="delete_menor(menor)")
                div(ng-hide="menor.nombres == 'No especificado'") {{menor.nombres}}&nbsp; {{ menor.apellidos}}
                div(ng-show="menor.nombres == 'No especificado'") {{menor.cedula_menor}}

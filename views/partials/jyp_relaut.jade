@@ -6,7 +6,8 @@ div.info_wrapper
       div.hecho_lista(ng-show="root.relauts.length") 
          div.hecho_lista_title
             Hay {{root.relauts.length}} asuntos de Relaciones Autoridades para este postulado.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedRelautIndex, dirty: relaut.dirty}" ng-click="get_relaut($index)" ng-repeat="relaut in root.relauts") {{relaut.titulo}}
+         input.item_filter(type="text" placeholder="Buscar relaciones" name="relaut_search" ng-model="root.relauts.search")
+         div.hecho_titulo(ng-class="{selected: relaut==root.relaut, dirty: relaut.dirty}" ng-click="get_relaut(relaut)" ng-repeat="relaut in root.relauts | filter:root.relauts.search") {{relaut.titulo}}
             div.delete_item(ng-click="delete_relaut(relaut)")
 
 

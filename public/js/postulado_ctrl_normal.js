@@ -378,9 +378,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   *************************************************************************/
 
 
-  $scope.get_delito = function(index) {
-    $scope.root.delito = $scope.root.delitos[index];
-    $scope.root.selectedDelitoIndex = index;
+  $scope.get_delito = function(delito) {
+    $scope.root.delito = delito;
   }
 
 
@@ -412,9 +411,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     OPERACIONES CONJUNTAS
   *************************************************************************/
 
-  $scope.get_op_conjunta = function(index) {
-    $scope.root.op_conjunta = $scope.root.op_conjuntas[index];
-    $scope.root.selectedOp_conjuntaIndex = index;
+  $scope.get_op_conjunta = function(op) {
+    $scope.root.op_conjunta = op;
   }
 
   $scope.jyp_op_conjuntas = function() {
@@ -442,9 +440,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   *************************************************************************/
 
 
-  $scope.get_relaut = function(index) {
-    $scope.root.relaut = $scope.root.relauts[index];
-    $scope.root.selectedRelautIndex = index;
+  $scope.get_relaut = function(relaut) {
+    $scope.root.relaut = relaut;
   }
 
 
@@ -471,9 +468,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     PARAPOLITICA
   *************************************************************************/
 
-  $scope.get_parapolitica = function(index) {
-    $scope.root.parapolitica = $scope.root.parapoliticas[index];
-    $scope.root.selectedParapoliticaIndex = index;
+  $scope.get_parapolitica = function(pp) {
+    $scope.root.parapolitica = pp;
   }
 
 
@@ -499,9 +495,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     FOSAS
   *************************************************************************/
 
-  $scope.get_fosa = function(index) {
-    $scope.root.fosa = $scope.root.fosas[index];
-    $scope.root.selectedFosaIndex = index;
+  $scope.get_fosa = function(fosa) {
+    $scope.root.fosa = fosa;
   }
 
   $scope.jyp_fosas = function() {
@@ -525,9 +520,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     MENORES
   *************************************************************************/
 
-  $scope.get_menor = function(index) {
-    $scope.root.menor = $scope.root.menores[index];
-    $scope.root.selectedMenorIndex = index;
+  $scope.get_menor = function(menor) {
+    $scope.root.menor = menor;
   }
 
   $scope.menores = function() {
@@ -552,9 +546,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   *************************************************************************/
   
 
-  $scope.get_proc = function(index) {
-    $scope.root.proc = $scope.root.proces[index];
-    $scope.root.selectedProcIndex = index;
+  $scope.get_proc = function(proc) {
+    $scope.root.proc = proc;
   }
 
   $scope.proces = function() {
@@ -577,9 +570,8 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     BIENES
   *************************************************************************/
 
-  $scope.get_bien = function(index) {
-    $scope.root.bien = $scope.root.bienes[index];
-    $scope.root.selectedBienIndex = index;
+  $scope.get_bien = function(bien) {
+    $scope.root.bien = bien;
   }
 
   $scope.bienes = function() {

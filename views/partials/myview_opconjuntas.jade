@@ -5,7 +5,8 @@ div.info_wrapper
       div.hecho_lista(ng-show="root.op_conjuntas.length") 
          div.hecho_lista_title
             Hay {{root.op_conjuntas.length}} asuntos de Operaciones Conjuntas para usted.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedOp_conjuntaIndex, dirty: op_conjunta.dirty}" ng-click="get_op_conjunta($index)" ng-repeat="op_conjunta in root.op_conjuntas") {{op_conjunta.titulo}}
+         input.item_filter(type="text" placeholder="Buscar operaciones" name="opconjunta_search" ng-model="root.op_conjuntas.search")
+         div.hecho_titulo(ng-class="{selected: op_conjunta==root.op_conjunta, dirty: op_conjunta.dirty}" ng-click="get_op_conjunta(op_conjunta)" ng-repeat="op_conjunta in root.op_conjuntas | filter:root.op_conjuntas.search") {{op_conjunta.titulo}}
 
 
    div.datos_version(ng-show="root.op_conjuntas.length")
@@ -39,30 +40,3 @@ div.info_wrapper
                label.small_form Apellidos implicado
             td
                div.myview_form_value {{root.op_conjunta.apellidos_implicado}}
-   
-      //-h2.info_subtitle.inline Georeferenciación     
-      //-table.tab_form_table
-      //-   tr
-      //-      td
-      //-         label.small_form Pais
-      //-         div.myview_form_value {{root.op_conjunta.pais}}
-      //-      td
-      //-         label.small_form Departamento
-      //-         div.myview_form_value {{root.op_conjunta.departamento}}
-      //-      td
-      //-         label.small_form Municipio
-      //-         div.myview_form_value {{root.op_conjunta.municipio}}
-      //-   tr
-      //-      td
-      //-         label.small_form Corregimiento
-      //-         div.myview_form_value {{root.op_conjunta.corregimiento}}
-      //-      td
-      //-         label.small_form Vereda
-      //-         div.myview_form_value {{root.op_conjunta.vereda}}
-      //-   tr
-      //-      td
-      //-         label.small_form Latitud
-      //-         div.myview_form_value {{root.op_conjunta.lat}}
-      //-      td               
-      //-         label.small_form Longitud
-      //-        div.myview_form_value {{root.op_conjunta.long}}

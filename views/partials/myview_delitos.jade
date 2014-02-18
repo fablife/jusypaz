@@ -5,7 +5,8 @@ div.info_wrapper
       div.hecho_lista(ng-show="root.delitos.length") 
          div.hecho_lista_title
             Hay {{root.delitos.length}} delitos para usted.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedDelitoIndex, dirty: delito.dirty}" ng-click="get_delito($index)" ng-repeat="delito in root.delitos | filter:root.delitos.search") {{delito.titulo}} 
+         input.item_filter(type="text" placeholder="Buscar delitos" name="delito_search" ng-model="root.delitos.search")
+         div.hecho_titulo(ng-class="{selected: delito==root.delito, dirty: delito.dirty}" ng-click="get_delito(delito)" ng-repeat="delito in root.delitos | filter:root.delitos.search") {{delito.titulo}} 
 
 
    div.datos_version(ng-show="root.delitos.length")

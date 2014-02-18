@@ -1,3 +1,4 @@
+upload_counter = 0;
 
 app.directive('fileUpload', function() {
    return {
@@ -8,7 +9,7 @@ app.directive('fileUpload', function() {
          post: "=postId",
          complete_function: "&completeFunction"
       },
-      template: '<div class="uploadContainer"><input type="file" id="file_upload" class="custom-uploader-input"/><button class="buttons mleft10" ng-click="browse()" ng-show="notReady">Busca archivo</button><button class="buttons" ng-click="upload()" ng-disabled="notReady">Subir</button></div>',
+      template: '<div class="uploadContainer"><input type="file" id="{{path_id}}_upload" class="custom-uploader-input"/><button class="buttons mleft10" ng-click="browse()" ng-show="notReady">Busca archivo</button><button class="buttons" ng-click="upload()" ng-disabled="notReady">Subir</button></div>',
       controller: function($scope, UploadService) {
         $scope.notReady = true;
         $scope.progressVisible = false;
@@ -54,7 +55,7 @@ app.directive('fileUpload', function() {
          };
 
          $scope.browse = function() {
-            var upload_btn = document.getElementById("file_upload");
+            var upload_btn = document.getElementById($scope.path_id + "_upload");
             upload_btn.click();
          } 
       },

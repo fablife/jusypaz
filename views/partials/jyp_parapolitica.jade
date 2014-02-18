@@ -6,7 +6,8 @@ div.info_wrapper
       div.hecho_lista(ng-show="root.parapoliticas.length") 
          div.hecho_lista_title
             Hay {{root.parapoliticas.length}} asuntos de parapoliticas para este postulado.
-         div.hecho_titulo(ng-class="{selected: $index==root.selectedParapoliticaIndex, dirty: parapolitica.dirty}" ng-click="get_parapolitica($index)" ng-repeat="parapolitica in root.parapoliticas") {{parapolitica.titulo}}
+         input.item_filter(type="text" placeholder="Buscar parapolitica" name="parapolitica_search" ng-model="root.parapoliticas.search")
+         div.hecho_titulo(ng-class="{selected: parapolitica==root.parapolitica, dirty: parapolitica.dirty}" ng-click="get_parapolitica(parapolitica)" ng-repeat="parapolitica in root.parapoliticas | filter:root.parapoliticas.search") {{parapolitica.titulo}}
             div.delete_item(ng-click="delete_pp(parapolitica)")
 
 

@@ -101,6 +101,7 @@ HojaSchema = new Schema({
    otros_nombres:   { type: String },
    estatura:        { type: String },
    remisiones:      { type: String },
+   imputaciones:    { type: String },
    peso:            { type: String },
    domicilio:       { type: String },
    #residencia:      { type: String },
