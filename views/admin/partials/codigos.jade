@@ -12,7 +12,7 @@ div.data_container
               label Término del nuevo código penal
               br
               input.dialog_input(type="text" ng-model="root.new_codigo_text")
-              button.buttons(ng-click="save_codigo()") Salvar
+              button.buttons(ng-click="save_codigo()") Guardar 
               button.buttons(ng-click="cancel_codigo()") Cancelar
 
             table#users_table.object_table
@@ -23,8 +23,10 @@ div.data_container
                 tbody
                     tr.row(ng-repeat="codigo in root.codigos" ng-class-odd="'object_row_odd'" ng-class-even="'object_row_even'")
                       td
-                        {{ codigo.nombre }}
+                        div(input-inline-edit="codigo.nombre" on-save="set_codigo_dirty(codigo)" ng-focus="edit()"  tabindex="{{ $index*10 + 1 }}")
                       td
+                        button.action(ng-show="is_dirty(codigo)" ng-click="update_codigo(codigo)") 
+                          img(src="/img/save.png") Grabar
                         button.action(ng-click="delete_codigo(codigo)") 
                           img(src="/img/delete.png") Eliminar
 

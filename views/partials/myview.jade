@@ -4,7 +4,7 @@ div.myview_wrapper
     div.postulado_info
       div.postulado_img(ng-controller="FileUploadCtrl" ng-mouseenter="show_buttons()" ng-mouseleave="hide_buttons()" )
         div.picture()
-        img(ng-show="root.postulado.picture" src="{{root.postulado.picture}}" width="100px" height="100px")
+        img(ng-show="root.postulado.picture" src="{{root.postulado.picture}}" width="135px" height="180px")
         
       div.myview_info_general
         label Nombres
@@ -23,7 +23,8 @@ div.myview_wrapper
         a(href="/minfo/pdf")
          img(src="/img/pdf.png")
          //-img(src="/img/pdf.png" ng-click="load_pdf_view()") 
-        
+
+    div.clear        
 
     tabset.info_tabs
       tab.info_tab.active(heading="Hoja de Vida" select="hv()")

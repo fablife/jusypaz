@@ -43,3 +43,8 @@ div.info_wrapper
       p(ng-hide="not_empty(root.op_conjunta.mensaje)") No hay observaciones del postulado
       div(ng-show="root.op_conjunta.mensaje")
         div(input-inline-text="root.op_conjunta.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+
+      h2.info_subtitle Observaciones del investigador 
+      p(ng-hide="not_empty(root.delito.observacion)") No hay observaciones del investigador 
+      div(input-inline-text="root.delito.observacion" on-save="set_dirty()" ng-focus="edit()" tabindex="220") 
+

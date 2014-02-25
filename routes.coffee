@@ -55,9 +55,9 @@ exports.new_codigo = (req, res) ->
       cp.nombre = codigo
       cp.save((err) ->
         if err?
-          handle_error(err, "Error salvando el nuevo codigo penal.", res)
+          handle_error(err, "Error grabando el nuevo codigo penal.", res)
         else
-          console.log "Nuevo código salvado con éxito"
+          console.log "Nuevo código grabado con éxito"
           res.send(cp)
       )
     else 
@@ -148,9 +148,9 @@ exports.pwd = (req, res) ->
           user.password = form.new_pass;
           user.save((err) ->
             if err?
-              handle_error(err, "No se pudo salvar la nueva contraseña!", res)
+              handle_error(err, "No se pudo grabar la nueva contraseña!", res)
             else
-              console.log "Nueva contraseña salvada con éxito"
+              console.log "Nueva contraseña grabada con éxito"
               res.send("OK")
           )
     )
@@ -174,7 +174,7 @@ exports.send_message = (req, res) ->
         msg.date = Date.now()
         msg.save((err) -> 
           if err?
-            handle_error(err, "No se pudo salvar el mensaje mandado.", res)
+            handle_error(err, "No se pudo grabar el mensaje mandado.", res)
           else
             console.log "Nuevo mensaje guardado en el sistema con éxito"
             res.send "OK"
@@ -190,6 +190,25 @@ exports.informe = (req, res) ->
   data_objects = [Fosa, Bien, Menor, Delito, Proceso, RelacionesAutoridades, OperacionesConjuntas, Parapolitica]
   _get_all_data(data_objects, res)
 
+exports.update_codigo = (req, res) ->
+  console.log("update_codigo")
+  c = {}
+  try
+    c = new CodigoPenal(req.body)
+  catch e
+    handle_error(e, "Seems no valid data in update_codigo update request", res)
+    return
+  upsert_data = c.toObject()
+  delete upsert_data._id
+  
+  CodigoPenal.update({_id: c.id}, upsert_data, {upsert: true}, (err) ->
+    if err?
+      handle_error(err, "Error grabando update para codigo penal", res)
+    else
+      console.log("Codigo Penal " + c.nombre + " grabado")
+      res.send(c)
+  )
+  
 exports.save_user = (req,res) ->
     console.log ("save_user")
     console.log (req.body)
@@ -206,8 +225,8 @@ exports.save_user = (req,res) ->
       if err?
         handle_error(err,"Error creando nuevo usuario!",res)
       else
-        console.log("Usuario " + u.username + " salvado.")
-        res.send("Usuario salvado")
+        console.log("Usuario " + u.username + " grabado.")
+        res.send("Usuario grabado")
     )
 
 exports.save_postulado = (req,res) ->
@@ -232,7 +251,7 @@ exports.save_postulado = (req,res) ->
         if err?
           handle_error(err,"Error creando nuevo postulado!",res)
         else
-          console.log("Postulado " + p.nombres + " " + p.apellidos + " salvado.")
+          console.log("Postulado " + p.nombres + " " + p.apellidos + " grabado.")
           if not details.updatedExisting
             u = new Usuario()
             u.username = p.nombres.substring(0,4) + p.apellidos.substring(0,4) + (""+ (Math.random())).substring(2,6)
@@ -244,10 +263,10 @@ exports.save_postulado = (req,res) ->
               handle_error(err, "Se creó el postulado pero no el usuario", res)
             else
               console.log("Objeto usuario con contraseña estandar para postulado " + p.nombres + " " + p.apellidos + " creado.")
-              res.send("Postulado salvado")
+              res.send("Postulado grabado")
             )
           else
-            res.send("Postulado salvado")         
+            res.send("Postulado grabado")         
       )
 
 exports.delete_user = (req,res) ->
@@ -365,21 +384,21 @@ exports.hv = (req, res) ->
   getHv(req, res)
 
 exports.save_hv = (req, res) ->
-  console.log "Salvar hoja de vida"
+  console.log "Grabar hoja de vida"
   saveHv(req, res)
 
 exports.msg_hv = (req, res) ->
   h = req.body
   Hoja.findOne({cedula: req.user.cedula}, (err, hoja) ->
     if err?
-      handle_error(err, "Hoja de vida para salvar observacion no encontrada", res)
+      handle_error(err, "Hoja de vida para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       hoja.mensaje = h.mensaje
       hoja.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para hoja de vida", res)
+          handle_error(err, "Error grabando mensaje para hoja de vida", res)
         else
           res.send(hoja)
       )
@@ -392,7 +411,7 @@ exports.create_delito = (req, res) ->
   crea_delito(req, res)
 
 exports.save_delito = (req, res) ->
-  console.log "Salvar delito"
+  console.log "Grabar delito"
   _save_delito(req, res)
 
 exports.jyp_delitos = (req, res) ->
@@ -422,14 +441,14 @@ exports.msg_delito = (req, res) ->
   id = req.params.delitoId
   Delito.findById(id, (err, delito) ->
     if err?
-      handle_error(err, "Delito para salvar observacion no encontrada", res)
+      handle_error(err, "Delito para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       delito.mensaje = h.mensaje
       delito.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para delito", res)
+          handle_error(err, "Error grabando mensaje para delito", res)
         else
           res.send(delito)
       )
@@ -471,14 +490,14 @@ exports.create_proces = (req, res) ->
   )
 
 exports.save_proces = (req, res) ->
-  console.log "Salvar proces"
+  console.log "Grabar proces"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(err, "Error accedendo a postulado para salvar proceso: Postulado no encontrado", res)
+      handle_error(err, "Error accedendo a postulado para grabar proceso: Postulado no encontrado", res)
     else
        #fosa = req.body
        #fosa.postulado_nombre = p.nombres + " " + p.apellidos
@@ -487,10 +506,10 @@ exports.save_proces = (req, res) ->
        #obj.fecha_ingreso  = convert_date(date)
        Proceso.update({'_id': id }, obj, (err) ->
          if err?
-           handle_error(err, "Error salvando menor.", res)
+           handle_error(err, "Error grabando menor.", res)
            return
-         res.send("proceso salvado ok")
-         console.log("proceso salvado con exito")
+         res.send("proceso grabado ok")
+         console.log("proceso grabado con exito")
        )
   )
 
@@ -513,14 +532,14 @@ exports.msg_proceso= (req, res) ->
   id = req.params.procesoId
   Proceso.findById(id, (err, proc) ->
     if err?
-      handle_error(err, "Proceso para salvar observacion no encontrada", res)
+      handle_error(err, "Proceso para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       proc.mensaje = h.mensaje
       proc.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para proceso", res)
+          handle_error(err, "Error grabando mensaje para proceso", res)
         else
           res.send(proc)
       )
@@ -563,14 +582,14 @@ exports.create_menor = (req, res) ->
   )
 
 exports.save_menor = (req, res) ->
-  console.log "Salvar menor"
+  console.log "Grabar menor"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(error, "Error accedendo a postulado para salvar menor: Postulado no encontrado")
+      handle_error(error, "Error accedendo a postulado para grabar menor: Postulado no encontrado")
       return
     #fosa = req.body
     #fosa.postulado_nombre = p.nombres + " " + p.apellidos
@@ -580,10 +599,10 @@ exports.save_menor = (req, res) ->
       obj.fecha_ingreso  = convert_date(date)
     Menor.update({'_id': id }, obj, (err) ->
       if err?
-        handle_error(err, "Error salvando menor.", res)
+        handle_error(err, "Error grabando menor.", res)
         return
-      res.send("menor salvado ok")
-      console.log("menor salvado con exito")
+      res.send("menor grabado ok")
+      console.log("menor grabado con exito")
     )
   )
 
@@ -604,14 +623,14 @@ exports.msg_menor = (req, res) ->
   id = req.params.menorId
   Menor.findById(id, (err, menor) ->
     if err?
-      handle_error(err, "Menor para salvar observacion no encontrada", res)
+      handle_error(err, "Menor para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       menor.mensaje = h.mensaje
       menor.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para menor", res)
+          handle_error(err, "Error grabando mensaje para menor", res)
         else
           res.send(menor)
       )
@@ -653,7 +672,7 @@ exports.create_bien = (req, res) ->
   )
 
 exports.save_bien = (req, res) ->
-  console.log "Salvar bien"
+  console.log "Grabar bien"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -670,15 +689,15 @@ exports.save_bien = (req, res) ->
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(error, "Error accedendo a postulado para salvar bien: Postulado no encontrado")
+      handle_error(error, "Error accedendo a postulado para grabar bien: Postulado no encontrado")
     #fosa = req.body
     #fosa.postulado_nombre = p.nombres + " " + p.apellidos
     Bien.update({'_id': id }, req.body, (err) ->
       if err?
-        handle_error(err, "Error salvando fosa.", res)
+        handle_error(err, "Error grabando fosa.", res)
         return
-      res.send("Bien salvado ok")
-      console.log("Bien salvado con exito")
+      res.send("Bien grabado ok")
+      console.log("Bien grabado con exito")
     )
   )
 
@@ -700,14 +719,14 @@ exports.msg_bien= (req, res) ->
   id = req.params.bienId
   Bien.findById(id, (err, bien) ->
     if err?
-      handle_error(err, "Bien para salvar observacion no encontrada", res)
+      handle_error(err, "Bien para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       bien.mensaje = h.mensaje
       bien.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para bien", res)
+          handle_error(err, "Error grabando mensaje para bien", res)
         else
           res.send(bien)
       )
@@ -750,22 +769,22 @@ exports.create_op_conjunta = (req, res) ->
   )
 
 exports.save_op_conjunta = (req, res) ->
-  console.log "Salvar op conjunta"
+  console.log "Grabar op conjunta"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(error, "Error accedendo a postulado para salvar op_conjunta: Postulado no encontrado")
+      handle_error(error, "Error accedendo a postulado para grabar op_conjunta: Postulado no encontrado")
     #pp = req.body
     #pp.postulado_nombre = p.nombres + " " + p.apellidos
     OperacionesConjuntas.update({'_id': id }, req.body, (err) ->
       if err?
-        handle_error(err, "Error salvando op_conjunta.", res)
+        handle_error(err, "Error grabando op_conjunta.", res)
         return
-      res.send("op_conjunta salvada ok")
-      console.log("op_conjunta salvada con exito")
+      res.send("op_conjunta grabada ok")
+      console.log("op_conjunta grabada con exito")
     )
   )
 
@@ -787,14 +806,14 @@ exports.msg_opcon= (req, res) ->
   id = req.params.opconId
   OperacionesConjuntas.findById(id, (err, opcon) ->
     if err?
-      handle_error(err, "Operacion Conjunta para salvar observacion no encontrada", res)
+      handle_error(err, "Operacion Conjunta para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       opcon.mensaje = h.mensaje
       opcon.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para OperacionConjunta", res)
+          handle_error(err, "Error grabando mensaje para OperacionConjunta", res)
         else
           res.send(opcon)
       )
@@ -836,22 +855,22 @@ exports.create_relaut = (req, res) ->
   )
 
 exports.save_relaut = (req, res) ->
-  console.log "Salvar pp"
+  console.log "Grabar pp"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(error, "Error accedendo a postulado para salvar relaut: Postulado no encontrado")
+      handle_error(error, "Error accedendo a postulado para grabar relaut: Postulado no encontrado")
     #pp = req.body
     #pp.postulado_nombre = p.nombres + " " + p.apellidos
     RelacionesAutoridades.update({'_id': id }, req.body, (err) ->
       if err?
-        handle_error(err, "Error salvando relaut.", res)
+        handle_error(err, "Error grabando relaut.", res)
         return
-      res.send("pp salvada ok")
-      console.log("pp salvada con exito")
+      res.send("pp grabada ok")
+      console.log("pp grabada con exito")
     )
   )
 
@@ -874,14 +893,14 @@ exports.msg_relaut= (req, res) ->
   id = req.params.relautId
   RelacionesAutoridades.findById(id, (err, relaut) ->
     if err?
-      handle_error(err, "Relacion Autoridad para salvar observacion no encontrada", res)
+      handle_error(err, "Relacion Autoridad para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       relaut.mensaje = h.mensaje
       relaut.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para Relacion Autoridad", res)
+          handle_error(err, "Error grabando mensaje para Relacion Autoridad", res)
         else
           res.send(relaut)
       )
@@ -923,22 +942,22 @@ exports.create_pp = (req, res) ->
   )
 
 exports.save_pp = (req, res) ->
-  console.log "Salvar pp"
+  console.log "Grabar pp"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(error, "Error accedendo a postulado para salvar pp: Postulado no encontrado")
+      handle_error(error, "Error accedendo a postulado para grabar pp: Postulado no encontrado")
     #pp = req.body
     #pp.postulado_nombre = p.nombres + " " + p.apellidos
     Parapolitica.update({'_id': id }, req.body, (err) ->
       if err?
-        handle_error(err, "Error salvando pp.", res)
+        handle_error(err, "Error grabando pp.", res)
         return
-      res.send("pp salvada ok")
-      console.log("pp salvada con exito")
+      res.send("pp grabada ok")
+      console.log("pp grabada con exito")
     )
   )
 
@@ -960,14 +979,14 @@ exports.msg_pp= (req, res) ->
   id = req.params.ppId
   Parapolitica.findById(id, (err, pp) ->
     if err?
-      handle_error(err, "Parapolitica para salvar observacion no encontrada", res)
+      handle_error(err, "Parapolitica para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       pp.mensaje = h.mensaje
       pp.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para Parapolitica ", res)
+          handle_error(err, "Error grabando mensaje para Parapolitica ", res)
         else
           res.send(pp)
       )
@@ -1009,22 +1028,22 @@ exports.create_fosa = (req, res) ->
   )
 
 exports.save_fosa = (req, res) ->
-  console.log "Salvar fosa"
+  console.log "Grabar fosa"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
   #Check: maybe not needed? save nombre directly from form?
   Postulado.find({'cedula':p}, (err, postulado) ->
     if err?
-      handle_error(error, "Error accedendo a postulado para salvar fosa: Postulado no encontrado")
+      handle_error(error, "Error accedendo a postulado para grabar fosa: Postulado no encontrado")
     #fosa = req.body
     #fosa.postulado_nombre = p.nombres + " " + p.apellidos
     Fosa.update({'_id': id }, req.body, (err) ->
       if err?
-        handle_error(err, "Error salvando fosa.", res)
+        handle_error(err, "Error grabando fosa.", res)
         return
-      res.send("Fosa salvada ok")
-      console.log("Fosa salvada con exito")
+      res.send("Fosa grabada ok")
+      console.log("Fosa grabada con exito")
     )
   )
 
@@ -1045,14 +1064,14 @@ exports.msg_fosa= (req, res) ->
   id = req.params.fosaId
   Fosa.findById(id, (err, fosa) ->
     if err?
-      handle_error(err, "Fosa para salvar observacion no encontrada", res)
+      handle_error(err, "Fosa para grabar observacion no encontrada", res)
     #else if h._id not hoja._id
     #  handle_error(err, "Error accediendo a hoja de vida de usuario en msg_hv", res)
     else
       fosa.mensaje = h.mensaje
       fosa.save((err) ->
         if err?
-          handle_error(err, "Error salvando mensaje para Fosa", res)
+          handle_error(err, "Error grabando mensaje para Fosa", res)
         else
           res.send(fosa)
       )
@@ -1096,13 +1115,13 @@ getHv = (req, res) ->
     )
 
 saveHv = (req, res) ->
-  console.log("_salvando hoja de vida...")
+  console.log("_grabando hoja de vida...")
   p = req.params.postuladoId
   Hoja.update('cedula': p, req.body , {upsert: true}, (err) ->
     if err?
-      handle_error(err, "Error salvando hoja de vida.", res)
+      handle_error(err, "Error grabando hoja de vida.", res)
     res.send("HV saved ok")
-    console.log("Hoja de vida salvada con exito")
+    console.log("Hoja de vida grabada con exito")
   )
 
 getDelitos = (req, res) ->
@@ -1129,10 +1148,10 @@ _save_delito = (req, res) ->
   
   Delito.update({'_id': id }, upsert_data, (err) ->
     if err?
-      handle_error(err, "Error salvando delito.", res)
+      handle_error(err, "Error grabando delito.", res)
       return
-    res.send("Delito salvado ok")
-    console.log("Delito salvado con exito")
+    res.send("Delito grabado ok")
+    console.log("Delito grabado con exito")
   )
 
 crea_delito = (req, res) ->
@@ -1258,7 +1277,7 @@ video_upload = (req, res) ->
                           delito.video_path = files.uploadedFile[0].originalFilename
                           delito.save((err) ->
                           if err?
-                            handle_error(err, "Video subido ok, delito encontrado, pero al salvarlo hubo error", res)
+                            handle_error(err, "Video subido ok, delito encontrado, pero al grabarlo hubo error", res)
                           else
                             console.log ("Video subido con exito.")
                             res.send(delito)
@@ -1306,7 +1325,7 @@ avatar_upload = (req, res) ->
                       postulado.picture = "/img/" + p + "/" + files.uploadedFile[0].originalFilename
                       postulado.save((err) ->
                       if err?
-                        handle_error(err, "Imagen subida ok, Postulado encontrado, pero al salvarlo hubo error", res)
+                        handle_error(err, "Imagen subida ok, Postulado encontrado, pero al grabarlo hubo error", res)
                       else
                         res.send(postulado)
                       )

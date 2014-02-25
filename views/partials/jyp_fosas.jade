@@ -23,9 +23,9 @@ div.info_wrapper
    div.datos_version(ng-show="root.fosas.length")
       h2.info_subtitle Fosa
         div(input-inline-edit="root.fosa.titulo" class="inline inline-heading" on-save="set_fosa_dirty()" ng-focus="edit()" tabindex="5")
-      label Subir archivo
+      label Grabar archivo
       file-upload.uploadContainer.inline(path="'fosas'" path_id="root.fosa._id" post_id="root.postulado_id")
-         div(ng-show="progressVisible")
+         div(ng-show="root.progressVisible")
             div.percent {{uploadProgress}}%
             div.progress-bar
                 div.uploaded(ng-style="{'width': uploadProgress+'%'}")
@@ -93,6 +93,11 @@ div.info_wrapper
       p(ng-hide="not_empty(root.fosa.mensaje)") No hay observaciones del postulado
       div(ng-show="root.fosa.mensaje")
         div(input-inline-text="root.fosa.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+
+      h2.info_subtitle Observaciones del investigador 
+      p(ng-hide="not_empty(root.delito.observacion)") No hay observaciones del investigador 
+      div(input-inline-text="root.delito.observacion" on-save="set_dirty()" ng-focus="edit()" tabindex="220") 
+
 
    div.file_browser(ng-show="showFiles")
       span.close_button.right

@@ -2,16 +2,16 @@ div(ng-controller="PostuladoCtrl")
     h1.inline Postulado
     div.postulado_info
       div.postulado_img(ng-controller="FileUploadCtrl" ng-mouseenter="show_buttons()" ng-mouseleave="hide_buttons()" )
-        button.upload_button(ng-show="root.show_buttons" ng-click="upload_pic()") Busca imagen
-        button.upload_button(ng-show="(root.subirImagen && root.show_buttons)" ng-click="uploadImagen()") Subir imagen 
+        button.upload_button(ng-show="root.show_buttons" ng-click="upload_pic()") Cargar imagen
+        button.upload_button(ng-show="(root.subirImagen && root.show_buttons)" ng-click="uploadImagen()") Grabar imagen 
         div.picture()        
-        img(ng-show="root.postulado.picture != ''" src="{{root.postulado.picture}}" width="100px" height="100px")
+        img(ng-show="root.postulado.picture != ''" src="{{root.postulado.picture}}" width="135px" height="180px")
         input(style="display: none" type="file" ng-model-instant id="fileToUpload" onchange="angular.element(this).scope().setFiles(this)")
         //-label.inline.small_text(ng-show="root.subirImagen" id="uploadFileName")
         
       if (is_admin)
         div.top_actions.right
-          button.buttons.action_button(ng-click="save()") Salvar
+          button.buttons.action_button(ng-click="save()") Guardar 
           //-button.buttons.action_button(ng-click="cancel()") Cancelar
 
       div.info_general
@@ -27,6 +27,8 @@ div(ng-controller="PostuladoCtrl")
       div.info_general
         label Ciudad
         div(input-readonly="root.postulado.ciudad" tabindex="5")
+
+    div.clear
 
     tabset.info_tabs
       tab.info_tab.active(heading="Hoja de Vida" select="hv()")

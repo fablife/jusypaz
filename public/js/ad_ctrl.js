@@ -89,6 +89,25 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
         $scope.show_add_codigo_dialog = true;
     }
 
+    
+    $scope.set_codigo_dirty = function(c) {
+      c.dirty = true;
+    }
+
+    $scope.is_dirty = function(c) {
+      return c.dirty;
+    }
+
+    $scope.update_codigo = function(codigo) {
+        $http.put('/admin/codigopenal/' + codigo._id, codigo).
+           success(function() {
+            $scope.root.notification = "Codigo grabado con éxito."; 
+            codigo.dirty = false;
+        }).error(function() {
+            $scope.error = "Error al grabar el postulado."; 
+        });      
+    }
+
     $scope.delete_codigo = function(codigo) {
         var yes = confirm("Está seguro de querer eliminar este codigo?");
 
@@ -219,10 +238,10 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
     $scope.save_user = function(user) {
         $http.put('/admin/save_user', user).
            success(function() {
-            $scope.root.notification = "Postulado salvado con éxito."; 
+            $scope.root.notification = "Usuario grabado con éxito."; 
             user.dirty = false;
         }).error(function() {
-            $scope.error = "Error al salvar el postulado."; 
+            $scope.error = "Error al grabar el usuario."; 
         });      
     }
     
@@ -259,10 +278,10 @@ adminControllers.controller('AdminCtrl', ['$scope', '$http', 'Usuario', 'Postula
     $scope.save_postulado = function(postulado) {
         $http.put('/admin/save_postulado', postulado).
            success(function() {
-            $scope.root.notification = "Postulado salvado con éxito."; 
+            $scope.root.notification = "Postulado grabado con éxito."; 
             postulado.dirty = false;
         }).error(function() {
-            $scope.root.error = "Error al salvar el postulado."; 
+            $scope.root.error = "Error al grabar el postulado."; 
         });
     };
 

@@ -22,28 +22,28 @@ codigos = ["Homicidio agravado","Homicidio en persona protegida","Desaparición 
 
 err_cnt = 0
 results = 0 
-console.log "Iniciando a salvar los códigos..."
+console.log "Iniciando a grabar los códigos..."
 console.log "Son: " + codigos.length + " codigos."
 
 for c in codigos
-  console.log "Salvando a " + c
+  console.log "Grabando a " + c
   p = new CodigoPenal()
   p.nombre = c
   p.save((err) ->
     if err?
       err_cnt += 1
-      #console.log "No se pudo salvar el código penal " + c + "! Razón: " + err
-      console.log "No se pudo salvar el código penal! Razón: " + err
+      #console.log "No se pudo grabar el código penal " + c + "! Razón: " + err
+      console.log "No se pudo grabar el código penal! Razón: " + err
       results += 1
     else
-      #console.log c + " salvado con éxito."
+      #console.log c + " grabado con éxito."
       results += 1
     if results == codigos.length
       if err_cnt > 0
-        console.log "Hubo errores en salvar la lista de código penal."
+        console.log "Hubo errores en grabar la lista de código penal."
         process.exit(-1)
       else
-        console.log "Toda la lista salvada con éxito."
+        console.log "Toda la lista grabada con éxito."
         process.exit(0)
   )
 

@@ -50,7 +50,7 @@ div.info_wrapper
          button.buttons.mleft10(ng-show='root.delito.video_path' ng-click="ver_video()") Ver video
          button.buttons.mleft10(ng-hide='root.delito.video_path' ng-click="busca_video()") Cargar video 
          input(style="display: none" type="file" ng-model-instant id="videoToUpload" onchange="angular.element(this).scope().setFiles(this)") 
-         button.buttons.mleft10( ng-show="root.subirVideo" ng-click="uploadFile()") Subir video 
+         button.buttons.mleft10( ng-show="root.subirVideo" ng-click="uploadFile()") Grabar video 
          label.inline.small_text(ng-show="root.subirVideo" id="uploadFileName")
          div(ng-show="root.progressVisible")
             div.percent {{progress}}%
@@ -190,7 +190,7 @@ div.info_wrapper
                   div(input-inline-text="otro.participacion" on-save="set_dirty()" ng-focus="edit()" tabindex="104")
 
       h2.info_subtitle Victimas
-      label.small_form Numbero de victimas 
+      label.small_form Numero de victimas 
       input.quick_input(ng-model="root.delito.num_victimas" on-change="set_dirty()" tabindex="120")
       br
 
@@ -221,7 +221,11 @@ div.info_wrapper
       h2.info_subtitle Observaciones del postulado 
       p(ng-hide="not_empty(root.delito.mensaje)") No hay observaciones del postulado
       div(ng-show="root.delito.mensaje")
-         div(input-inline-text="root.delito.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="206") 
+         div(input-inline-text="root.delito.mensaje" on-save="set_dirty()" ng-focus="edit()" tabindex="210") 
+
+      h2.info_subtitle Observaciones del investigador 
+      p(ng-hide="not_empty(root.delito.observacion)") No hay observaciones del investigador 
+      div(input-inline-text="root.delito.observacion" on-save="set_dirty()" ng-focus="edit()" tabindex="220") 
 
    div.file_browser(ng-show="showFiles")
       span.close_button.right

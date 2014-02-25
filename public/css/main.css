@@ -448,11 +448,12 @@ li.info_tab:hover {
 
 .postulado_img {
   background-image: url('/img/profile_placeholder.png');
-  background-size: 100px 100px;
+  background-size: 135px 180px;
   float: left;
-  width: 100px;
-  height: 100px;
+  width: 135px;
+  height: 180px;
   cursor: pointer;
+  margin-right: 10px;
 }
 
 .info_col {
@@ -535,7 +536,7 @@ input[type=file] {
 .buttons {
   cursor: pointer;
   height: 45px;
-  width: 90px;
+  width: 95px;
   border: none;
   margin-right: 20px;
 }

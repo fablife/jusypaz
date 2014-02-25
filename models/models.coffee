@@ -77,6 +77,7 @@ DelitoSchema = new Schema({
   finca:          { type: String, default: "No especificado" },
   via:            { type: String, default: "No especificado" },
   otro_lugar:     { type: String, default: "No especificado" },
+  observacion:    { type: String, default: "No especificado" },
   mensaje:        { type: String},
   video_path:     { type: String },
   lat:            { type: Number },
@@ -94,21 +95,15 @@ HojaSchema = new Schema({
    lugar_nacimiento: { type: String },
    frente_bec:      { type: String },
    num_desmovil:    { type: String },
-   #licencia_cond:   { type: String },
-   #pasaporte:       { type: String },
-   #salud:           { type: String },
-   #clinica:         { type: String },
    otros_nombres:   { type: String },
    estatura:        { type: String },
    remisiones:      { type: String },
    imputaciones:    { type: String },
    peso:            { type: String },
    domicilio:       { type: String },
-   #residencia:      { type: String },
    fijo:            { type: String },
    celular:         { type: String },
    profesion:       { type: String },
-   #militar:         { type: String },
    grado:           { type: String },
    conyugue:        { type: String },
    madre:           { type: String },
@@ -116,18 +111,6 @@ HojaSchema = new Schema({
    hijos:           { type: String },
    hermanos:        { type: String },
    mensaje:        { type: String},
-   #cuentas_ahorro:  { type: String },
-   #cuentas_corriente: { type: String },
-   #tarjetas_credito:  { type: String },
-   #cdt:             { type: String },
-   #obligaciones_entidades:  { type: String },
-   #obligaciones_familiares: { type: String },
-   #seguros_vida:    { type: String },
-   #inmuebles:       { type: String },
-   #muebles:         { type: String },
-   #sociedades:      { type: String },
-   #otros:           { type: String },
-   #bienes_fondo:    { type: String }
    bienes_desc:    { type: String }
 })
 
@@ -145,6 +128,7 @@ FosaSchema = new Schema({
   municipio:        { type: String, default: "No especificado" },
   corregimiento:    { type: String, default: "No especificado" },
   vereda:           { type: String, default: "No especificado" },
+  observacion:    { type: String, default: "No especificado" },
   lat:              { type: Number, default: 0 },
   long:             { type: Number, default: 0 },
   id_victima:       { type: String, default: "No especificado" },
@@ -162,6 +146,7 @@ BienSchema = new Schema({
   fecha_entrega:    { type: Date},
   rec_acc_social:   { type: Boolean, default: false},
   avaluo_acc_social:{ type: String, default: "No especificado" },
+  observacion:      { type: String, default: "No especificado" },
   observaciones:    { type: String, default: "No especificado" },
   documentos:       { type: String, default: "No especificado" },
   fotos:            { type: String, default: "No especificado" },
@@ -180,6 +165,7 @@ MenorSchema = new Schema({
   fecha_ingreso:    { type: Date },
   edad_ingreso:     { type: String, default: "No especificado" },
   edad_desmovilizado:{ type: String, default: "No especificado" }
+  observacion:      { type: String, default: "No especificado" },
   frente:           { type: String, default: "No especificado" },
   comandante:       { type: String, default: "No especificado" },
   labor:            { type: String, default: "No especificado" },
@@ -198,6 +184,7 @@ ProcesoSchema = new Schema({
   juzgado:          { type: String, default: "No especificado" },
   radicado:         { type: String, default: "No especificado" },
   estado:           { type: String, default: "No especificado" },
+  observacion:      { type: String, default: "No especificado" },
   mensaje:          { type: String}
 })
 
@@ -210,6 +197,7 @@ ParapoliticaSchema = new Schema({
   compulsa_copias:  { type: String, default: "No especificado" },
   condenas:         { type: String, default: "No especificado" },
   absolucion:       { type: String, default: "No especificado" },
+  observacion:      { type: String, default: "No especificado" },
   narracion:        { type: String, default: "No especificado" },
   pais:             { type: String, default: "Colombia" },
   departamento:     { type: String, default: "Antioquia" },
@@ -234,6 +222,7 @@ RelacionesAutoridadesSchema = new Schema({
   rango:            { type: String, default: "No especificado" },
   dependencia:      { type: String, default: "No especificado" },
   fecha:            { type: String, default: "No especificado" },
+  observacion:      { type: String, default: "No especificado" },
   pais:             { type: String, default: "Colombia" },
   departamento:     { type: String, default: "Antioquia" },
   municipio:        { type: String, default: "No especificado" },
@@ -251,6 +240,7 @@ OperacionesConjuntasSchema = new Schema({
   apellidos_implicado:  { type: String, default: "No especificado" },
   titulo:           { type: String, required: true},
   narracion:        { type: String, default: "No especificado" },
+  observacion:      { type: String, default: "No especificado" },
   mensaje:          { type: String}
 })
  

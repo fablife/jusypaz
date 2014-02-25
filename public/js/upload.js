@@ -9,7 +9,7 @@ app.directive('fileUpload', function() {
          post: "=postId",
          complete_function: "&completeFunction"
       },
-      template: '<div class="uploadContainer"><input type="file" id="{{path_id}}_upload" class="custom-uploader-input"/><button class="buttons mleft10" ng-click="browse()" ng-show="notReady">Busca archivo</button><button class="buttons" ng-click="upload()" ng-disabled="notReady">Subir</button></div>',
+      template: '<div class="uploadContainer"><input type="file" id="{{path_id}}_upload" class="custom-uploader-input"/><button class="buttons mleft10" ng-click="browse()" ng-show="notReady">Cargar archivo</button><button class="buttons" ng-click="upload()" ng-disabled="notReady">Grabar archivo</button></div>',
       controller: function($scope, UploadService) {
         $scope.notReady = true;
         $scope.progressVisible = false;
@@ -26,7 +26,7 @@ app.directive('fileUpload', function() {
         uploadService.onUploadComplete(function(event) {
           $scope.notReady = true;
           //$scope.root.notification = "Archivo subido con éxito.";
-          alert("Archivo subido con éxito");
+          alert("Archivo grabado con éxito");
           console.log("upload successfully completed");
           $scope.complete_function({url: event.target.response});
         });

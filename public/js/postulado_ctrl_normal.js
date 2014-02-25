@@ -318,7 +318,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       data_object.mensaje = null;
       $http.put(url, data_object)
         .success(function(data, state) {
-          $scope.root.notification = "Observación salvada con éxito";
+          $scope.root.notification = "Observación grabada con éxito";
           data_object = data;
         })
         .error(function(data, state) {
@@ -364,7 +364,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
       }
     $http.put(url, data_object)
       .success(function(data, state) {
-        $scope.root.notification = "Observación salvada con éxito";
+        $scope.root.notification = "Observación grabada con éxito";
         data_object = data;
       })
       .error(function(data, state) {
