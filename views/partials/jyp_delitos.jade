@@ -48,6 +48,7 @@ div.info_wrapper
       h2.info_subtitle.inline Datos de la acción
       div.inline.datos_acciones(ng-controller="FileUploadCtrl")
          button.buttons.mleft10(ng-show='root.delito.video_path' ng-click="ver_video()") Ver video
+         button.buttons.mleft10(ng-show='root.delito.video_path' ng-click="del_video()") Eliminar video
          button.buttons.mleft10(ng-hide='root.delito.video_path' ng-click="busca_video()") Cargar video 
          input(style="display: none" type="file" ng-model-instant id="videoToUpload" onchange="angular.element(this).scope().setFiles(this)") 
          button.buttons.mleft10( ng-show="root.subirVideo" ng-click="uploadFile()") Grabar video 
@@ -133,7 +134,7 @@ div.info_wrapper
 
       h2.info_subtitle Autores participantes
       button.add_action_small(ng-click="add_participante()")
-      table.tab_form_table.addition(ng-show="root.delito.participantes.length > 0" ng-repeat="participante in root.delito.participantes")
+      table.tab_form_table.addition.smooth_separator(ng-show="root.delito.participantes.length > 0" ng-repeat="participante in root.delito.participantes")
          tr
             td
                label.small_form Nombres
@@ -159,6 +160,10 @@ div.info_wrapper
             td 
                label.small_form Datos sobre pertenencia grupo armado
                div(input-inline-text="participante.participacion_datos" on-save="set_dirty()" ng-focus="edit()" tabindex="39")
+            td
+              &nbsp;
+            td
+              &nbsp;
          tr(ng-show="participante.pertenencia == 'Autodefensa'")
             td
                label.small_form Autodefensa Bloque
@@ -173,6 +178,10 @@ div.info_wrapper
             td
                label.small_form Autodefensa Linea de mando
                div(input-inline-edit="participante.autodefensa_mando" on-save="set_dirty()" ng-focus="edit()" tabindex="45")
+            td
+              &nbsp;
+            td
+              &nbsp;
          tr
             td
                label.small_form Otros implicados en el hecho
@@ -188,6 +197,11 @@ div.info_wrapper
                   div(input-inline-edit="otro.pertenencia" on-save="set_dirty()" ng-focus="edit()" tabindex="103")
                   label.small_form Participación
                   div(input-inline-text="otro.participacion" on-save="set_dirty()" ng-focus="edit()" tabindex="104")
+            td
+              &nbsp;
+            td
+              &nbsp;
+            
 
       h2.info_subtitle Victimas
       label.small_form Numero de victimas 
@@ -195,7 +209,7 @@ div.info_wrapper
       br
 
       button.add_action_small(ng-click="add_victima()")
-      table.tab_form_table.additions(ng-repeat="v in root.delito.victimas")
+      table.tab_form_table.additions.smooth_separator(ng-repeat="v in root.delito.victimas")
          tr
             td
                label.small_form Nombre de la victima

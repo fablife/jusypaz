@@ -131,5 +131,7 @@ div.info.datos_version
                div.myview_form_value {{root.hoja.bienes_desc}}
 
    h2.info_subtitle Remisiones 
-   a(ng-show="root.hoja.remisiones", href="{{root.hoja.remisiones}}") Bajar archivo remisiones
-   p(ng-hide="root.hoja.remisiones") No hay archivo de remisiones.
+   div(ng-show="root.hoja.remisiones.length > 0")
+      div.remisiones(ng-repeat="r in root.hoja.remisiones")
+        a.inline(href="{{r}}") {{ get_file_name_only(r) }} 
+   p(ng-hide="root.hoja.remisiones.length > 0") No hay archivo de remisiones.

@@ -97,8 +97,8 @@ HojaSchema = new Schema({
    num_desmovil:    { type: String },
    otros_nombres:   { type: String },
    estatura:        { type: String },
-   remisiones:      { type: String },
-   imputaciones:    { type: String },
+   remisiones:      { type: Array },
+   imputaciones:    { type: Array },
    peso:            { type: String },
    domicilio:       { type: String },
    fijo:            { type: String },
@@ -184,6 +184,7 @@ ProcesoSchema = new Schema({
   juzgado:          { type: String, default: "No especificado" },
   radicado:         { type: String, default: "No especificado" },
   estado:           { type: String, default: "No especificado" },
+  imputacion:       { type: String, default: "No especificado" },
   observacion:      { type: String, default: "No especificado" },
   mensaje:          { type: String}
 })

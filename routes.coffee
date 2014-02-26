@@ -1117,6 +1117,36 @@ getHv = (req, res) ->
 saveHv = (req, res) ->
   console.log("_grabando hoja de vida...")
   p = req.params.postuladoId
+  p_dir =  __dirname + "/media/postulados/" + p + "/hv/remis"
+  i_dir =  __dirname + "/media/postulados/" + p + "/hv/imput"
+  remis = req.body.remisiones
+  remis_file_name_only = []
+  for r in remis
+    remis_file_name_only.push(r.substring(r.lastIndexOf("/") + 1))  
+
+  imput = req.body.imputaciones
+  imput_file_name_only = []
+  for i in imput 
+    imput_file_name_only.push(i.substring(i.lastIndexOf("/") + 1))  
+
+  if fs.existsSync(p_dir)
+    listing = fs.readdirSync(p_dir)
+    if listing.length > 0
+      for l in listing 
+        if remis_file_name_only.indexOf(l) < 0
+          console.log("Found a file to delete in Hoja remisiones array: " + l)
+          fs.unlinkSync(p_dir + "/" + l)
+          console.log("Deleted.")
+
+  if fs.existsSync(i_dir)
+    listing = fs.readdirSync(i_dir)
+    if listing.length > 0
+      for l in listing 
+        if imput_file_name_only.indexOf(l) < 0
+          console.log("Found a file to delete in Hoja remisiones array: " + l)
+          fs.unlinkSync(i_dir + "/" + l)
+          console.log("Deleted.")
+
   Hoja.update('cedula': p, req.body , {upsert: true}, (err) ->
     if err?
       handle_error(err, "Error grabando hoja de vida.", res)
@@ -1230,6 +1260,37 @@ docs_upload = (req, res) ->
           handle_error(e, "Error al subir archivo", res)
     )
 
+
+exports.delete_video = (req, res) ->
+  console.log("_delete_video")
+
+  cedula = req.params.postuladoId
+  id     = req.params.delitoId
+
+  Postulado.findOne({'cedula':cedula} ,(err, postulado) ->
+    if err?
+      handle_error(err, "Error eliminando video: ese postulado no existe", res)
+    else
+      Delito.findById(id, (err, delito) ->
+        if err?
+          handle_error(err, "Error eliminando video: ese delito no existe", res)
+        else
+          root_dir = __dirname + "/media/postulados/"
+          full_dir = root_dir + cedula + "/delitos/"
+
+          try
+            fs.unlinkSync(full_dir + id + "/" + delito.video_path)
+          catch e
+            handle_error(err, "Error eliminando video: error eliminando del file system.", res)
+            return 
+          delito.video_path = ""
+          delito.save()
+          console.log("Video para delito eliminado con éxio.")
+          res.send(delito)
+      )
+  )
+  
+  
 
 video_upload = (req, res) ->
   console.log("_video_upload")

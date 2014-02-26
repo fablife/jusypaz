@@ -1,7 +1,10 @@
 div.info
    h2.info_subtitle Imputaciones 
-   a(ng-show="root.hoja.imputaciones", href="{{root.hoja.imputaciones}}") Bajar archivo imputaciones
-   p(ng-hide="root.hoja.imputaciones") No hay archivo de imputaciones.
+   div(ng-show="root.hoja.imputaciones.length > 0")
+      div.remisiones(ng-repeat="r in root.hoja.imputaciones")
+        a.inline(href="{{r}}") {{ get_file_name_only(r) }} 
+        div.inline_delete_item(ng-click="delete_imputacion(r)")
+   p(ng-hide="root.hoja.imputaciones.length > 0") No hay archivo de imputaciones.
    file-upload.uploadContainer.inline(path="'hv'" file_id="'imput'" path_id="'imput'" complete_function="set_imputacion(url)" post_id="root.postulado_id")
          div(ng-show="progressVisible")
             div.percent {{uploadProgress}}%

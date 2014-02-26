@@ -274,6 +274,7 @@ app.get('/admin/postulados/:postuladoId/informe',can_access,  routes.informe_pos
 app.get('/admin/informe',ensureAdmin,routes.informe)
 
 app.post('/admin/postulados/:postuladoId/videoupload', ensureAdmin, can_access, routes.upload_video)
+app.delete('/admin/postulados/:postuladoId/videoupload/:delitoId', ensureAdmin, can_access, routes.delete_video)
 app.post('/admin/postulados/:postuladoId/avatarupload', ensureAdmin,can_access, routes.upload_avatar)
 app.post('/admin/postulados/:postuladoId/docsupload', ensureAdmin, can_access, routes.upload_docs)
 app.put('/admin/postulados/:postuladoId/hv',can_access,  routes.save_hv)

@@ -244,6 +244,11 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
  /*
   * END STATS
   */
+
+  $scope.get_file_name_only = function(r) {
+    return r.substring(r.lastIndexOf("/") + 1);
+  }
+
   $http.get('/minfo/')
         .success(function(postulado, status, headers, config) {
             console.log(postulado[0]);

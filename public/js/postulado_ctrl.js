@@ -11,7 +11,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
   $scope.maintab.active = "hv";
   $scope.subtab.active = "jyp_delitos";
 
-  $scope.root.opciones_status = [{status: "Desmovilizados"}, {status: "Entregados a las familias"}, {status: "Entregados al ICBF"}, {status: "Personal que militó siendo menor de edad"}];
+  $scope.root.opciones_status = [{status: "Desmovilizado"}, {status: "Entregado a las familias"}, {status: "Entregado al ICBF"}, {status: "Persona que militó siendo menor de edad"}];
   $scope.root.tipos_pp = [{nombre: "Gobernadores"}, {nombre: "Diputados"}, {nombre: "Congresistas"}, {nombre: "Alcaldes"}, {nombre: "Concejales"}, {nombre: "Camara de representates"}, {nombre: "Directivos de partidos políticos"}];
   $scope.root.tipos_relaut = [{nombre: "Ejercito"}, {nombre: "Armada"}, {nombre: "Policia"}];
   $scope.root.tipos_op_conjunta = [{nombre: "Grupos de autodefensa"}, {nombre: "Ejercito"}, {nombre: "Policia Nacional"}];
@@ -185,7 +185,7 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     p.autodefensa_comandante   = "No especificado";
     p.autodefensa_mando    = "No especificado";
 
-    $scope.root.delito.participantes.ush(p);
+    $scope.root.delito.participantes.unshift(p);
   }
 
   $scope.remove_participante = function(p) {
@@ -1038,9 +1038,31 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
     HOJA DE VIDA
   *************************************************************************/
 
+  $scope.get_file_name_only = function(r) {
+    return r.substring(r.lastIndexOf("/") + 1);
+  }
+
+  $scope.delete_remision = function(r) {
+    var yes = confirm("Está seguro de querer elimina este documento?");
+
+    if (yes == true) {
+      for(var i=0; i<$scope.root.hoja.remisiones.length; i++) {
+        if ($scope.root.hoja.remisiones[i] == r) {
+          $scope.root.hoja.remisiones.splice(i, 1);
+          $http.put('/admin/postulados/' + $scope.root.postulado_id + "/hv", $scope.root.hoja).
+            success(function(data) {
+            console.log("Successfully updated remisiones on hoja after upload");
+          }).error(function() {
+            console.log("Error updating remisiones on hoja after upload");
+          });
+        }
+      }
+    }
+  }
+
   $scope.set_remision = function(url) {
     console.log(url);
-    $scope.root.hoja.remisiones = '/docs/' + $scope.root.postulado_id + '/hv/remis/' + url;
+    $scope.root.hoja.remisiones.push('/docs/' + $scope.root.postulado_id + '/hv/remis/' + url);
      
    if (typeof $scope.root.hoja.cedula == "undefined" || $scope.root.hoja.cedula == null) {
      $scope.root.hoja.cedula = $scope.root.postulado_id;
@@ -1054,9 +1076,27 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         });
   }
 
+  $scope.delete_imputacion = function(r) {
+    var yes = confirm("Está seguro de querer elimina este documento?");
+
+    if (yes == true) {
+      for(var i=0; i<$scope.root.hoja.imputaciones.length; i++) {
+        if ($scope.root.hoja.imputaciones[i] == r) {
+          $scope.root.hoja.imputaciones.splice(i, 1);
+          $http.put('/admin/postulados/' + $scope.root.postulado_id + "/hv", $scope.root.hoja).
+            success(function(data) {
+            console.log("Successfully updated remisiones on hoja after upload");
+          }).error(function() {
+            console.log("Error updating remisiones on hoja after upload");
+          });
+        }
+      }
+    }
+  }
+
   $scope.set_imputacion = function(url) {
     console.log(url);
-    $scope.root.hoja.imputaciones = '/docs/' + $scope.root.postulado_id + '/hv/imput/' + url;
+    $scope.root.hoja.imputaciones.push('/docs/' + $scope.root.postulado_id + '/hv/imput/' + url);
      
    if (typeof $scope.root.hoja.cedula == "undefined" || $scope.root.hoja.cedula == null) {
      $scope.root.hoja.cedula = $scope.root.postulado_id;

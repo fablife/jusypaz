@@ -1,6 +1,6 @@
 angular.module('app', [], function() {})
-FileUploadCtrl.$inject = ['$scope', '$timeout']
-function FileUploadCtrl(scope, timeout) {
+FileUploadCtrl.$inject = ['$scope', '$http','$timeout']
+function FileUploadCtrl(scope, http, timeout) {
     //============== DRAG & DROP =============
     // source for drag&drop: http://www.webappers.com/2011/09/28/drag-drop-file-upload-with-html5-javascript/
     /*
@@ -107,6 +107,20 @@ function FileUploadCtrl(scope, timeout) {
         scope.root.subirImagen = false;
         xhr.send(fd)
         
+    }
+
+    scope.del_video = function() {
+      var yes = window.confirm("Está seguro de querer eliminar este video?");
+      if (yes == true) {
+        http.delete('/admin/postulados/' + scope.root.delito.cedula + "/videoupload/" + scope.root.delito._id)
+          .success(function(data) {
+            scope.root.notification = "Video eliminado con éxito";
+            scope.root.delito = data; 
+          })
+          .error(function() {
+            scope.root.error = "Error eliminando video";
+          });
+      }
     }
 
     scope.ver_video = function() {

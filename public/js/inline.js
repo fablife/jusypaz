@@ -11,14 +11,15 @@ app.directive('onEsc', function() {
     return escape_function;
 });
 
+/*
 app.directive('onBlur', function() {
   return function(scope, elm, attr) {
     elm.bind('blur', function(e) {
-        //scope.$apply(attr.onBlur);
+        scope.$apply(attr.onEnter);
     });
   };
 });
-
+*/
 // On enter event
 app.directive('onEnter', function() {
   return function(scope, elm, attr) {
