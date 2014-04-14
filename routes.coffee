@@ -1121,14 +1121,16 @@ saveHv = (req, res) ->
   i_dir =  __dirname + "/media/postulados/" + p + "/hv/imput"
   remis = req.body.remisiones
   remis_file_name_only = []
-  for r in remis
-    remis_file_name_only.push(r.substring(r.lastIndexOf("/") + 1))  
+  if remis and remis.length > 0
+    for r in remis
+      remis_file_name_only.push(r.substring(r.lastIndexOf("/") + 1))  
 
   imput = req.body.imputaciones
   imput_file_name_only = []
-  for i in imput 
-    imput_file_name_only.push(i.substring(i.lastIndexOf("/") + 1))  
-
+  if imput and imput.length > 0
+    for i in imput 
+      imput_file_name_only.push(i.substring(i.lastIndexOf("/") + 1))  
+  
   if fs.existsSync(p_dir)
     listing = fs.readdirSync(p_dir)
     if listing.length > 0
