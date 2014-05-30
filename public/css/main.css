@@ -42,6 +42,15 @@ body {
   text-align: right;
 }
 
+.vertical_top {
+  vertical-align: top;
+}
+
+.vertical-text {
+  transform: rotate(90deg);
+  transform-origin: left top 0;
+}
+
 .title_separator {
   margin-top: 4px;
   margin-bottom: 10px;
@@ -499,6 +508,12 @@ label {
 label.small_form {
   font-size: 12px;
   display: inline;
+}
+
+label.small_form_multi {
+  font-size: 12px;
+  display: inline;
+  margin-right: 6px;
 }
 
 #direccion {

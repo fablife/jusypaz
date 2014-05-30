@@ -66,7 +66,7 @@ DelitoSchema = new Schema({
   confesado:      { type: Boolean, default: false },
   narracion:      { type: String, default: "No especificado" },
   clasificacion:  { type: String, default: "No especificado" },
-  fecha_ocurrencia: { type: Date },
+  fecha_ocurrencia: { type: String},
   pais:           { type: String, default: "No especificado" },
   dept:           { type: String, default: "No especificado" },
   municipio:      { type: String, default: "No especificado" },

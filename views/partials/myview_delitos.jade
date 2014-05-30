@@ -1,7 +1,6 @@
 div.info_wrapper
    div.navegacion_hechos
       div.empty(ng-hide="root.delitos.length") No hay delitos para usted.
-      input(type="text" ng-model="root.delitos.search")
       div.hecho_lista(ng-show="root.delitos.length") 
          div.hecho_lista_title
             Hay {{root.delitos.length}} delitos para usted.
@@ -212,22 +211,27 @@ div.info_wrapper
               td
                  div.myview_form_value {{participante.autodefensa_mando}}
            tr
-              td.align_right
+              td.align_right.vertical_top
                  label.small_form Otros implicados en el hecho
               td
                  div.participante(ng-repeat="otro in participante.otros_implicados")
-                    label.small_form Nombres
+                    label.small_form_multi Nombres
                     {{otro.nombres}}
-                    label.small_form Apellidos
+                    br
+                    label.small_form_multi Apellidos
                     {{otro.apellidos}}
-                    label.small_form Alias
+                    br
+                    label.small_form_multi Alias
                     {{otro.alias}}
-                    label.small_form Pertenencia
+                    br
+                    label.small_form_multi Pertenencia
                     {{otro.pertenencia}}
-                    label.small_form Participación
+                    br
+                    label.small_form_multi Participación
                     {{otro.participacion}}
+                    hr
 
-      div.victimas(ng-show="root.delito.num_victimas.length > 0")
+      div.victimas(ng-show="root.delito.victimas.length > 0")
         h2.info_subtitle Victimas
         hr.title_separator
         label.small_form Numbero de victimas 
