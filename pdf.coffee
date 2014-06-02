@@ -4,6 +4,7 @@
 phantom = require 'phantom'
 config  = require './config'
 fs      = require 'fs'
+logger  = require './logger'
 Postulado   = require('./models/models').Postulado
 Hoja        = require("./models/models").Hoja
 Delito      = require("./models/models").Delito
@@ -20,9 +21,10 @@ _get_all = require('./routes')._get_all_postulado_objects
 exports.get_pdf = (req, res) ->
   classes = [Postulado,Hoja,Delito,Fosa,Bien,Menor,Proceso,Parapolitica,RelacionesAutoridades,OperacionesConjuntas]
   _get_all(req.user.cedula,classes, (obj) ->
+    logger.debug(obj)
     res.render('partials/pdf_view',{postulado: obj['Postulado'][0], objects: obj}, (err, html) ->
       if err?
-        console.log("Error cargando vista par crear PDF!" + err)
+        logger.error("Error cargando vista par crear PDF!" + err)
       else
         if not fs.existsSync('files')
           fs.mkdirSync('files')
@@ -38,16 +40,16 @@ exports.get_pdf = (req, res) ->
                     }
             )
             page.set('content', html, () -> 
-              console.log("Reading page from html seems to have succeeded...")
+              logger.debug("Reading page from html seems to have succeeded...")
               page.render(filename, () ->
-                console.log('Archivo PDF generado con éxito.')
+                logger.info('Archivo PDF generado con éxito.')
                 
                 fs.readFile(filename, (err, data) ->
                   if err?
-                    console.log("Error reading the pdf file from disk to return to user!")
+                    logger.error("Error reading the pdf file from disk to return to user!")
                     res.send(500)
                   else
-                    console.log("PDF generado y retornado con éxito a usuario.")
+                    logger.info("PDF generado y retornado con éxito a usuario.")
                     res.setHeader("Content-Disposition", 'attachment; filename="' + file + '"')
                     res.type('application/pdf')
                     res.end(data, 'binary') 

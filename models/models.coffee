@@ -57,7 +57,7 @@ DelitoSchema = new Schema({
   titulo:         { type: String, required: true},
   tipo_version:   { type: String, default: "No especificado"},
   fecha_version:  { type: String, default: "No especificado"},
-  codigo_penal:   { type: String, default: "No especificado" },
+  codigo_penal:   { type: Array},
   fiscalia:       { type: String, default: "No especificado" },
   sitio_reclusion:{ type: String, default: "No especificado" },
   bloque_post:    { type: String, default: "No especificado" },

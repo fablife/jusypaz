@@ -18,6 +18,7 @@ CodigoPenal = require("./models/models").CodigoPenal
 
 handle_error = require("./utils").handle_error
 convert_date = require("./utils").convert_date
+logger       = require("./logger")
 
 fs = require('fs')
 multiparty = require('multiparty')
@@ -42,13 +43,13 @@ exports.admin = (req,res) ->
   res.render('admin/index')
 
 exports.new_codigo = (req, res) ->
-  console.log ("new codigo")
+  logger.debug("new codigo")
 
   if req.method isnt "POST"
     handle_error(new Error(), "Invalid access", res)
   else
     codigo = req.body.codigo
-    console.log req.body
+    logger.debug( req.body)
     
     if codigo?
       cp = new CodigoPenal()
@@ -57,7 +58,7 @@ exports.new_codigo = (req, res) ->
         if err?
           handle_error(err, "Error grabando el nuevo codigo penal.", res)
         else
-          console.log "Nuevo código grabado con éxito"
+          logger.info( "Nuevo código grabado con éxito")
           res.send(cp)
       )
     else 
@@ -65,25 +66,25 @@ exports.new_codigo = (req, res) ->
 
 
 exports.messages = (req, res) ->
-  console.log("messages")
+  logger.debug("messages")
 
   Message.find({'read': false}, (err, messages) ->
     if err?
       handle_error(err, "Error chequeando los mensajes!", res)
     else
-      console.log("Mensajes leidos")
+      logger.info("Mensajes leidos")
       res.send(messages)
   )
 
 exports.msg_read = (req, res) ->
-  console.log("msg read")
+  logger.debug("msg read")
 
   if req.method isnt "POST"
     handle_error(new Error(), "Invalid access", res)
   else  
     id = req.params.msgId
-    console.log id
-    console.log req.params
+    logger.debug( id )
+    logger.debug( req.params )
 
     if id?
       Message.findById(id, (err, message) ->
@@ -92,7 +93,7 @@ exports.msg_read = (req, res) ->
         else
           message.read = true;
           message.save((err) ->
-            console.log("Mensaje marcado leidos")
+            logger.info("Mensaje marcado leidos")
             res.send("OK")
           )      
       )
@@ -100,7 +101,7 @@ exports.msg_read = (req, res) ->
       handle_error(new Error(), "Invalid message id", res)
 
 exports.msg_delete = (req, res) ->
-  console.log("msg delete")
+  logger.debug("msg delete")
 
   id = req.params.msgId
   if id?
@@ -109,7 +110,7 @@ exports.msg_delete = (req, res) ->
         handle_error(err, "Error eliminando mensaje!", res)
       else
         msg.remove((err) ->
-          console.log "Mensaje eliminado con éxito"
+          logger.info "Mensaje eliminado con éxito"
           res.send("OK")
         )
     )
@@ -117,18 +118,18 @@ exports.msg_delete = (req, res) ->
     handle_error(new Error(), "Invalid message id", res)
 
 exports.get_messages = (req, res) ->
-  console.log("messages")
+  logger.debug("messages")
 
   Message.find((err, messages) ->
     if err?
       handle_error(err, "Error chequeando los mensajes!", res)
     else
-      console.log("Mensajes leidos")
+      logger.info("Mensajes leidos")
       res.send(messages)
   )
 
 exports.pwd = (req, res) ->
-  console.log("change pwd")
+  logger.debug("change pwd")
 
   if req.method isnt "POST"
     handle_error(new Error(), "Metodo ilegal de acceso", res)
@@ -150,13 +151,13 @@ exports.pwd = (req, res) ->
             if err?
               handle_error(err, "No se pudo grabar la nueva contraseña!", res)
             else
-              console.log "Nueva contraseña grabada con éxito"
+              logger.info "Nueva contraseña grabada con éxito"
               res.send("OK")
           )
     )
 
 exports.send_message = (req, res) ->
-  console.log "send message"
+  logger.debug "send message"
 
   if req.method isnt "POST"
     handle_error(new Error(), "Metodo ilegal de acceso", res)
@@ -176,7 +177,7 @@ exports.send_message = (req, res) ->
           if err?
             handle_error(err, "No se pudo grabar el mensaje mandado.", res)
           else
-            console.log "Nuevo mensaje guardado en el sistema con éxito"
+            logger.info "Nuevo mensaje guardado en el sistema con éxito"
             res.send "OK"
         )
     )
@@ -191,7 +192,7 @@ exports.informe = (req, res) ->
   _get_all_data(data_objects, res)
 
 exports.update_codigo = (req, res) ->
-  console.log("update_codigo")
+  logger.debug("update_codigo")
   c = {}
   try
     c = new CodigoPenal(req.body)
@@ -205,13 +206,13 @@ exports.update_codigo = (req, res) ->
     if err?
       handle_error(err, "Error grabando update para codigo penal", res)
     else
-      console.log("Codigo Penal " + c.nombre + " grabado")
+      logger.info("Codigo Penal " + c.nombre + " grabado")
       res.send(c)
   )
   
 exports.save_user = (req,res) ->
-    console.log ("save_user")
-    console.log (req.body)
+    logger.debug ("save_user")
+    logger.debug (req.body)
     u = {}
     try
       u = new Usuario(req.body)
@@ -225,13 +226,13 @@ exports.save_user = (req,res) ->
       if err?
         handle_error(err,"Error creando nuevo usuario!",res)
       else
-        console.log("Usuario " + u.username + " grabado.")
+        logger.info("Usuario " + u.username + " grabado.")
         res.send("Usuario grabado")
     )
 
 exports.save_postulado = (req,res) ->
-    console.log ("save_postulado")
-    console.log (req.body)
+    logger.debug ("save_postulado")
+    logger.debug (req.body)
     obj = req.body
     if not (/^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/.test(obj.fecha_nacimiento))
       handle_error(new Error(), "Formato fecha invalido!", res)
@@ -251,7 +252,7 @@ exports.save_postulado = (req,res) ->
         if err?
           handle_error(err,"Error creando nuevo postulado!",res)
         else
-          console.log("Postulado " + p.nombres + " " + p.apellidos + " grabado.")
+          logger.info("Postulado " + p.nombres + " " + p.apellidos + " grabado.")
           if not details.updatedExisting
             u = new Usuario()
             u.username = p.nombres.substring(0,4) + p.apellidos.substring(0,4) + (""+ (Math.random())).substring(2,6)
@@ -262,7 +263,7 @@ exports.save_postulado = (req,res) ->
             if err?
               handle_error(err, "Se creó el postulado pero no el usuario", res)
             else
-              console.log("Objeto usuario con contraseña estandar para postulado " + p.nombres + " " + p.apellidos + " creado.")
+              logger.info("Objeto usuario con contraseña estandar para postulado " + p.nombres + " " + p.apellidos + " creado.")
               res.send("Postulado grabado")
             )
           else
@@ -270,11 +271,11 @@ exports.save_postulado = (req,res) ->
       )
 
 exports.delete_user = (req,res) ->
-  console.log "Delete user"
+  logger.debug "Delete user"
   id = req.params.userId
   if id is String(req.user._id)
     handle_error(new Error("No puedo eliminar el usuario actual! " + id), "No puedo eliminar el usuario actual!", res)
-    console.log "delete aborted"
+    logger.info "delete aborted"
     return
     
   Usuario.findById(id, (err, usuario) ->
@@ -297,7 +298,7 @@ exports.delete_user = (req,res) ->
                       handle_error(err, "Error eliminando Usuario con id " + id, res)
                     else
                       res.send("OK")
-                      console.log "Usuario eliminado con éxito"
+                      logger.info "Usuario eliminado con éxito"
                   )
               else
                 handle_error(new Error("No puedo eliminar este usuario, es el último administrador!"), "No puedo eliminar este usuario, es el último administrador!", res)
@@ -306,7 +307,7 @@ exports.delete_user = (req,res) ->
   )
 
 exports.delete_codigo = (req, res) ->
-  console.log "Delete codigo"
+  logger.debug "Delete codigo"
   id = req.params.codigoId
   
   CodigoPenal.findById(id, (err, codigo) ->
@@ -318,13 +319,13 @@ exports.delete_codigo = (req, res) ->
         handle_error(err, "Error eliminando codigo con id " + id, res)
       else
         res.send("OK")
-        console.log("CodigoPenal eliminado con éxito.")
+        logger.info("CodigoPenal eliminado con éxito.")
       )
   )
     
 
 exports.delete_postulado = (req,res) ->
-  console.log "Delete postulado"
+  logger.debug "Delete postulado"
   id = req.params.postuladoId
   Postulado.findById(id, (err, postulado) ->
     if err?
@@ -340,51 +341,51 @@ exports.delete_postulado = (req,res) ->
             handle_error(err, "Se eliminó el postulado con cedula: " + cedula + " pero no el usuario asociado!", res)
           else
             res.send("OK")
-            console.log "Postulado y usuario asociado eliminado con éxito"
+            logger.info "Postulado y usuario asociado eliminado con éxito"
         )
       )
   )
 
 exports.usuarios = (req, res) ->
-  console.log("GET usuarios")
+  logger.debug("GET usuarios")
   Usuario.find({}, (err, usuarios) ->
     if err?
       handle_error(err, "Error retornando lista de usuarios", res)
     res.send(usuarios)
-  console.log("Lista de usuarios mandada")
+  logger.info("Lista de usuarios mandada")
   )
 
 exports.postulados = (req, res) ->
-  console.log("GET postulados ")
+  logger.debug("GET postulados ")
   Postulado.find({}, (err, postulados) ->
     if err?
         handle_error(err, "Error retornando lista de postulados")
     res.send(postulados)
-    console.log("Lista de postulados mandada")
+    logger.info("Lista de postulados mandada")
   )
 
 exports.postulado = (req, res) ->
-  console.log("GET postulado ")
+  logger.debug("GET postulado ")
   getPostulado(req, res)
  
 exports.upload_docs = (req, res) ->
-  console.log("POST docs_upload")
+  logger.debug("POST docs_upload")
   docs_upload(req, res)
 
 exports.upload_video = (req, res) ->
-  console.log("POST video_upload")
+  logger.debug("POST video_upload")
   video_upload(req, res)
 
 exports.upload_avatar = (req, res) ->
-  console.log("POST avatar_upload")
+  logger.debug("POST avatar_upload")
   avatar_upload(req, res)
   
 exports.hv = (req, res) ->
-  console.log "Hoja de vida"
+  logger.debug "Hoja de vida"
   getHv(req, res)
 
 exports.save_hv = (req, res) ->
-  console.log "Grabar hoja de vida"
+  logger.debug "Grabar hoja de vida"
   saveHv(req, res)
 
 exports.msg_hv = (req, res) ->
@@ -407,19 +408,19 @@ exports.msg_hv = (req, res) ->
 ## DELITOS 
 ########################################################
 exports.create_delito = (req, res) ->
-  console.log "get empty delito"
+  logger.debug "get empty delito"
   crea_delito(req, res)
 
 exports.save_delito = (req, res) ->
-  console.log "Grabar delito"
+  logger.debug "Grabar delito"
   _save_delito(req, res)
 
 exports.jyp_delitos = (req, res) ->
-  console.log "GET informacion de delitos justicia y paz"
+  logger.debug "GET informacion de delitos justicia y paz"
   getDelitos(req, res)
 
 exports.del_delito = (req, res) ->
-  console.log "delete delito"
+  logger.debug "delete delito"
   p = req.params.postuladoId
   d = req.params.itemId
   Delito.findOne({'cedula':p, _id: d}, (err, delito) ->
@@ -431,7 +432,7 @@ exports.del_delito = (req, res) ->
           if err?
             handle_error(err, "Error eliminando delito", res)
           else
-            console.log "Delito con id " + d + " eliminado con éxito"
+            logger.info "Delito con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
@@ -457,7 +458,7 @@ exports.msg_delito = (req, res) ->
 ## PROCESOS
 ########################################################
 exports.del_proces = (req, res) ->
-  console.log "delete proces"
+  logger.debug "delete proces"
   p = req.params.postuladoId
   d = req.params.itemId
   Proceso.findOne({'cedula':p, _id: d}, (err, proc) ->
@@ -469,14 +470,14 @@ exports.del_proces = (req, res) ->
           if err?
             handle_error(err, "Error eliminando proceso", res)
           else
-            console.log "Proceso con id " + d + " eliminado con éxito"
+            logger.info "Proceso con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
 
 exports.create_proces = (req, res) ->
-  console.log "create proces"
-  console.log(req.body)
+  logger.debug "create proces"
+  logger.debug(req.body)
   p = req.params.postuladoId
   m = new Proceso()
   m.titulo = req.body.titulo
@@ -486,11 +487,11 @@ exports.create_proces = (req, res) ->
       handle_error(err, "Error en create_proces", res)
     else
       res.send(m)
-      console.log("Nuevo proceso creado y retornado")
+      logger.info("Nuevo proceso creado y retornado")
   )
 
 exports.save_proces = (req, res) ->
-  console.log "Grabar proces"
+  logger.debug "Grabar proces"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -509,12 +510,12 @@ exports.save_proces = (req, res) ->
            handle_error(err, "Error grabando menor.", res)
            return
          res.send("proceso grabado ok")
-         console.log("proceso grabado con exito")
+         logger.info("proceso grabado con exito")
        )
   )
 
 exports.proces = (req, res) ->
-  console.log "GET todos proces"
+  logger.debug "GET todos proces"
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a procesos."), "Postulado con cedula " + p + " no encontrado." , res)  
@@ -523,7 +524,7 @@ exports.proces = (req, res) ->
     if err?
       handle_error(err, "Error accedendo a procesos.", res)
     res.send(menores)
-    console.log("procesos de postulado retornadas")
+    logger.info("procesos de postulado retornadas")
     )
 
 
@@ -549,7 +550,7 @@ exports.msg_proceso= (req, res) ->
 ## MENORES
 ########################################################
 exports.del_menor = (req, res) ->
-  console.log "delete menor"
+  logger.debug "delete menor"
   p = req.params.postuladoId
   d = req.params.itemId
   Menor.findOne({'cedula':p, _id: d}, (err, m) ->
@@ -561,14 +562,14 @@ exports.del_menor = (req, res) ->
           if err?
             handle_error(err, "Error eliminando menor", res)
           else
-            console.log "Menor con id " + d + " eliminado con éxito"
+            logger.info "Menor con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
 
 exports.create_menor = (req, res) ->
-  console.log "create menor" 
-  console.log(req.body)
+  logger.debug "create menor" 
+  logger.debug(req.body)
   p = req.params.postuladoId
   m = new Menor()
   m.nombres = req.body.nombres
@@ -578,11 +579,11 @@ exports.create_menor = (req, res) ->
       handle_error(err, "Error en create_menor", res)
     else
       res.send(m)
-      console.log("Nuevo menor creado y retornado")
+      logger.info("Nuevo menor creado y retornado")
   )
 
 exports.save_menor = (req, res) ->
-  console.log "Grabar menor"
+  logger.debug "Grabar menor"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -602,12 +603,12 @@ exports.save_menor = (req, res) ->
         handle_error(err, "Error grabando menor.", res)
         return
       res.send("menor grabado ok")
-      console.log("menor grabado con exito")
+      logger.info("menor grabado con exito")
     )
   )
 
 exports.menores = (req, res) ->
-  console.log "GET todos menores"
+  logger.debug "GET todos menores"
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a menores."), "Postulado con cedula " + p + " no encontrado." , res)
@@ -615,7 +616,7 @@ exports.menores = (req, res) ->
     if err?
       handle_error(err, "Error accedendo a menores.", res)
     res.send(menores)
-    console.log("menores de postulado retornadas")
+    logger.info("menores de postulado retornadas")
     )
 
 exports.msg_menor = (req, res) ->
@@ -639,7 +640,7 @@ exports.msg_menor = (req, res) ->
 ## BIENES
 ########################################################
 exports.del_bien = (req, res) ->
-  console.log "delete bien"
+  logger.debug "delete bien"
   p = req.params.postuladoId
   d = req.params.itemId
   Bien.findOne({'cedula':p, _id: d}, (err, b) ->
@@ -651,14 +652,14 @@ exports.del_bien = (req, res) ->
           if err?
             handle_error(err, "Error eliminando bien", res)
           else
-            console.log "Bien con id " + d + " eliminado con éxito"
+            logger.info "Bien con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
 
 exports.create_bien = (req, res) ->
-  console.log "create bien"
-  console.log(req.body)
+  logger.debug "create bien"
+  logger.debug(req.body)
   p = req.params.postuladoId
   b = new Bien()
   b.titulo = req.body.titulo
@@ -668,11 +669,11 @@ exports.create_bien = (req, res) ->
       handle_error(err, "Error en create_bien", res)
     else
       res.send(b)
-      console.log("Nuevo bien creado y retornado")
+      logger.info("Nuevo bien creado y retornado")
   )
 
 exports.save_bien = (req, res) ->
-  console.log "Grabar bien"
+  logger.debug "Grabar bien"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -697,12 +698,12 @@ exports.save_bien = (req, res) ->
         handle_error(err, "Error grabando fosa.", res)
         return
       res.send("Bien grabado ok")
-      console.log("Bien grabado con exito")
+      logger.info("Bien grabado con exito")
     )
   )
 
 exports.bienes = (req, res) ->
-  console.log "GET todos bienes"
+  logger.debug "GET todos bienes"
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a bienes."), "Postulado con cedula " + p + " no encontrado." , res)
@@ -711,7 +712,7 @@ exports.bienes = (req, res) ->
       handle_error(err, "Error accedendo a bienes.", res)
     else
       res.send(bienes)
-      console.log("Bienes de postulado retornadas")
+      logger.info("Bienes de postulado retornadas")
     )
 
 exports.msg_bien= (req, res) ->
@@ -736,7 +737,7 @@ exports.msg_bien= (req, res) ->
 ## OPERACIONES CONJUNTAS
 ########################################################
 exports.del_op_conjunta = (req, res) ->
-  console.log "delete op_conjunta"
+  logger.debug "delete op_conjunta"
   p = req.params.postuladoId
   d = req.params.itemId
   OperacionesConjuntas.findOne({'cedula':p, _id: d}, (err, op) ->
@@ -748,14 +749,14 @@ exports.del_op_conjunta = (req, res) ->
           if err?
             handle_error(err, "Error eliminando operación conjunta", res)
           else
-            console.log "Operación conjunta con id " + d + " eliminado con éxito"
+            logger.info "Operación conjunta con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
 
 exports.create_op_conjunta = (req, res) ->
-  console.log "get empty op_conjunta"
-  console.log(req.body)
+  logger.debug "get empty op_conjunta"
+  logger.debug(req.body)
   p = req.params.postuladoId
   oc = new OperacionesConjuntas()
   oc.cedula = p
@@ -765,11 +766,11 @@ exports.create_op_conjunta = (req, res) ->
       handle_error(err, "Error en create_op_conjunta", res)
     else
       res.send(oc)
-      console.log("Nueva op_conjunta creada y retornada")
+      logger.info("Nueva op_conjunta creada y retornada")
   )
 
 exports.save_op_conjunta = (req, res) ->
-  console.log "Grabar op conjunta"
+  logger.debug "Grabar op conjunta"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -784,12 +785,12 @@ exports.save_op_conjunta = (req, res) ->
         handle_error(err, "Error grabando op_conjunta.", res)
         return
       res.send("op_conjunta grabada ok")
-      console.log("op_conjunta grabada con exito")
+      logger.info("op_conjunta grabada con exito")
     )
   )
 
 exports.jyp_op_conjunta = (req, res) ->
-  console.log "GET todas op_conjuntas"
+  logger.debug "GET todas op_conjuntas"
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
@@ -798,7 +799,7 @@ exports.jyp_op_conjunta = (req, res) ->
       handle_error(err, "Error accedendo a relaciones autoridades.", res)
     else
       res.send(pps)
-      console.log("RelacionesAutoridades de postulado retornadas")
+      logger.info("RelacionesAutoridades de postulado retornadas")
     )
 
 exports.msg_opcon= (req, res) ->
@@ -823,7 +824,7 @@ exports.msg_opcon= (req, res) ->
 ## RELACIONES AUTORIDADES
 ########################################################
 exports.del_relaut = (req, res) ->
-  console.log "delete relaut"
+  logger.debug "delete relaut"
   p = req.params.postuladoId
   d = req.params.itemId
   RelacionesAutoridades.findOne({'cedula':p, _id: d}, (err, ra) ->
@@ -835,14 +836,14 @@ exports.del_relaut = (req, res) ->
           if err?
             handle_error(err, "Error eliminando relación autoridad", res)
           else
-            console.log "Relación autoridad con id " + d + " eliminado con éxito"
+            logger.info "Relación autoridad con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
 
 exports.create_relaut = (req, res) ->
-  console.log "get empty RELAUT"
-  console.log(req.body)
+  logger.debug "get empty RELAUT"
+  logger.debug(req.body)
   p = req.params.postuladoId
   ra = new RelacionesAutoridades()
   ra.cedula = p
@@ -851,11 +852,11 @@ exports.create_relaut = (req, res) ->
     if err?
       handle_error(err, "Error en create_relaut", res)
     res.send(ra)
-    console.log("Nueva relaut creada y retornada")
+    logger.info("Nueva relaut creada y retornada")
   )
 
 exports.save_relaut = (req, res) ->
-  console.log "Grabar pp"
+  logger.debug "Grabar pp"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -870,12 +871,12 @@ exports.save_relaut = (req, res) ->
         handle_error(err, "Error grabando relaut.", res)
         return
       res.send("pp grabada ok")
-      console.log("pp grabada con exito")
+      logger.info("pp grabada con exito")
     )
   )
 
 exports.jyp_relaut = (req, res) ->
-  console.log "GET todas relauts"
+  logger.debug "GET todas relauts"
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
@@ -883,7 +884,7 @@ exports.jyp_relaut = (req, res) ->
     if err?
       handle_error(err, "Error accedendo a relaciones autoridades.", res)
     res.send(pps)
-    console.log("RelacionesAutoridades de postulado retornadas")
+    logger.info("RelacionesAutoridades de postulado retornadas")
     )
 
 
@@ -910,7 +911,7 @@ exports.msg_relaut= (req, res) ->
 ## PP
 ########################################################
 exports.del_pp = (req, res) ->
-  console.log "delete parapolitica"
+  logger.debug "delete parapolitica"
   p = req.params.postuladoId
   d = req.params.itemId
   Parapolitica.findOne({'cedula':p, _id: d}, (err, pp) ->
@@ -922,14 +923,14 @@ exports.del_pp = (req, res) ->
           if err?
             handle_error(err, "Error eliminando parapolitica", res)
           else
-            console.log "Parapolitica con id " + d + " eliminado con éxito"
+            logger.info "Parapolitica con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
 
 exports.create_pp = (req, res) ->
-  console.log "get empty pp"
-  console.log(req.body)
+  logger.debug "get empty pp"
+  logger.debug(req.body)
   p = req.params.postuladoId
   pp = new Parapolitica()
   pp.cedula = p
@@ -938,11 +939,11 @@ exports.create_pp = (req, res) ->
     if err?
       handle_error(err, "Error en create_pp", res)
     res.send(pp)
-    console.log("Nueva pp creada y retornada")
+    logger.info("Nueva pp creada y retornada")
   )
 
 exports.save_pp = (req, res) ->
-  console.log "Grabar pp"
+  logger.debug "Grabar pp"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -957,12 +958,12 @@ exports.save_pp = (req, res) ->
         handle_error(err, "Error grabando pp.", res)
         return
       res.send("pp grabada ok")
-      console.log("pp grabada con exito")
+      logger.info("pp grabada con exito")
     )
   )
 
 exports.jyp_pp = (req, res) ->
-  console.log "GET todas pps"
+  logger.debug "GET todas pps"
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
@@ -970,7 +971,7 @@ exports.jyp_pp = (req, res) ->
     if err?
       handle_error(err, "Error accedendo a pps.", res)
     res.send(pps)
-    console.log("pps de postulado retornadas")
+    logger.info("pps de postulado retornadas")
     )
 
 
@@ -996,7 +997,7 @@ exports.msg_pp= (req, res) ->
 ## FOSAS
 ########################################################
 exports.del_fosa = (req, res) ->
-  console.log "delete fosa"
+  logger.debug "delete fosa"
   p = req.params.postuladoId
   d = req.params.itemId
   Fosa.findOne({'cedula':p, _id: d}, (err, f) ->
@@ -1008,14 +1009,14 @@ exports.del_fosa = (req, res) ->
           if err?
             handle_error(err, "Error eliminando fosa", res)
           else
-            console.log "Fosa con id " + d + " eliminado con éxito"
+            logger.info "Fosa con id " + d + " eliminado con éxito"
             res.send("OK", 204)
         )
   )
 
 exports.create_fosa = (req, res) ->
-  console.log "get empty fosa"
-  console.log(req.body)
+  logger.debug "get empty fosa"
+  logger.debug(req.body)
   p = req.params.postuladoId
   f = new Fosa()
   f.titulo = req.body.titulo
@@ -1024,11 +1025,11 @@ exports.create_fosa = (req, res) ->
     if err?
       handle_error(err, "Error en create_fosa", res)
     res.send(f)
-    console.log("Nueva fosa creada y retornada")
+    logger.info("Nueva fosa creada y retornada")
   )
 
 exports.save_fosa = (req, res) ->
-  console.log "Grabar fosa"
+  logger.debug "Grabar fosa"
   p = req.params.postuladoId
   id = req.body._id
   delete req.body._id
@@ -1043,12 +1044,12 @@ exports.save_fosa = (req, res) ->
         handle_error(err, "Error grabando fosa.", res)
         return
       res.send("Fosa grabada ok")
-      console.log("Fosa grabada con exito")
+      logger.info("Fosa grabada con exito")
     )
   )
 
 exports.jyp_fosas = (req, res) ->
-  console.log "GET todas fosas"
+  logger.debug "GET todas fosas"
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
@@ -1056,7 +1057,7 @@ exports.jyp_fosas = (req, res) ->
     if err?
       handle_error(err, "Error accedendo a fosas.", res)
     res.send(fosas)
-    console.log("Fosas de postulado retornadas")
+    logger.info("Fosas de postulado retornadas")
     )
 
 exports.msg_fosa= (req, res) ->
@@ -1081,16 +1082,16 @@ exports.msg_fosa= (req, res) ->
 ## 
 ########################################################
 exports.codigos = (req, res) ->
-  console.log "GET codigos"
+  logger.debug "GET codigos"
   CodigoPenal.find({}, (err, codigos) ->
     if err?
       handle_error(err, "Error accediendo a la lista de codigos penales", res)
     res.send(codigos)
-    console.log "Lista codigos penales retornada con éxito."
+    logger.info "Lista codigos penales retornada con éxito."
   )
 
 getPostulado = (req, res) ->
-  console.log("_get postulado")
+  logger.debug("_get postulado")
   p = req.params.postuladoId
   if not p?
     handle_error( new Error("Error accedendo a postulado."), "Postulado con cedula " + p " no encontrado", res)
@@ -1098,12 +1099,12 @@ getPostulado = (req, res) ->
     if err?
       handle_error(error, "Error accedendo a postulado.")
     res.send(postulado)
-    console.log("Postulado retornado")
+    logger.info("Postulado retornado")
     )
 
 
 getHv = (req, res) ->
-  console.log("_get hoja de vida")
+  logger.debug("_get hoja de vida")
   p = req.params.postuladoId
   if not p?
     handle_error(new Error(), "Error accedendo a postulado.", res)
@@ -1111,11 +1112,11 @@ getHv = (req, res) ->
     if err?
       handle_error(err, "Error accedendo a postulado.", res)
     res.send(hv_postulado)
-    console.log("Hoja de vida de postulado retornada")
+    logger.info("Hoja de vida de postulado retornada")
     )
 
 saveHv = (req, res) ->
-  console.log("_grabando hoja de vida...")
+  logger.debug("_grabando hoja de vida...")
   p = req.params.postuladoId
   p_dir =  __dirname + "/media/postulados/" + p + "/hv/remis"
   i_dir =  __dirname + "/media/postulados/" + p + "/hv/imput"
@@ -1136,28 +1137,28 @@ saveHv = (req, res) ->
     if listing.length > 0
       for l in listing 
         if remis_file_name_only.indexOf(l) < 0
-          console.log("Found a file to delete in Hoja remisiones array: " + l)
+          logger.info("Found a file to delete in Hoja remisiones array: " + l)
           fs.unlinkSync(p_dir + "/" + l)
-          console.log("Deleted.")
+          logger.info("Deleted.")
 
   if fs.existsSync(i_dir)
     listing = fs.readdirSync(i_dir)
     if listing.length > 0
       for l in listing 
         if imput_file_name_only.indexOf(l) < 0
-          console.log("Found a file to delete in Hoja remisiones array: " + l)
+          logger.info("Found a file to delete in Hoja remisiones array: " + l)
           fs.unlinkSync(i_dir + "/" + l)
-          console.log("Deleted.")
+          logger.info("Deleted.")
 
   Hoja.update('cedula': p, req.body , {upsert: true}, (err) ->
     if err?
       handle_error(err, "Error grabando hoja de vida.", res)
     res.send("HV saved ok")
-    console.log("Hoja de vida grabada con exito")
+    logger.info("Hoja de vida grabada con exito")
   )
 
 getDelitos = (req, res) ->
-  console.log("_get informacion justicia y paz")
+  logger.debug("_get informacion justicia y paz")
   p = req.params.postuladoId
   if not p?
     handle_error(new Error("Error accedendo a postulado."), "Postulado con cedula " + p + " no encontrado." , res)
@@ -1165,12 +1166,12 @@ getDelitos = (req, res) ->
     if err?
       handle_error(err, "Error accedendo a postulado.", res)
     res.send(hechos_postulado)
-    console.log("Hechos de postulado retornados")
+    logger.info("Hechos de postulado retornados")
     )
 
 _save_delito = (req, res) ->
-  console.log("_save_delito: " + req.body.titulo)
-  console.log(req.body)
+  logger.debug("_save_delito: " + req.body.titulo)
+  logger.debug(req.body)
   id = req.body._id
   delete req.body._id
   obj = new Delito(req.body)
@@ -1183,12 +1184,12 @@ _save_delito = (req, res) ->
       handle_error(err, "Error grabando delito.", res)
       return
     res.send("Delito grabado ok")
-    console.log("Delito grabado con exito")
+    logger.info("Delito grabado con exito")
   )
 
 crea_delito = (req, res) ->
-  console.log("_crea_delito")
-  console.log(req.body)
+  logger.debug("_crea_delito")
+  logger.debug(req.body)
   p = req.params.postuladoId
   d = new Delito()
   d.titulo = req.body.titulo
@@ -1197,11 +1198,11 @@ crea_delito = (req, res) ->
     if err?
       handle_error(err, "Error en get_empty_delito", res)
     res.send(d)
-    console.log("Nuevo delito creado y retornado")
+    logger.info("Nuevo delito creado y retornado")
   )
 
 docs_upload = (req, res) ->
-  console.log("_docs_upload")
+  logger.debug("_docs_upload")
 
   if req.method isnt "POST"
     handle_error(new Error(), "Metodo ilegal de acceso", res)
@@ -1212,39 +1213,39 @@ docs_upload = (req, res) ->
       if err?
         handle_error(err, "Error in form upload", res)
       else
-        console.log(files)
+        logger.debug(files)
         p         = req.params.postuladoId
         path      = fields.path
         p_root_dir=  __dirname + "/media/postulados/"
         p_dir     =  __dirname + "/media/postulados/" + p + "/"
         root_dir  =  __dirname + "/media/postulados/" + p + "/" + path + "/"
         id        = fields.path_id[0]
-        console.log("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " + id)
+        logger.debug("params----p: " + p + "--path: " + path + "--root_dir: " + root_dir + "--id: " + id)
 
         try 
           fs.readFile(files.uploadedFile[0].path, (err, data) ->
             try
               newPath = root_dir + id + "/" + files.uploadedFile[0].originalFilename
               if not fs.existsSync(p_root_dir)
-                console.log ("creating p_root_dir: " + p_root_dir)
+                logger.debug ("creating p_root_dir: " + p_root_dir)
                 fs.mkdirSync(p_root_dir) 
               if not fs.existsSync(p_dir)
-                console.log ("creating p_dir: " + p_dir)
+                logger.debug ("creating p_dir: " + p_dir)
                 fs.mkdirSync(p_dir)
               if not fs.existsSync(root_dir)
-                console.log ("creating root_dir: " + root_dir)
+                logger.debug ("creating root_dir: " + root_dir)
                 fs.mkdirSync(root_dir)
               if id.indexOf("/") > 0                
                 subdir = id.substring(0, id.indexOf("/"))
-                console.log ("subdir: " + subdir)
+                logger.debug ("subdir: " + subdir)
                 base_dir = root_dir + subdir
                 if not fs.existsSync(base_dir )
-                  console.log ("creating base_dir with root_dir: " + root_dir + " - subdir: " + subdir)
+                  logger.debug ("creating base_dir with root_dir: " + root_dir + " - subdir: " + subdir)
                   fs.mkdirSync(base_dir)
               else
-                console.log "indexOf was: " + id.indexOf("/")
+                logger.debug "indexOf was: " + id.indexOf("/")
               if not fs.existsSync(root_dir + id)
-                console.log ("creating root_dir + id: " + root_dir + id)
+                logger.debug ("creating root_dir + id: " + root_dir + id)
                 fs.mkdirSync(root_dir + id)
 
               
@@ -1252,7 +1253,7 @@ docs_upload = (req, res) ->
                 if err?
                   handle_error(err, "Error guardando archivo subido", res)
                 else
-                  console.log("Archivo subido con éxito.")
+                  logger.info("Archivo subido con éxito.")
                   res.send(files.uploadedFile[0].originalFilename)
                 )
             catch e
@@ -1264,7 +1265,7 @@ docs_upload = (req, res) ->
 
 
 exports.delete_video = (req, res) ->
-  console.log("_delete_video")
+  logger.debug("_delete_video")
 
   cedula = req.params.postuladoId
   id     = req.params.delitoId
@@ -1287,7 +1288,7 @@ exports.delete_video = (req, res) ->
             return 
           delito.video_path = ""
           delito.save()
-          console.log("Video para delito eliminado con éxio.")
+          logger.info("Video para delito eliminado con éxito.")
           res.send(delito)
       )
   )
@@ -1295,7 +1296,7 @@ exports.delete_video = (req, res) ->
   
 
 video_upload = (req, res) ->
-  console.log("_video_upload")
+  logger.debug("_video_upload")
 
   if req.method isnt "POST"
     handle_error(new Error(), "Metodo ilegal de acceso", res)
@@ -1335,14 +1336,14 @@ video_upload = (req, res) ->
                       if err?
                         handle_error(err, "Video subido pero no se encontro delito asociado", res)
                       else
-                        console.log delito
+                        logger.debug delito
                         if delito?
                           delito.video_path = files.uploadedFile[0].originalFilename
                           delito.save((err) ->
                           if err?
                             handle_error(err, "Video subido ok, delito encontrado, pero al grabarlo hubo error", res)
                           else
-                            console.log ("Video subido con exito.")
+                            logger.info ("Video subido con exito.")
                             res.send(delito)
                           )
                         else
@@ -1356,7 +1357,7 @@ video_upload = (req, res) ->
     )
 
 avatar_upload = (req, res) ->
-  console.log("_avatar_upload")
+  logger.debug("_avatar_upload")
 
   root_dir =  __dirname + "/media/postulados/"
   p = req.params.postuladoId
@@ -1383,7 +1384,7 @@ avatar_upload = (req, res) ->
                   if err?
                     handle_error(err, "Imagen subido pero no se encontro Postulado asociado", res)
                   else
-                    console.log postulado
+                    logger.debug postulado
                     if postulado?
                       postulado.picture = "/img/" + p + "/" + files.uploadedFile[0].originalFilename
                       postulado.save((err) ->
@@ -1403,19 +1404,19 @@ avatar_upload = (req, res) ->
 
 
 _get_all_data = (data_objects, res) ->
-  console.log "_get_all_data for informes"
+  logger.debug "_get_all_data for informes"
   try
     all = {} 
     cnt = 0
     Postulado.find({}, (err, postulados) ->
-      console.log postulados
+      logger.debug postulados
       if err?
         handle_error(err, "Error accedendo a todos los datos de postulado para informe", res)
       else
         if postulados?
-          console.log("gefore foreeach")
+          logger.debug("gefore foreeach")
           postulados.forEach (p) ->
-            console.log("in foreeach")
+            logger.debug("in foreeach")
             _get_all_postulado_objects(p.cedula, data_objects, (objects) ->
               all[p.cedula] = []
               all[p.cedula].push(p)
@@ -1423,8 +1424,8 @@ _get_all_data = (data_objects, res) ->
         
               cnt += 1
               if cnt is postulados.length
-                console.log("going to return all data!")
-                console.log(all)
+                logger.info("Voy retornando todos los datos!")
+                logger.debug(all)
                 res.send(all)
             )
         else
@@ -1439,26 +1440,26 @@ exports._get_all_postulado_objects = (cedula, data_objects, callback) ->
     returns = {}
     cnt = 0
     data_objects.forEach (obj) ->
-      console.log "Getting objects for " + obj.modelName
+      logger.debug "Getting objects for " + obj.modelName
       obj.find({'cedula': cedula}, (err, objects) ->
         if err?
           handle_error(err, err.message, res)
         else
-          #console.log "Results: " + objects
+          #logger.debug "Results: " + objects
           name = obj.modelName
-          console.log name
+          logger.debug name
           returns[name] = objects
           cnt += 1
           if cnt is data_objects.length
-            console.log "All data retrieved"
-            #console.log returns
+            logger.info "All data retrieved"
+            #logger.debug returns
             #return returns
             callback(returns)
         )
 
 _get_all_postulado_data = (cedula, data_objects, res) ->
-  console.log "_get_all_postulado_data for informes"
-  console.log cedula
+  logger.debug "_get_all_postulado_data for informes"
+  logger.debug cedula
   try
     _get_all_postulado_objects(cedula, data_objects, (objects) ->
       res.send(objects)

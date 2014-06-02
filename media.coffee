@@ -1,5 +1,6 @@
 fs            = require('fs')
 handle_error  = require("./utils").handle_error
+logger        = require("./logger")
 
 exports.get_doc = (req,res) ->
   cedula = req.params.postuladoId
@@ -25,9 +26,9 @@ exports.view_docs = (req, res) ->
     type    = req.params.type
     type_id = req.params.typeId
 
-    console.log cedula
-    console.log type
-    console.log type_id
+    logger.debug cedula
+    logger.debug type
+    logger.debug type_id
 
     if type_id.indexOf("X") > 0 
       type_id = type_id.replace("XX","/")
@@ -38,13 +39,13 @@ exports.view_docs = (req, res) ->
         if err?
             handle_error(err, "No se pudo leer el contenido de la carpeta " + docs_path, res)
         else
-            console.log("Carpeta de documentos " + docs_path + " retornada con éxito.")
+            logger.debuginfo("Carpeta de documentos " + docs_path + " retornada con éxito.")
             res.send(files)
     )
 
 exports.play = (req,res) ->
 
-    console.log req.params
+    logger.debug req.params
     #url     = req.url
     #sub     = url.substring("/videos/".length)
     #cedula  = sub.substring(0, sub.indexOf("/"))
@@ -55,9 +56,9 @@ exports.play = (req,res) ->
     delito  = req.params.delitoId
     video   = req.params.name
 
-    console.log delito
-    console.log video
-    console.log cedula 
+    logger.debug delito
+    logger.debug video
+    logger.debug cedula 
 
     video_path = __dirname + "/media/postulados/" + cedula + "/delitos/" + delito + "/" + video 
 
@@ -93,7 +94,7 @@ exports.play = (req,res) ->
 
 exports.img_view = (req,res) ->
 
-    console.log req.params
+    logger.debug req.params
     #url     = req.url
     #sub     = url.substring("/videos/".length)
     #cedula  = sub.substring(0, sub.indexOf("/"))
@@ -103,8 +104,8 @@ exports.img_view = (req,res) ->
     cedula  = req.params.cedulaId
     img     = req.params.name
 
-    console.log img
-    console.log cedula 
+    logger.debug img
+    logger.debug cedula 
 
     img_path = __dirname + "/media/postulados/" + cedula + "/" + img
 

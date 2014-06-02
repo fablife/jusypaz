@@ -148,10 +148,13 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
 
     for (var i=0; i< $scope.root.delitos.length; i++) {
       var d = $scope.root.delitos[i];
-      if (!$scope.root.delitos_by_codigo_penal[d.codigo_penal]) {
-        $scope.root.delitos_by_codigo_penal[d.codigo_penal] = [];
+      for (var y=0; y<d.codigo_penal.length; y++) {
+        key = d.codigo_penal[y];
+        if (!$scope.root.delitos_by_codigo_penal[key]) {
+          $scope.root.delitos_by_codigo_penal[key] = [];
+        }
+        $scope.root.delitos_by_codigo_penal[key].push(d);
       }
-      $scope.root.delitos_by_codigo_penal[d.codigo_penal].push(d);
     }
     $scope.get_chart();
   }
@@ -203,7 +206,10 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         .call(xAxis)
         .selectAll("text")  
         .style("text-anchor", "end")
+        .attr("class", "diagram_element_text")
         .attr("dx", "-.8em")
+        .attr("x", "-10")
+        .attr("y", "0")
         .attr("dy", ".15em")
         .attr("transform", function(d) {
             return "rotate(-90)" 

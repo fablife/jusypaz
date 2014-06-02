@@ -1,4 +1,5 @@
 Postulado   = require('./models/models').Postulado
+logger      = require('./logger')
 
 
 exports.can_access = (req, res, cedula, callback) ->
@@ -10,12 +11,12 @@ exports.can_access = (req, res, cedula, callback) ->
       return
     if not user?
       text = "No se encontró postulado con esa cédula"
-      console.log text
+      logger.debug text
       callback(new Error(text))
     else if not cedula == user_cedula or role is not "admin"
       callback(new Error("No tiene derecho a acceder a ver esta información"))
     else
-      console.log "Can access"
+      logger.info "Can access"
       callback(null)
     )
 

@@ -12,6 +12,7 @@ urls      = require('./urls')
 routes    = require('./routes')
 media     = require('./media')
 pdf       = require('./pdf')
+logger    = require('./logger')
 
 MongoStore = require('connect-mongo')(express)
 User      = require('./models/models').User
@@ -32,14 +33,14 @@ can_access = (req, res, cedula=null, next) ->
       handle_error(err, err.message, res)
     if not user?
       text = "No se encontró postulado con esa cédula"
-      console.log text
+      logger.debug(text)
       handle_error(err, text, res)
     else if not cedula == user_cedula or role is not "admin"
       text = "No se encontró postulado con esa cédula"
-      console.log text
+      logger.debug(text)
       handler_error(new Error(text), text, res)
     else
-      console.log "Can access"
+      logger.debug "Login: can access, ok"
       next()
     )
 
@@ -51,10 +52,10 @@ is_mine = (req, res, next) ->
       handle_error(err, err.message, res)
     if not user?
       text = "No se encontró postulado con esa cédula"
-      console.log text
+      logger.debug(text)
       handle_error(err, text, res)
     else
-      console.log "is mine ok"
+      logger.debug("Login: is_mine ok")
       next()
     )
 
@@ -75,7 +76,7 @@ can_view_imagen = (req, res, next) ->
     #url_params_only = url.substring("/img/".length)
     #cedula = url_params_only.substring(0, url_params_only.indexOf("/"))
     cedula = req.params.cedulaId
-    console.log "Requesting img for cedula: " + cedula
+    logger.debug("Requesting img for cedula: " + cedula)
     can_access(req, res, cedula, (err) ->
       if err?
         handle_error(err, err.message, res)
@@ -87,14 +88,14 @@ can_view_imagen = (req, res, next) ->
 ensureAuthenticated = (req, res, next) ->
       if (req.isAuthenticated())
           return next()
-      console.log "Not authenticated!"
+      logger.debug("Not authenticated!")
       res.redirect('/')
 
 #Middleware to check that a user has admin role 
 ensureAdmin = (req, res, next) ->
       if (req.user.role == "admin")
           return next()
-      console.log "Not admin!"
+      logger.debug( "Not admin!")
       res.redirect('/')
 
 app = module.exports = express()
@@ -102,21 +103,21 @@ app = module.exports = express()
 #set up passport
 LocalStrategy = require('passport-local').Strategy
 passport.use(new LocalStrategy({usernameField: 'cedula'}, (cedula, password, done) ->
-    console.log("new local strategy")
+    logger.debug("new local strategy")
     User.findOne({ cedula: cedula }, (err, user) ->
-      console.log("findone")
+      logger.debug("findone")
       if err?
-         console.log "error in findone"
+         logger.debug("error in findone")
          return done(err)
       if not user
-        console.log("Acceso no otorgado: Usuario incorrecto")
+        logger.info("Acceso no otorgado: Usuario incorrecto")
         return done(null, false, { message: 'Acceso no otorgado: Usuario invalido.' })
-      console.log(user.password)
-      console.log password
+      logger.debug(user.password)
+      logger.debug(password)
       if password isnt user.password
-          console.log "NOT"
-          return done(null, false, {message: "Acceso no otorgado: Contraseña invalida." })
-      console.log "BUT YESS"
+         logger.debug("Contraseña NO corresponde!")
+         return done(null, false, {message: "Acceso no otorgado: Contraseña invalida." })
+      logger.debug("Login todo bien")
       done(null,user)
     )
 ))
@@ -181,25 +182,25 @@ app.get('/', routes.index)
 
 app.post '/login', (req, res, next) ->
   passport.authenticate('local', (err, user, info) ->
-    console.log "authenticate callback"
+    logger.debug("authenticate callback")
     if err?
-      console.log "err in authenticate callback"
+      logger.error("err in authenticate callback")
       return next(err)
     if not user
-      console.log "User NOT in auth callback"
+      logger.debug("User NOT in auth callback")
       req.flash("loginerror", info.message)
       return res.redirect('/login')
     req.logIn user, (err) ->
       if err?
-        console.log "err! " + err
+        logger.error( err)
         res.redirect("/", { message: req.flash(err)})
         return
-      console.log user.role
+      logger.debug( user.role)
       if user.role is "admin" or user.role is "auditor"
-        console.log "redirecting to tablero"
+        logger.debug("redirecting to tablero")
         res.redirect("/tablero")
       else
-        console.log "redirecting to inicio"
+        logger.debug("redirecting to inicio")
         res.redirect("/inicio")
   )(req, res, next)
 
@@ -327,5 +328,5 @@ app.get('/partials/:name',(req, res) ->
 #Start the app
 ########################
 app.listen(config.app.port, () ->
-      console.log("Express server listening on port %d in %s mode", config.app.port, app.settings.env)
+      logger.info("Express server listening on port " + config.app.port + " in " + app.settings.env + " mode")
 )

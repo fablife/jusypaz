@@ -46,9 +46,8 @@ body {
   vertical-align: top;
 }
 
-.vertical-text {
-  transform: rotate(90deg);
-  transform-origin: left top 0;
+.diagram_element_text {
+  margin-right: 5px;  
 }
 
 .title_separator {

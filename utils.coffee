@@ -1,6 +1,8 @@
+logger = require('./logger')
+
 exports.handle_error = (exception, text, res, code=500) ->
-    console.log(text)
-    console.log exception
+    logger.error(text)
+    logger.error(exception)
     res.send(code, text)
 
 exports.convert_date = (date) ->
