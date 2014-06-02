@@ -16,5 +16,6 @@
     , "phantom":"*"
     , "shelljs":"*"
     , "multiparty":"*"
+    , "colors":"*"
   }
 }
