@@ -13,3 +13,7 @@ exports.info = (obj) ->
 
 exports.error = (obj) ->
   console.log(("[ERROR] " + obj).red)
+  
+exports.warning = (obj) ->
+    console.log(("[INFO] " + obj).yellow)
+
