@@ -12,4 +12,4 @@ exports.info = (obj) ->
     console.log(("[INFO] " + obj).green)
 
 exports.error = (obj) ->
-  console.log(("[ERROR] " + obj.red))
+  console.log(("[ERROR] " + obj).red)
