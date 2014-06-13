@@ -1283,7 +1283,7 @@ exports.delete_video = (req, res) ->
           full_file = full_dir + id + "/" + delito.video_path
 
           try
-            if fs.existsSync(full_file)
+            if fs.existsSync(full_file) and delito.video_path not ''
               fs.unlinkSync(full_file)
             else
               logger.warning("El video que quieres eliminar no existe! Voy a borrar la entrada en la base de datos, para que puedas subir un nuevo!")
