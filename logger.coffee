@@ -15,5 +15,5 @@ exports.error = (obj) ->
   console.log(("[ERROR] " + obj).red)
   
 exports.warning = (obj) ->
-    console.log(("[INFO] " + obj).yellow)
+    console.log(("[WARNING] " + obj).yellow)
 
