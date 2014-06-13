@@ -1280,11 +1280,17 @@ exports.delete_video = (req, res) ->
         else
           root_dir = __dirname + "/media/postulados/"
           full_dir = root_dir + cedula + "/delitos/"
+          full_file = full_dir + id + "/" + delito.video_path
 
           try
-            fs.unlinkSync(full_dir + id + "/" + delito.video_path)
+            if fs.existsSync(full_file)
+              fs.unlinkSync(full_file)
+            else
+              logger.info("El video que quieres eliminar no existe! Voy a borrar la entrada en la base de datos, para que puedas subir un nuevo!")
           catch e
+            logger.error("Video no se puede eliminar de file system. Params: cedula: " + cedula + " - path: " + full_dir + " - video: " + delito.video_path + " - full_file: " + full_file)
             handle_error(err, "Error eliminando video: error eliminando del file system.", res)
+            
             return 
           delito.video_path = ""
           delito.save()
