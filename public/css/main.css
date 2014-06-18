@@ -46,8 +46,9 @@ body {
   vertical-align: top;
 }
 
-.diagram_element_text {
-  margin-right: 5px;  
+.vertical-text {
+  transform: rotate(90deg);
+  transform-origin: left top 0;
 }
 
 .title_separator {
@@ -775,7 +776,9 @@ td.actions {
 .hecho_titulo {
   border : 1px solid #D6D6D6;
   cursor: pointer;
-  padding: 4px;
+  padding: 4px 24px 4px 4px;
+  position: relative;
+  line-height: 18px;
 }
 
 .hecho_titulo.selected {
@@ -1003,7 +1006,10 @@ th.hpad {
   height: 16px;
   display: inline-block;
   float: right;
-  margin-top: 5px;
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  margin: -8px 0px 0 0;
 }
 
 .inline_delete_item {
