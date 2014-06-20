@@ -126,6 +126,7 @@ function FileUploadCtrl(scope, http, timeout) {
     scope.ver_video = function() {
       if (scope.video === null) {
         scope.video   = document.createElement('video');
+        scope.video.id = "ver_video";
         scope.video.controls = "controls";
         var source  = document.createElement('source');        
         source.src  = "/videos/" + scope.root.delito.cedula + "/" + scope.root.delito._id + "/" + scope.root.delito.video_path;
@@ -148,6 +149,10 @@ function FileUploadCtrl(scope, http, timeout) {
 
     scope.cerrar = function() {
       scope.root.play_video = false;
+      var element = document.getElementById("ver_video");
+      element.outerHTML = "";
+      delete element;
+      scope.video = null;
       console.log(scope.root.play_video);
     }
 
