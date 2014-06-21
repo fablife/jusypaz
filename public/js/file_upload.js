@@ -49,7 +49,7 @@ function FileUploadCtrl(scope, http, timeout) {
     //============== DRAG & DROP =============
     */
     scope.root.subirVideo = false
-    scope.video = null
+    scope.root.video = null
 
     scope.setFiles = function(element) {
     scope.$apply(function(scope) {
@@ -124,14 +124,14 @@ function FileUploadCtrl(scope, http, timeout) {
     }
 
     scope.ver_video = function() {
-      if (scope.video === null) {
-        scope.video   = document.createElement('video');
-        scope.video.id = "ver_video";
-        scope.video.controls = "controls";
+      if (scope.root.video === null) {
+        scope.root.video   = document.createElement('video');
+        scope.root.video.id = "ver_video";
+        scope.root.video.controls = "controls";
         var source  = document.createElement('source');        
         source.src  = "/videos/" + scope.root.delito.cedula + "/" + scope.root.delito._id + "/" + scope.root.delito.video_path;
         if (scope.root.delito.hora_mencion) {
-          scope.video.addEventListener('loadedmetadata', function() {            
+          scope.root.video.addEventListener('loadedmetadata', function() {            
             var stringtime = scope.root.delito.hora_mencion;
             var h = stringtime.substring(0,2);
             var m = stringtime.substring(3,5);
@@ -141,8 +141,8 @@ function FileUploadCtrl(scope, http, timeout) {
         }
         source.type = "video/mp4";
 
-        scope.video.appendChild(source);
-        document.getElementById("video_container").appendChild(scope.video);
+        scope.root.video.appendChild(source);
+        document.getElementById("video_container").appendChild(scope.root.video);
       }
       scope.root.play_video = true;
     }
@@ -152,7 +152,7 @@ function FileUploadCtrl(scope, http, timeout) {
       var element = document.getElementById("ver_video");
       element.outerHTML = "";
       delete element;
-      scope.video = null;
+      scope.root.video = null;
       console.log(scope.root.play_video);
     }
 
