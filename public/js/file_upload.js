@@ -130,6 +130,7 @@ function FileUploadCtrl(scope, http, timeout) {
         scope.root.video.controls = "controls";
         var source  = document.createElement('source');        
         source.src  = "/videos/" + scope.root.delito.cedula + "/" + scope.root.delito._id + "/" + scope.root.delito.video_path;
+        /*
         if (scope.root.delito.hora_mencion) {
           scope.root.video.addEventListener('loadedmetadata', function() {            
             var stringtime = scope.root.delito.hora_mencion;
@@ -139,6 +140,7 @@ function FileUploadCtrl(scope, http, timeout) {
             this.currentTime = parseInt(h)*3600 + parseInt(m)*60 + parseInt(s);
           }, false);          
         }
+        */
         source.type = "video/mp4";
 
         scope.root.video.appendChild(source);
