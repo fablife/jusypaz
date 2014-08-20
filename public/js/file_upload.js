@@ -50,6 +50,7 @@ function FileUploadCtrl(scope, http, timeout) {
     */
     scope.root.subirVideo = false
     scope.root.video = null
+    scope.root.file_selected = false;
 
     scope.setFiles = function(element) {
     scope.$apply(function(scope) {
@@ -65,6 +66,7 @@ function FileUploadCtrl(scope, http, timeout) {
         }
       scope.root.subirImagen = true;
       });
+      scope.root.file_selected = true;
       //var label  = document.getElementById("uploadFileName"); 
       //label.innerHTML = document.getElementById("fileToUpload").value;
     };
@@ -116,6 +118,7 @@ function FileUploadCtrl(scope, http, timeout) {
           .success(function(data) {
             scope.root.notification = "Video eliminado con éxito";
             scope.root.delito = data; 
+            scope.root.file_selected = false;
           })
           .error(function() {
             scope.root.error = "Error eliminando video";
@@ -147,6 +150,7 @@ function FileUploadCtrl(scope, http, timeout) {
         document.getElementById("video_container").appendChild(scope.root.video);
       }
       scope.root.play_video = true;
+      scope.root.file_selected = false;
     }
 
     scope.cerrar = function() {
