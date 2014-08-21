@@ -85,7 +85,7 @@ exports.play = (req,res) ->
                 res.writeHead(200,
                     "Content-Length": data.length,
                     "Content-Type": 'video/mp4')
-            res.write(data)
+            res.write(data.slice(start,end+1), "binary")
             res.end()
     )
 
