@@ -98,3 +98,10 @@ div.info_wrapper
                label.small_form Longitud
             td
                div.myview_form_value {{root.parapolitica.long}}
+
+
+      div.observaciones(ng-show="root.parapolitica.observacion != null && root.parapolitica.observacion != '' && root.parapolitica.observacion != 'No especificado'")
+        h2.info_subtitle Observaciones del investigador
+        hr.title_separator
+        {{ root.parapolitica.observacion }}
+

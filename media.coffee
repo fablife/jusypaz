@@ -39,19 +39,13 @@ exports.view_docs = (req, res) ->
         if err?
             handle_error(err, "No se pudo leer el contenido de la carpeta " + docs_path, res)
         else
-            logger.debuginfo("Carpeta de documentos " + docs_path + " retornada con éxito.")
+            logger.debug("Carpeta de documentos " + docs_path + " retornada con éxito.")
             res.send(files)
     )
 
 exports.play = (req,res) ->
 
     logger.debug req.params
-    #url     = req.url
-    #sub     = url.substring("/videos/".length)
-    #cedula  = sub.substring(0, sub.indexOf("/"))
-    #delito  = sub.substring((cedula + "/").length)
-    #delito  = delito.substring(0, delito.indexOf("/"))
-    #video   = delito.substring((delito + "/").length)
     cedula  = req.params.cedulaId
     delito  = req.params.delitoId
     video   = req.params.name
@@ -59,6 +53,7 @@ exports.play = (req,res) ->
     logger.debug delito
     logger.debug video
     logger.debug cedula 
+    logger.debug req.sessionID 
 
     video_path = __dirname + "/media/postulados/" + cedula + "/delitos/" + delito + "/" + video 
 
@@ -68,6 +63,7 @@ exports.play = (req,res) ->
         else
             range = req.headers.range
             if range?
+                logger.debug("in range")
                 total = data.length
 
                 parts = range.replace(/bytes=/, "").split("-")
@@ -85,10 +81,12 @@ exports.play = (req,res) ->
                     "Content-Length": chunksize, 
                     "Content-Type": 'video/mp4' )
             else
+                logger.debug("no range")
                 res.writeHead(200,
                     "Content-Length": data.length,
                     "Content-Type": 'video/mp4')
-            res.end(data)
+            res.write(data)
+            res.end()
     )
 
 
@@ -115,5 +113,6 @@ exports.img_view = (req,res) ->
         else
             res.writeHead(200,
                 "Content-Length": data.length)
-            res.end(data)
+            res.write(data)
+            res.end()
     )

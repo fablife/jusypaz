@@ -270,6 +270,10 @@ div.info_wrapper
               td
                  {{v.datos_completos}}
 
+      div.observaciones(ng-show="root.delito.observacion != null && root.delito.observacion != '' && root.delito.observacion != 'No especificado'")
+        h2.info_subtitle Observaciones del investigador 
+        hr.title_separator
+        {{ root.delito.observacion }}
    
  //-  div.file_browser(ng-show="showFiles")
  //-     span.close_button.right

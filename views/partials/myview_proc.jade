@@ -44,3 +44,9 @@ div.info
                   label.small_form Estado 
                td
                   div.myview_form_value {{root.proc.estado}}
+
+      div.observaciones(ng-show="root.proc.observacion != null && root.proc.observacion != '' && root.proc.observacion != 'No especificado'")
+        h2.info_subtitle Observaciones del investigador
+        hr.title_separator
+        {{ root.proc.observacion }}
+

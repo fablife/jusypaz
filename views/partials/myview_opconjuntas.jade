@@ -40,3 +40,9 @@ div.info_wrapper
                label.small_form Apellidos implicado
             td
                div.myview_form_value {{root.op_conjunta.apellidos_implicado}}
+
+      div.observaciones(ng-show="root.op_conjunta.observacion != null && root.op_conjunta.observacion != '' && root.op_conjunta.observacion != 'No especificado'")
+        h2.info_subtitle Observaciones del investigador
+        hr.title_separator
+        {{ root.op_conjunta.observacion }}
+
