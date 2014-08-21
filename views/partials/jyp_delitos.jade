@@ -49,7 +49,7 @@ div.info_wrapper
       div.inline.datos_acciones(ng-controller="FileUploadCtrl")
          button.buttons.mleft10(ng-show='root.delito.video_path' ng-click="ver_video()") Ver video
          button.buttons.mleft10(ng-show='root.delito.video_path' ng-click="del_video()") Eliminar video
-         button.buttons.mleft10(ng-hide='root.delito.video_path' ng-click="busca_video()") Cargar video 
+         button.buttons.mleft10(ng-hide='root.delito.video_path || root.file_selected' ng-click="busca_video()") Cargar video 
          input(style="display: none" type="file" ng-model-instant id="videoToUpload" onchange="angular.element(this).scope().setFiles(this)") 
          button.buttons.mleft10( ng-show="root.subirVideo" ng-click="uploadFile()") Grabar video 
          label.inline.small_text(ng-show="root.subirVideo" id="uploadFileName")

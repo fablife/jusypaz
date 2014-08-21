@@ -55,3 +55,9 @@ div.info
                   label.small_form Observaciones 
                td
                   div.myview_form_value {{root.bien.observaciones}}
+
+      div.observaciones(ng-show="root.bien.observacion != null && root.bien.observacion != '' && root.bien.observacion != 'No especificado'")
+        h2.info_subtitle Observaciones del investigador
+        hr.title_separator
+        {{ root.bien.observacion }}
+

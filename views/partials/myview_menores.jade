@@ -99,3 +99,10 @@ div.info
                   label.small_form Incapacidades
                td
                   div.myview_form_value {{root.menor.incapacidades}}
+
+
+      div.observaciones(ng-show="root.menor.observacion != null && root.menor.observacion != '' && root.menor.observacion != 'No especificado'")
+        h2.info_subtitle Observaciones del investigador
+        hr.title_separator
+        {{ root.menor.observacion }}
+

@@ -18,3 +18,4 @@ node_modules
 media/*
 
 scripts/create_admin.coffee
+config.coffee

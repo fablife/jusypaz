@@ -113,3 +113,9 @@ div.info_wrapper
                label.small_form Longitud
             td
                div.myview_form_value {{root.relaut.long}}
+
+      div.observaciones(ng-show="root.relaut.observacion != null && root.relaut.observacion != '' && root.relaut.observacion != 'No especificado'")
+        h2.info_subtitle Observaciones del investigador
+        hr.title_separator
+        {{ root.relaut.observacion }}
+

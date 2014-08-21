@@ -23,6 +23,12 @@ handle_error = require('./utils').handle_error
 #Connect to DB
 db = mongoose.connect(config.creds.mongoose_auth_local)
 
+
+########################################
+# MIDDLEWARE CALLS
+########################################
+
+#Middleware to check if a user can access the info
 can_access = (req, res, cedula=null, next) ->
   role = req.user.role
   if cedula is null
@@ -44,6 +50,7 @@ can_access = (req, res, cedula=null, next) ->
       next()
     )
 
+#Middleware to check if it's the user's own info 
 is_mine = (req, res, next) ->
   cedula = req.user.cedula
   req.params.postuladoId = cedula
@@ -98,6 +105,9 @@ ensureAdmin = (req, res, next) ->
       logger.debug( "Not admin!")
       res.redirect('/')
 
+
+
+#INSTANTIATE EXPRESS
 app = module.exports = express()
 
 #set up passport
@@ -105,15 +115,15 @@ LocalStrategy = require('passport-local').Strategy
 passport.use(new LocalStrategy({usernameField: 'cedula'}, (cedula, password, done) ->
     logger.debug("new local strategy")
     User.findOne({ cedula: cedula }, (err, user) ->
-      logger.debug("findone")
+      #logger.debug("findone")
       if err?
          logger.debug("error in findone")
          return done(err)
       if not user
         logger.info("Acceso no otorgado: Usuario incorrecto")
         return done(null, false, { message: 'Acceso no otorgado: Usuario invalido.' })
-      logger.debug(user.password)
-      logger.debug(password)
+      #logger.debug(user.password)
+      #logger.debug(password)
       if password isnt user.password
          logger.debug("Contraseña NO corresponde!")
          return done(null, false, {message: "Acceso no otorgado: Contraseña invalida." })
@@ -132,18 +142,18 @@ app.configure( () ->
   app.use(express.json())
   #app.use(express.bodyParser())
   app.use(express.methodOverride())
-  app.use(express.cookieParser('terces'))
+  app.use(express.cookieParser())
   app.use(express.session({
     secret:'siarsecret',
     maxAge: new Date(Date.now() + 86400000), #1 day
     store: new MongoStore( {db:mongoose.connections[0].db})
   }))
   app.use(express.static(__dirname + '/public'))
+  app.use(express.static(__dirname + '/../../public'))
   app.use(flash())
   app.use(passport.initialize())
   app.use(passport.session())
   app.use(app.router)
-  app.use(express.static(__dirname + '/../../public'))
 )
 app.configure('development', () ->
       app.use(express.errorHandler({ dumpExceptions: true, showStack: true }))
@@ -159,13 +169,10 @@ app.configure('production', () ->
 # this will be as simple as storing the user ID when serializing, and finding
 # the user by ID when deserializing.
 passport.serializeUser((user, done) ->
-      #console.log "SerializeUser"
       done(null, user._id)
 )
 
 passport.deserializeUser((id, done) ->
-      #done(null,id)
-      #console.log "DeserializeUser"
       User.findById(id, (err, user) ->
          done(err, user)
       )
@@ -174,10 +181,6 @@ passport.deserializeUser((id, done) ->
 #  Routes
 ########################
 app.get('/', routes.index)
-#passport_options =
-#  successRedirect: '/tablero'
-#  failureRedirect: '/'
-#  failureFlash: true
 
 
 app.post '/login', (req, res, next) ->
