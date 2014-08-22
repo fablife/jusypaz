@@ -45,19 +45,29 @@ try
     if not fs.existsSync(files_dir)
        fs.mkdirSync(files_dir)
     
-    dbcmd = 'mongodump -d jusypaz -o ' + db_dir 
+    console.log("Primero hago backup de la base de datos...")
+    dbcmd = 'mongodump -u ' + conf.env.db_user + ' -p ' + conf.env.db_pw + ' -d jusypaz -o ' + db_dir 
     dbenv = shell.exec(dbcmd,{silent:true}, (code, output) ->
       #console.log("Code de mongodb: " + code)
       #console.log("Output de mongodb: " + output)
-      finish()
+      if code == 0
+        console.log("Backup base de datos terminado con éxito.")
+        finish()
+      else
+        console.log("Ahi. Backup de base de datos falló.")
+        oops()
     )
+
+    console.log("Ahora hago backup de los archivos subidos...")
     zipcmd = "zip -r " + files_dir + "/archivos.zip " + conf.backup.source_files 
     zipenv = shell.exec(zipcmd,{silent: true}, (code, output) ->
       #console.log("Code de archivos: " + code)
       #console.log("Output de archivos: " + output) 
       if code == 0
+        console.log("Backup archivos terminado con éxito.")
         finish()
       else
+        console.log("Ahi. Backup de archivos falló.")
         oops()
     )
     
