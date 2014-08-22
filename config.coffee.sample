@@ -1,12 +1,14 @@
 exports.env = {
-  debug: false,
-  no_auth: true
+  debug: true,
+  no_auth: false,
+  db_user:  'siar_db',
+  db_pw: 'siar_pwd'
 }
 
 if exports.env.no_auth
   auth_local = 'mongodb://localhost/jusypaz'
 else
-  auth_local = 'mongodb://siar_db:siar_pwd@localhost/jusypaz'
+  auth_local = 'mongodb://' + exports.env.db_user + ':' + exports.env.db_pw + '@localhost/jusypaz'
 
 exports.creds = {
   #Your mongo auth uri goes here
@@ -21,7 +23,7 @@ exports.app = {
 }
 
 exports.backup = {
-  dir: "/home/siar/backup",
-  source_files: "/home/siar/jusypaz/media"
+  dir: "/home/fabio/prj/jusy/backup",
+  source_files: "/home/fabio/prj/jusy/jusypaz/media"
 }
   
