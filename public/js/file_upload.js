@@ -192,18 +192,27 @@ function FileUploadCtrl(scope, http, timeout) {
 
     function uploadComplete(evt) {
         /* This event is raised when the server send back a response */
-        scope.root.delito = JSON.parse(evt.target.response);   
+        alert("Video subido con exito")
+        delito = JSON.parse(evt.target.response);   
+        scope.root.delito = delito;
+        for (var i=0;i < scope.root.delitos.length; i++) {
+          if (scope.root.delitos[i]._id == delito._id) {
+            scope.root.delitos[i] = scope.root.delito;
+          }
+        }
+        scope.root.file_selected = false;
         scope.root.progressVisible = false;
         scope.root.subirVideo = false;
-        alert("Video subido con exito")
     }
 
     function uploadFailed(evt) {
+        scope.root.file_selected = false;
         scope.root.progressVisible = false;
         alert("Hubo un error al subir el archivo.")
     }
 
     function uploadCanceled(evt) {
+        scope.root.file_selected = false;
         scope.$apply(function(){
             scope.root.progressVisible = false
         })
