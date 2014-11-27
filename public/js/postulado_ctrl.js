@@ -274,10 +274,14 @@ app.controller("PostuladoCtrl", function PostuladoCtrl($scope, $routeParams, $ht
         $scope.$watch('root.delito.pais', function (newVal, oldVal, scope) {
           if(newVal == "Panamá") { 
             $scope.root.delito_depts = $scope.root.panama_depts;
-            $scope.root.delito.dept  = $scope.root.panama_depts[0].nombre;
+            if (! $scope.root.delito.dept) {
+              $scope.root.delito.dept  = $scope.root.panama_depts[0].nombre;
+            }
           } else if (newVal="Colombia") {
             $scope.root.delito_depts = $scope.root.colombia_depts;
-            $scope.root.delito.dept  = $scope.root.colombia_depts[0].nombre;
+            if (! $scope.root.delito.dept) {
+              $scope.root.delito.dept  = $scope.root.colombia_depts[0].nombre;
+            }
           }
         });
         //console.log($scope.root.delitos);
